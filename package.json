@@ -1,0 +1,27 @@
+{
+	"name": "mantis_web_app",
+	"version": "0.0.0",
+	"private": true,
+	"proxy": "http://localhost:5000/",
+	"dependencies": {
+		"@material-ui/core": "^4.11.3",
+		"@material-ui/icons": "^4.11.2",
+		"axios": "^0.21.1",
+		"clsx": "^1.1.1",
+		"react": "^16.2.0",
+		"react-dom": "^16.2.0",
+		"react-query": "^3.13.4",
+		"react-router-dom": "^5.2.0",
+		"react-scripts": "1.0.17"
+	},
+	"scripts": {
+		"start": "react-scripts start",
+		"build": "react-scripts build",
+		"test": "react-scripts test --env=jsdom",
+		"eject": "react-scripts eject",
+		"report": "node bundle-report.js"
+	},
+	"devDependencies": {
+		"webpack-bundle-analyzer": "^4.4.0"
+	}
+}
