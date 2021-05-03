@@ -1,5 +1,5 @@
 {
-	"name": "mantis_web_app",
+	"name": "mantis-web-app",
 	"version": "0.0.0",
 	"private": true,
 	"proxy": "http://localhost:5000/",
