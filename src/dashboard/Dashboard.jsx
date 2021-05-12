@@ -19,7 +19,14 @@ import Nav from "../common/nav/Nav";
 import AddProjectDialog from "./AddProjectDialog";
 
 const Dashboard = () => {
-	const { isLoading, data } = useQuery("fetchProjects", () => axios("/projects"));
+	const { isLoading, data } = useQuery("fetchProjects", () =>
+		axios.get("/project", {
+			headers: {
+				"auth-token":
+					"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDliMWFjYzc3MWZjZDJhZWM4ZThjNmYiLCJpYXQiOjE2MjA3Nzc5MjF9.Yh0k3KVxo_3fNnEMmN9Fyk1Ku9f8D379KZ2i_6OcS64",
+			},
+		})
+	);
 
 	const [addProjectOpen, setAddProjectOpen] = useState(false);
 
@@ -37,7 +44,11 @@ const Dashboard = () => {
 			<Container maxWidth='lg'>
 				<Typography variant='h4'>Projects</Typography>
 				<Box py={3}>
-					<TextField id='outlined-basic' label='Search...' color='secondary' />
+					<TextField
+						id='outlined-basic'
+						label='Search...'
+						color='secondary'
+					/>
 				</Box>
 
 				{!isLoading ? (
@@ -51,21 +62,41 @@ const Dashboard = () => {
 					>
 						{data.data.map((project) => {
 							return (
-								<Grid item xs={12} sm={6} lg={4} key={project._id}>
+								<Grid
+									item
+									xs={12}
+									sm={6}
+									lg={4}
+									key={project._id}
+								>
 									<Card>
 										<CardContent>
-											<Typography variant='h5' component='h2'>
+											<Typography
+												variant='h5'
+												component='h2'
+											>
 												{project.title}
 											</Typography>
-											<Typography color='textSecondary'>{project.role}</Typography>
-											<Typography variant='body2' component='p'>
+											<Typography color='textSecondary'>
+												{project.role}
+											</Typography>
+											<Typography
+												variant='body2'
+												component='p'
+											>
 												Tasks: {project.tasks.length}
 											</Typography>
-											<Typography variant='body2' component='p'>
+											<Typography
+												variant='body2'
+												component='p'
+											>
 												Team Size:
 												{" " + project.users.length}
 											</Typography>
-											<Typography variant='body2' component='p'>
+											<Typography
+												variant='body2'
+												component='p'
+											>
 												{project.description}
 											</Typography>
 										</CardContent>
@@ -76,7 +107,9 @@ const Dashboard = () => {
 													textDecoration: "none",
 												}}
 											>
-												<Button size='small'>Open {project.title}</Button>
+												<Button size='small'>
+													Open {project.title}
+												</Button>
 											</Link>
 										</CardActions>
 									</Card>
@@ -88,7 +121,10 @@ const Dashboard = () => {
 					<h1>Loading</h1>
 				)}
 			</Container>
-			<AddProjectDialog open={addProjectOpen} handleClose={handleAddProjectClose} />
+			<AddProjectDialog
+				open={addProjectOpen}
+				handleClose={handleAddProjectClose}
+			/>
 		</React.Fragment>
 	);
 };

@@ -6,8 +6,6 @@ import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
 import Link from "@material-ui/core/Link";
 import Paper from "@material-ui/core/Paper";
 import Hidden from "@material-ui/core/Hidden";
@@ -57,7 +55,14 @@ const Login = (props) => {
 						</div>
 					</Hidden>
 				</Grid>
-				<Grid item xs={12} md={5} elevation={6} component={Paper} square>
+				<Grid
+					item
+					xs={12}
+					md={5}
+					elevation={6}
+					component={Paper}
+					square
+				>
 					<div className={classes.paper}>
 						<Avatar className={classes.avatar}>
 							<LockOutlinedIcon />
@@ -87,11 +92,12 @@ const Login = (props) => {
 								autoComplete='current-password'
 								color='secondary'
 							/>
-							<FormControlLabel
-								control={<Checkbox value='remember' color='secondary' />}
-								label='Remember me'
-							/>
-							<RouterLink to='/' style={{ textDecoration: "none" }} onClick={login}>
+
+							<RouterLink
+								to='/'
+								style={{ textDecoration: "none" }}
+								onClick={login}
+							>
 								<Button
 									type='submit'
 									fullWidth
@@ -104,12 +110,21 @@ const Login = (props) => {
 							</RouterLink>
 							<Grid container>
 								<Grid item xs>
-									<Link href='#' variant='body2' color='inherit'>
+									<Link
+										href='#'
+										variant='body2'
+										color='inherit'
+									>
 										Forgot password?
 									</Link>
 								</Grid>
 								<Grid item>
-									<Link href='#' variant='body2' color='inherit' onClick={handleSignUpOpen}>
+									<Link
+										href='#'
+										variant='body2'
+										color='inherit'
+										onClick={handleSignUpOpen}
+									>
 										{"Don't have an account? Sign Up"}
 									</Link>
 								</Grid>
@@ -118,7 +133,11 @@ const Login = (props) => {
 					</div>
 				</Grid>
 			</Grid>
-			<Dialog open={signUpOpen} onClose={handleSignUpClose} aria-labelledby='form-dialog-title'>
+			<Dialog
+				open={signUpOpen}
+				onClose={handleSignUpClose}
+				aria-labelledby='form-dialog-title'
+			>
 				<DialogTitle id='form-dialog-title'>Sign Up</DialogTitle>
 				<DialogContent>
 					<TextField
@@ -136,9 +155,19 @@ const Login = (props) => {
 						margin='normal'
 						required
 						fullWidth
-						label='Full Name'
-						name='email'
-						autoComplete='email'
+						label='First Name'
+						name='fname'
+						autoComplete='given-name'
+						color='secondary'
+					/>
+					<TextField
+						variant='outlined'
+						margin='normal'
+						required
+						fullWidth
+						label='Last Name'
+						name='lname'
+						autoComplete='family-name'
 						color='secondary'
 					/>
 
@@ -148,8 +177,8 @@ const Login = (props) => {
 						required
 						fullWidth
 						label='Password'
-						name='email'
-						autoComplete='email'
+						name='password'
+						type='password'
 						color='secondary'
 					/>
 					<TextField
@@ -157,10 +186,9 @@ const Login = (props) => {
 						margin='normal'
 						required
 						fullWidth
-						name='password'
 						label='Verify Password'
+						name='vpassword'
 						type='password'
-						autoComplete='current-password'
 						color='secondary'
 					/>
 				</DialogContent>
