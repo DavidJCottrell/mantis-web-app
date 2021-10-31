@@ -19,14 +19,14 @@ import Nav from "../common/nav/Nav";
 import AddProjectDialog from "./AddProjectDialog";
 
 const Dashboard = () => {
-	const { isLoading, data } = useQuery("fetchProjects", () =>
-		axios.get("/project", {
-			headers: {
-				"auth-token":
-					"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDliMWFjYzc3MWZjZDJhZWM4ZThjNmYiLCJpYXQiOjE2MjA3Nzc5MjF9.Yh0k3KVxo_3fNnEMmN9Fyk1Ku9f8D379KZ2i_6OcS64",
-			},
-		})
-	);
+	// const { isLoading, data } = useQuery("fetchProjects", () =>
+	// 	axios.get("/project", {
+	// 		headers: {
+	// 			"auth-token":
+	// 				"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDliMWFjYzc3MWZjZDJhZWM4ZThjNmYiLCJpYXQiOjE2MjA3Nzc5MjF9.Yh0k3KVxo_3fNnEMmN9Fyk1Ku9f8D379KZ2i_6OcS64",
+	// 		},
+	// 	})
+	// );
 
 	const [addProjectOpen, setAddProjectOpen] = useState(false);
 
@@ -51,75 +51,52 @@ const Dashboard = () => {
 					/>
 				</Box>
 
-				{!isLoading ? (
-					<Grid
-						container
-						spacing={3}
-						style={{
-							margin: 0,
-							width: "100%",
-						}}
-					>
-						{data.data.map((project) => {
-							return (
-								<Grid
-									item
-									xs={12}
-									sm={6}
-									lg={4}
-									key={project._id}
+				<Grid
+					container
+					spacing={3}
+					style={{
+						margin: 0,
+						width: "100%",
+					}}
+				>
+					<Grid item xs={12} sm={6} lg={4} key={"u2hee7hd82hd82"}>
+						<Card>
+							<CardContent>
+								<Typography variant='h5' component='h2'>
+									{"Half Life 3"}
+								</Typography>
+								<Typography color='textSecondary'>
+									{"Team Leader"}
+								</Typography>
+								<Typography variant='body2' component='p'>
+									Tasks: {4}
+								</Typography>
+								<Typography variant='body2' component='p'>
+									Team Size:
+									{" " + 2}
+								</Typography>
+								<br />
+								<Typography variant='body2' component='p'>
+									{
+										"A description of the project should go here... Lorem ipsum dolor sit amet consectetur adipisicing elit. Similique, sequi."
+									}
+								</Typography>
+							</CardContent>
+							<CardActions>
+								<Link
+									to='/projects'
+									style={{
+										textDecoration: "none",
+									}}
 								>
-									<Card>
-										<CardContent>
-											<Typography
-												variant='h5'
-												component='h2'
-											>
-												{project.title}
-											</Typography>
-											<Typography color='textSecondary'>
-												{project.role}
-											</Typography>
-											<Typography
-												variant='body2'
-												component='p'
-											>
-												Tasks: {project.tasks.length}
-											</Typography>
-											<Typography
-												variant='body2'
-												component='p'
-											>
-												Team Size:
-												{" " + project.users.length}
-											</Typography>
-											<Typography
-												variant='body2'
-												component='p'
-											>
-												{project.description}
-											</Typography>
-										</CardContent>
-										<CardActions>
-											<Link
-												to='/projects'
-												style={{
-													textDecoration: "none",
-												}}
-											>
-												<Button size='small'>
-													Open {project.title}
-												</Button>
-											</Link>
-										</CardActions>
-									</Card>
-								</Grid>
-							);
-						})}
+									<Button size='small'>
+										Open&nbsp;<b>{"Half Life 3"}</b>
+									</Button>
+								</Link>
+							</CardActions>
+						</Card>
 					</Grid>
-				) : (
-					<h1>Loading</h1>
-				)}
+				</Grid>
 			</Container>
 			<AddProjectDialog
 				open={addProjectOpen}

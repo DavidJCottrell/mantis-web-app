@@ -35,8 +35,13 @@ const ProfileMenu = (props) => {
 				open={props.open}
 				onClose={props.handleClose}
 			>
-				<Link to='/' style={{ textDecoration: "none", color: "inherit" }}>
-					<MenuItem onClick={props.handleClose}>Dashboard</MenuItem>
+				<Link
+					to='/'
+					style={{ textDecoration: "none", color: "inherit" }}
+				>
+					<MenuItem onClick={props.handleClose}>
+						My dashboard
+					</MenuItem>
 				</Link>
 				<MenuItem
 					onClick={() => {
@@ -46,11 +51,17 @@ const ProfileMenu = (props) => {
 				>
 					My account
 				</MenuItem>
-				<Link to='/login' style={{ textDecoration: "none", color: "inherit" }}>
+				<Link
+					to='/login'
+					style={{ textDecoration: "none", color: "inherit" }}
+				>
 					<MenuItem onClick={signOut}>Sign Out</MenuItem>
 				</Link>
 			</Menu>
-			<ProfileDialog handleClose={handleProfileClose} open={profileOpen} />
+			<ProfileDialog
+				handleClose={handleProfileClose}
+				open={profileOpen}
+			/>
 		</React.Fragment>
 	);
 };
