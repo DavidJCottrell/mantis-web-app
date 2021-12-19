@@ -1,21 +1,15 @@
-class Auth {
-	constructor() {
-		this.authenticated = true;
-	}
-
-	login(cb) {
-		this.authenticated = true;
-		cb();
-	}
-
-	logout(cb) {
-		this.authenticated = false;
-		cb();
-	}
-
-	isAuthenticated() {
-		return this.authenticated;
-	}
+function login(token) {
+	localStorage.setItem("logged-in", true);
+	localStorage.setItem("auth-token", token);
 }
 
-export default new Auth();
+function logout() {
+	localStorage.setItem("logged-in", false);
+	localStorage.removeItem("auth-token");
+}
+
+function isAuthenticated() {
+	return localStorage.getItem("logged-in") === "true";
+}
+
+export default { login, logout, isAuthenticated };

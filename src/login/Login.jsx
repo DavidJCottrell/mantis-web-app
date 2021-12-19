@@ -1,5 +1,8 @@
 import React, { useState } from "react";
-import { Link as RouterLink } from "react-router-dom";
+import { withRouter } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast";
+
+import axios from "axios";
 
 // Material-UI
 import Avatar from "@material-ui/core/Avatar";
@@ -18,6 +21,8 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 // Snackbar
 
+import auth from "../utils/auth.js";
+
 // Styles
 import { loginStyles } from "./loginStyles";
 
@@ -25,7 +30,26 @@ const Login = (props) => {
 	const classes = loginStyles();
 
 	const login = () => {
-		props.auth.login(() => {});
+		if (document.getElementById("email-input").value === "") {
+			toast.error("Please enter your email");
+		} else if (document.getElementById("password-input").value === "") {
+			toast.error("Please enter your password");
+		} else {
+			axios
+				.post("http://192.168.0.98:9000/user/login/", {
+					email: document.getElementById("email-input").value,
+					password: document.getElementById("password-input").value,
+				})
+				// If they successfully login
+				.then((response) => {
+					auth.login(response.data);
+					props.history.push("/");
+				})
+				// If they fail
+				.catch((error) => {
+					toast.error(error.response.data);
+				});
+		}
 	};
 
 	const [signUpOpen, setSignUpOpen] = useState(false);
@@ -36,6 +60,7 @@ const Login = (props) => {
 
 	return (
 		<React.Fragment>
+			<Toaster />
 			<Grid container component='main' className={classes.root}>
 				<CssBaseline />
 				{/* component={Paper} */}
@@ -80,6 +105,7 @@ const Login = (props) => {
 								name='email'
 								autoComplete='email'
 								color='secondary'
+								id='email-input'
 							/>
 							<TextField
 								variant='outlined'
@@ -91,23 +117,25 @@ const Login = (props) => {
 								type='password'
 								autoComplete='current-password'
 								color='secondary'
+								id='password-input'
 							/>
 
-							<RouterLink
-								to='/'
+							{/* <RouterLink
+								// to='/'
 								style={{ textDecoration: "none" }}
 								onClick={login}
+							> */}
+							<Button
+								// type='submit'
+								fullWidth
+								variant='contained'
+								color='secondary'
+								className={classes.submit}
+								onClick={login}
 							>
-								<Button
-									type='submit'
-									fullWidth
-									variant='contained'
-									color='secondary'
-									className={classes.submit}
-								>
-									Sign In
-								</Button>
-							</RouterLink>
+								Sign In
+							</Button>
+							{/* </RouterLink> */}
 							<Grid container>
 								<Grid item xs>
 									<Link
@@ -205,4 +233,4 @@ const Login = (props) => {
 	);
 };
 
-export default Login;
+export default withRouter(Login);

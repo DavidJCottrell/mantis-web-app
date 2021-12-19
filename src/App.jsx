@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Route, Switch } from "react-router-dom";
 
 //Pages
@@ -12,8 +12,6 @@ import PageNotFound from "./PageNotFound";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
-
-import auth from "./utils/auth";
 
 const App = () => {
 	const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
@@ -40,23 +38,9 @@ const App = () => {
 		<ThemeProvider theme={theme}>
 			<CssBaseline />
 			<Switch>
-				<Route
-					exact
-					path='/login'
-					render={() => <Login auth={auth} />}
-				></Route>
-				<ProtectedRoute
-					exact
-					path='/'
-					component={Dashboard}
-					auth={auth}
-				/>
-				<ProtectedRoute
-					exact
-					path='/projects'
-					component={Projects}
-					auth={auth}
-				/>
+				<Route exact path='/login' render={() => <Login />}></Route>
+				<ProtectedRoute exact path='/' component={Dashboard} />
+				<ProtectedRoute exact path='/projects' component={Projects} />
 				<Route path='*' component={PageNotFound} />
 			</Switch>
 		</ThemeProvider>

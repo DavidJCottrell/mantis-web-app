@@ -5,14 +5,13 @@ import { withRouter, Link } from "react-router-dom";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 
-// import auth from "../utils/auth";
+import auth from "../../utils/auth";
+
 import ProfileDialog from "./ProfileDialog";
 
 const ProfileMenu = (props) => {
 	const signOut = () => {
-		// props.auth.logout(() => {
-		// 	console.log("Log Out");
-		// });
+		auth.logout();
 	};
 
 	const [profileOpen, setProfileOpen] = useState(false);

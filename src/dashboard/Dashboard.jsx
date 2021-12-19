@@ -35,6 +35,7 @@ const Dashboard = () => {
 	};
 
 	const handleAddProjectClose = () => {
+		console.log("Token: ", localStorage.getItem("token"));
 		setAddProjectOpen(false);
 	};
 
