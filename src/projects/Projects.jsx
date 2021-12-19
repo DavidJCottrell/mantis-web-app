@@ -22,9 +22,12 @@ import Hidden from "@material-ui/core/Hidden";
 import Nav from "../common/nav/Nav";
 import TaskTableRow from "./TaskTableRow";
 
-const Projects = () => {
+const Projects = (props) => {
 	const theme = useTheme();
 	const isMobile = useMediaQuery(theme.breakpoints.up("sm"));
+	const { _id } = props.location.state;
+
+	// Get project data based on the passed _id
 
 	const taskData = [
 		{
@@ -90,11 +93,17 @@ const Projects = () => {
 								<TableHead>
 									<TableRow>
 										<TableCell>Key</TableCell>
-										<TableCell align='left'>Title</TableCell>
+										<TableCell align='left'>
+											Title
+										</TableCell>
 										{isMobile ? (
 											<React.Fragment>
-												<TableCell align='left'>Status</TableCell>
-												<TableCell align='left'>Resolution</TableCell>
+												<TableCell align='left'>
+													Status
+												</TableCell>
+												<TableCell align='left'>
+													Resolution
+												</TableCell>
 											</React.Fragment>
 										) : null}
 										<TableCell />
@@ -102,7 +111,11 @@ const Projects = () => {
 								</TableHead>
 								<TableBody>
 									{taskData.map((task) => (
-										<TaskTableRow key={task.taskKey} row={task} isMobile={isMobile} />
+										<TaskTableRow
+											key={task.taskKey}
+											row={task}
+											isMobile={isMobile}
+										/>
 									))}
 								</TableBody>
 							</Table>
@@ -118,28 +131,45 @@ const Projects = () => {
 							<br />
 							<Card>
 								<CardContent>
-									<Typography variant='h5' component='h2' gutterBottom>
+									<Typography
+										variant='h5'
+										component='h2'
+										gutterBottom
+									>
 										Team Members
 									</Typography>
 
-									<Typography variant='subtitle1' component='h2'>
+									<Typography
+										variant='subtitle1'
+										component='h2'
+									>
 										Team Leaders
 									</Typography>
 									<ul>
-										{teamData.TeamLeaders.map((person, i) => (
-											<li key={i}>{person}</li>
-										))}
+										{teamData.TeamLeaders.map(
+											(person, i) => (
+												<li key={i}>{person}</li>
+											)
+										)}
 									</ul>
-									<Typography variant='subtitle1' component='h2'>
+									<Typography
+										variant='subtitle1'
+										component='h2'
+									>
 										Developers
 									</Typography>
 									<ul>
-										{teamData.Developers.map((person, i) => (
-											<li key={i}>{person}</li>
-										))}
+										{teamData.Developers.map(
+											(person, i) => (
+												<li key={i}>{person}</li>
+											)
+										)}
 									</ul>
 
-									<Typography variant='subtitle1' component='h2'>
+									<Typography
+										variant='subtitle1'
+										component='h2'
+									>
 										Clients
 									</Typography>
 
@@ -150,7 +180,10 @@ const Projects = () => {
 									</ul>
 
 									<br />
-									<Button variant='contained' color='secondary'>
+									<Button
+										variant='contained'
+										color='secondary'
+									>
 										Add users
 									</Button>
 								</CardContent>
