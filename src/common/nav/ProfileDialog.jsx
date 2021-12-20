@@ -11,18 +11,23 @@ const AccountMenu = (props) => {
 		<Dialog
 			open={props.open}
 			onClose={props.handleClose}
-			aria-labelledby="form-dialog-title"
+			aria-labelledby='form-dialog-title'
 			fullWidth
 		>
-			<DialogTitle id="form-dialog-title">Your profile</DialogTitle>
+			<DialogTitle id='form-dialog-title'>Your profile</DialogTitle>
 			<DialogContent>
-				<Typography variant="subtitle1">Profile details</Typography>
+				<Typography variant='subtitle1'>Profile details</Typography>
+				<ul>
+					<li>Name: {localStorage.getItem("user-name")}</li>
+					<li>Username: {localStorage.getItem("user-username")}</li>
+					<li>Email: {localStorage.getItem("user-email")}</li>
+				</ul>
 			</DialogContent>
 			<DialogActions>
-				<Button onClick={props.handleClose} color="inherit">
+				<Button onClick={props.handleClose} color='inherit'>
 					Cancel
 				</Button>
-				<Button onClick={props.handleClose} color="inherit" disabled>
+				<Button onClick={props.handleClose} color='inherit' disabled>
 					Update
 				</Button>
 			</DialogActions>
