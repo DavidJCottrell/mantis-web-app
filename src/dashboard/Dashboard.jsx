@@ -19,7 +19,7 @@ import Nav from "../common/nav/Nav";
 import AddProjectDialog from "./AddProjectDialog";
 
 const Dashboard = () => {
-	const { isLoading, error, data } = useQuery("fetchProjects", () =>
+	const { isSuccess, error, data } = useQuery("fetchProjects", () =>
 		axios.get("http://192.168.0.98:9000/project/all/", {
 			headers: {
 				"auth-token": localStorage.getItem("auth-token"),
@@ -27,7 +27,7 @@ const Dashboard = () => {
 		})
 	);
 
-	// NEEDS TO HANDLE ERRORS
+	if (error) console.log(error);
 
 	const [addProjectOpen, setAddProjectOpen] = useState(false);
 
@@ -36,7 +36,6 @@ const Dashboard = () => {
 	};
 
 	const handleAddProjectClose = () => {
-		console.log("Token: ", localStorage.getItem("token"));
 		setAddProjectOpen(false);
 	};
 
@@ -44,7 +43,7 @@ const Dashboard = () => {
 		<React.Fragment>
 			<Nav handleAddProjectOpen={handleAddProjectOpen} />
 			<Container>
-				<Typography variant='h4'>Projects</Typography>
+				<Typography variant='h4'>Your Projects</Typography>
 				<Box py={3}>
 					<TextField
 						id='outlined-basic'
@@ -61,11 +60,7 @@ const Dashboard = () => {
 						width: "100%",
 					}}
 				>
-					{isLoading ? (
-						<h1>Loading</h1>
-					) : error ? (
-						<h1>Error loading projects</h1>
-					) : (
+					{isSuccess ? (
 						data.data.map((project) => (
 							<Grid item xs={12} sm={6} md={4} key={project._id}>
 								<Card>
@@ -99,10 +94,11 @@ const Dashboard = () => {
 									</CardContent>
 									<CardActions>
 										<Link
-											// to='/projects'
 											to={{
 												pathname: "/projects",
-												state: { _id: project._id },
+												state: {
+													projectId: project._id,
+												},
 											}}
 											style={{
 												textDecoration: "none",
@@ -116,8 +112,11 @@ const Dashboard = () => {
 								</Card>
 							</Grid>
 						))
+					) : (
+						<h1>Loading Your Projects...</h1>
 					)}
 				</Grid>
+				<br />
 			</Container>
 			<AddProjectDialog
 				open={addProjectOpen}
