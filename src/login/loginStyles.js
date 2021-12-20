@@ -2,8 +2,10 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const loginStyles = makeStyles((theme) => ({
 	root: {
-		// height: "100vh",
-		minHeight: "-webkit-fill-available",
+		height: "100vh",
+		// minHeight: "-webkit-fill-available",
+		// minHeight: "-moz-available",
+		// minHeight: "-fill-available",
 	},
 	center: {
 		display: "grid",

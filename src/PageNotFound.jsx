@@ -20,7 +20,9 @@ const PageNotFound = () => {
 		>
 			<Grid item xs={10}>
 				<Typography variant='h2'>404</Typography>
-				<Typography variant='h5'>The page "{page}" could not be found</Typography>
+				<Typography variant='h5'>
+					The page "{page}" could not be found
+				</Typography>
 				<br />
 				<Link style={{ textDecoration: "none" }} to='/'>
 					<Button variant='contained'>Return home</Button>
