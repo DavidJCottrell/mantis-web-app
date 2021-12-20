@@ -30,26 +30,37 @@ const Login = (props) => {
 	const classes = loginStyles();
 
 	const login = () => {
-		if (document.getElementById("email-input").value === "") {
-			toast.error("Please enter your email");
-		} else if (document.getElementById("password-input").value === "") {
-			toast.error("Please enter your password");
-		} else {
-			axios
-				.post("http://192.168.0.98:9000/user/login/", {
-					email: document.getElementById("email-input").value,
-					password: document.getElementById("password-input").value,
-				})
-				// If they successfully login
-				.then((response) => {
-					auth.login(response.data);
-					props.history.push("/");
-				})
-				// If they fail
-				.catch((error) => {
-					toast.error(error.response.data);
-				});
-		}
+		axios
+			.post("http://192.168.0.98:9000/user/login/", {
+				email: document.getElementById("email-input").value,
+				password: document.getElementById("password-input").value,
+			})
+			.then((response) => {
+				auth.login(response.data); // Front-end login, store auth-token and id
+				axios
+					.get("http://192.168.0.98:9000/user/details/", {
+						headers: {
+							"auth-token": localStorage.getItem("auth-token"),
+						},
+					})
+					.then((response) => {
+						localStorage.setItem(
+							"user-name",
+							response.data.firstName +
+								" " +
+								response.data.lastName
+						);
+						localStorage.setItem(
+							"user-username",
+							response.data.username
+						);
+						localStorage.setItem("user-email", response.data.email);
+						props.history.push("/");
+					});
+			})
+			.catch(() => {
+				toast.error("Error logging in. Please try again later...");
+			});
 	};
 
 	const [signUpOpen, setSignUpOpen] = useState(false);
