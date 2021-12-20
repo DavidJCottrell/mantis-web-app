@@ -1,4 +1,6 @@
 import React from "react";
+import axios from "axios";
+import { useQuery } from "react-query";
 
 // Material-UI
 import Table from "@material-ui/core/Table";
@@ -25,53 +27,17 @@ import TaskTableRow from "./TaskTableRow";
 const Projects = (props) => {
 	const theme = useTheme();
 	const isMobile = useMediaQuery(theme.breakpoints.up("sm"));
-	const { _id } = props.location.state;
+	const { projectId } = props.location.state;
 
-	// Get project data based on the passed _id
+	const { isSuccess, error, data } = useQuery("fetchProjectData", () =>
+		axios.get("http://192.168.0.98:9000/project/" + String(projectId), {
+			headers: {
+				"auth-token": localStorage.getItem("auth-token"),
+			},
+		})
+	);
 
-	const taskData = [
-		{
-			taskKey: "T1",
-			title: "Login Bug",
-			status: "In-progress",
-			resolution: "Unresolved",
-			type: "Bug",
-		},
-		{
-			taskKey: "T2",
-			title: "Level 2 Issue",
-			status: "In-progress",
-			resolution: "Unresolved",
-			type: "Bug",
-		},
-		{
-			taskKey: "T3",
-			title: "Customer API Route",
-			status: "In-progress",
-			resolution: "Unresolved",
-			type: "New Feature",
-		},
-		{
-			taskKey: "T4",
-			title: "Item Menu Sort Option",
-			status: "In-progress",
-			resolution: "Unresolved",
-			type: "System Improvement",
-		},
-		{
-			taskKey: "T5",
-			title: "About Page",
-			status: "In-progress",
-			resolution: "Unresolved",
-			type: "New Feature",
-		},
-	];
-
-	const teamData = {
-		TeamLeaders: ["Bob Smith", "Jim Jones"],
-		Developers: ["Adam White", "Chris Martin", "James White"],
-		Clients: ["Edd Gordon", "Kyle Jones", "Jimmy Wozniak"],
-	};
+	if (error) console.log("Error loading project");
 
 	return (
 		<div>
@@ -85,111 +51,130 @@ const Projects = (props) => {
 					}}
 				>
 					{/* Tasks grid */}
-					<Grid item xs={12} md={8}>
-						<Typography variant='h4'>Half Life 3</Typography>
-						<br />
-						<TableContainer component={Paper}>
-							<Table aria-label='collapsible table'>
-								<TableHead>
-									<TableRow>
-										<TableCell>Key</TableCell>
-										<TableCell align='left'>
-											Title
-										</TableCell>
-										{isMobile ? (
-											<React.Fragment>
-												<TableCell align='left'>
-													Status
-												</TableCell>
-												<TableCell align='left'>
-													Resolution
-												</TableCell>
-											</React.Fragment>
-										) : null}
-										<TableCell />
-									</TableRow>
-								</TableHead>
-								<TableBody>
-									{taskData.map((task) => (
-										<TaskTableRow
-											key={task.taskKey}
-											row={task}
-											isMobile={isMobile}
-										/>
-									))}
-								</TableBody>
-							</Table>
-						</TableContainer>
-					</Grid>
+					{isSuccess ? (
+						<Grid item xs={12} md={8}>
+							<Typography variant='h4'>Half Life 3</Typography>
+							<br />
+							<TableContainer component={Paper}>
+								<Table aria-label='collapsible table'>
+									<TableHead>
+										<TableRow>
+											<TableCell>Key</TableCell>
+											<TableCell align='left'>
+												Title
+											</TableCell>
+											{isMobile ? (
+												<React.Fragment>
+													<TableCell align='left'>
+														Status
+													</TableCell>
+													<TableCell align='left'>
+														Resolution
+													</TableCell>
+												</React.Fragment>
+											) : null}
+											<TableCell />
+										</TableRow>
+									</TableHead>
+									<TableBody>
+										{data.data.project.tasks.map((task) => (
+											<TaskTableRow
+												key={task.taskKey}
+												row={task}
+												isMobile={isMobile}
+											/>
+										))}
+									</TableBody>
+								</Table>
+							</TableContainer>
+						</Grid>
+					) : (
+						<h1>Loading Project Data...</h1>
+					)}
 					{/* Gap between tasks and members card */}
 					<Hidden only={["xs", "sm"]}>
 						<Grid item md={1}></Grid>
 					</Hidden>
 					{/* Team Members Card (desktop only) */}
-					<Hidden only={["xs", "sm"]}>
-						<Grid item xs={12} md={3}>
-							<br />
-							<Card>
-								<CardContent>
-									<Typography
-										variant='h5'
-										component='h2'
-										gutterBottom
-									>
-										Team Members
-									</Typography>
+					{isSuccess ? (
+						<Hidden only={["xs", "sm"]}>
+							<Grid item xs={12} md={3}>
+								<br />
+								<Card>
+									<CardContent>
+										<Typography
+											variant='h5'
+											component='h2'
+											gutterBottom
+										>
+											Team Members
+										</Typography>
 
-									<Typography
-										variant='subtitle1'
-										component='h2'
-									>
-										Team Leaders
-									</Typography>
-									<ul>
-										{teamData.TeamLeaders.map(
-											(person, i) => (
-												<li key={i}>{person}</li>
-											)
-										)}
-									</ul>
-									<Typography
-										variant='subtitle1'
-										component='h2'
-									>
-										Developers
-									</Typography>
-									<ul>
-										{teamData.Developers.map(
-											(person, i) => (
-												<li key={i}>{person}</li>
-											)
-										)}
-									</ul>
+										<Typography
+											variant='subtitle1'
+											component='h2'
+										>
+											Team Leaders
+										</Typography>
+										<ul>
+											{data.data.project.users.map(
+												(person, i) =>
+													person.role ===
+													"Team Leader" ? (
+														<li key={i}>
+															{person.name}
+														</li>
+													) : null
+											)}
+										</ul>
+										<Typography
+											variant='subtitle1'
+											component='h2'
+										>
+											Developers
+										</Typography>
+										<ul>
+											{data.data.project.users.map(
+												(person, i) =>
+													person.role ===
+													"Developer" ? (
+														<li key={i}>
+															{person.name}
+														</li>
+													) : null
+											)}
+										</ul>
 
-									<Typography
-										variant='subtitle1'
-										component='h2'
-									>
-										Clients
-									</Typography>
+										<Typography
+											variant='subtitle1'
+											component='h2'
+										>
+											Clients
+										</Typography>
 
-									<ul>
-										{teamData.Clients.map((person, i) => (
-											<li key={i}>{person}</li>
-										))}
-									</ul>
+										<ul>
+											{data.data.project.users.map(
+												(person, i) =>
+													person.role === "Client" ? (
+														<li key={i}>
+															{person.name}
+														</li>
+													) : null
+											)}
+										</ul>
 
-									<br />
-									<Button
-										variant='contained'
-										color='secondary'
-									>
-										Add users
-									</Button>
-								</CardContent>
-							</Card>
-						</Grid>
-					</Hidden>
+										<br />
+										<Button
+											variant='contained'
+											color='secondary'
+										>
+											Add users
+										</Button>
+									</CardContent>
+								</Card>
+							</Grid>
+						</Hidden>
+					) : null}
 				</Grid>
 				{/* More Stuff */}
 			</Nav>
