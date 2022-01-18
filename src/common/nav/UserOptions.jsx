@@ -1,5 +1,7 @@
 import React from "react";
 
+import { Link } from "react-router-dom";
+
 import AddIcon from "@material-ui/icons/Add";
 import GroupAddIcon from "@material-ui/icons/GroupAdd";
 import ListItem from "@material-ui/core/ListItem";
@@ -9,6 +11,7 @@ import List from "@material-ui/core/List";
 import FormatListBulletedIcon from "@material-ui/icons/FormatListBulleted";
 import GroupIcon from "@material-ui/icons/Group";
 import AssessmentIcon from "@material-ui/icons/Assessment";
+import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 
 const UserOptions = ({ userType }) => {
 	switch (userType) {
@@ -67,11 +70,28 @@ const UserOptions = ({ userType }) => {
 						</ListItemIcon>
 						<ListItemText primary='Release report' />
 					</ListItem>
+
 					<ListItem button>
 						<ListItemIcon>
 							<GroupIcon />
 						</ListItemIcon>
 						<ListItemText primary='Team members' />
+					</ListItem>
+
+					<ListItem button>
+						<Link
+							to={{
+								pathname: "/",
+							}}
+							style={{
+								textDecoration: "none",
+							}}
+						>
+							<ListItemIcon>
+								<ArrowBackIcon />
+							</ListItemIcon>
+						</Link>
+						<ListItemText primary='Back to Dashboard' />
 					</ListItem>
 				</List>
 			);

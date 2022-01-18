@@ -19,15 +19,15 @@ import Nav from "../common/nav/Nav";
 import AddProjectDialog from "./AddProjectDialog";
 
 const Dashboard = () => {
-	const { isSuccess, error, data } = useQuery("fetchProjects", () =>
-		axios.get("http://192.168.0.98:9000/project/all/", {
+	const projects = useQuery("fetchProjects", () =>
+		axios.get("http://192.168.0.98:9000/user/projects/", {
 			headers: {
 				"auth-token": localStorage.getItem("auth-token"),
 			},
 		})
 	);
 
-	if (error) console.log(error);
+	if (projects.error) console.log(projects.error);
 
 	const [addProjectOpen, setAddProjectOpen] = useState(false);
 
@@ -59,9 +59,11 @@ const Dashboard = () => {
 						margin: 0,
 						width: "100%",
 					}}
+					id='project-grid'
+					key='1'
 				>
-					{isSuccess ? (
-						data.data.map((project) => (
+					{projects.isSuccess ? (
+						projects.data.data.map((project) => (
 							<Grid item xs={12} sm={6} md={4} key={project._id}>
 								<Card>
 									<CardContent>

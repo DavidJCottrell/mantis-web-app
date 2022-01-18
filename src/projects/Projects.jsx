@@ -53,7 +53,9 @@ const Projects = (props) => {
 					{/* Tasks grid */}
 					{isSuccess ? (
 						<Grid item xs={12} md={8}>
-							<Typography variant='h4'>Half Life 3</Typography>
+							<Typography variant='h4'>
+								{data.data.project.title}
+							</Typography>
 							<br />
 							<TableContainer component={Paper}>
 								<Table aria-label='collapsible table'>

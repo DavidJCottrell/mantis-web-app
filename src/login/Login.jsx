@@ -29,38 +29,54 @@ import { loginStyles } from "./loginStyles";
 const Login = (props) => {
 	const classes = loginStyles();
 
-	const login = () => {
+	const login = (email, password) => {
 		axios
 			.post("http://192.168.0.98:9000/user/login/", {
-				email: document.getElementById("email-input").value,
-				password: document.getElementById("password-input").value,
+				email: email,
+				password: password,
 			})
-			.then((response) => {
-				auth.login(response.data); // Front-end login, store auth-token and id
+			.then((res1) => {
 				axios
 					.get("http://192.168.0.98:9000/user/details/", {
 						headers: {
-							"auth-token": localStorage.getItem("auth-token"),
+							"auth-token": res1.data.token,
 						},
 					})
-					.then((response) => {
-						localStorage.setItem(
-							"user-name",
-							response.data.firstName +
-								" " +
-								response.data.lastName
-						);
-						localStorage.setItem(
-							"user-username",
-							response.data.username
-						);
-						localStorage.setItem("user-email", response.data.email);
+					.then((res2) => {
+						auth.login(res2.data, res1.data.token); // Front-end login, store auth-token, and user details
 						props.history.push("/");
 					});
 			})
 			.catch(() => {
 				toast.error("Error logging in. Please try again later...");
 			});
+	};
+
+	const signUp = () => {
+		const form = document.getElementById("signUp-form");
+		const password = form.elements["password"].value;
+		const vpassword = form.elements["vpassword"].value;
+		const fname = form.elements["fname"].value;
+		const lname = form.elements["lname"].value;
+		const email = form.elements["email"].value;
+
+		if (password === vpassword) {
+			axios
+				.post("http://192.168.0.98:9000/user/register/", {
+					firstName: fname,
+					lastName: lname,
+					email: email,
+					password: password,
+				})
+				.then(() => {
+					login(email, password);
+				})
+				.catch((e) => {
+					toast.error(e.response.data);
+				});
+		} else {
+			toast.error("Passwords do not match, please try again.");
+		}
 	};
 
 	const [signUpOpen, setSignUpOpen] = useState(false);
@@ -106,7 +122,11 @@ const Login = (props) => {
 						<Typography component='h1' variant='h5'>
 							Sign in
 						</Typography>
-						<form className={classes.form} noValidate>
+						<form
+							className={classes.form}
+							id='login-form'
+							noValidate
+						>
 							<TextField
 								variant='outlined'
 								margin='normal'
@@ -116,7 +136,6 @@ const Login = (props) => {
 								name='email'
 								autoComplete='email'
 								color='secondary'
-								id='email-input'
 							/>
 							<TextField
 								variant='outlined'
@@ -128,21 +147,21 @@ const Login = (props) => {
 								type='password'
 								autoComplete='current-password'
 								color='secondary'
-								id='password-input'
 							/>
-
-							{/* <RouterLink
-								// to='/'
-								style={{ textDecoration: "none" }}
-								onClick={login}
-							> */}
 							<Button
 								// type='submit'
 								fullWidth
 								variant='contained'
 								color='secondary'
 								className={classes.submit}
-								onClick={login}
+								onClick={() => {
+									login(
+										document.getElementById("login-form")
+											.elements["email"].value,
+										document.getElementById("login-form")
+											.elements["password"].value
+									);
+								}}
 							>
 								Sign In
 							</Button>
@@ -179,63 +198,68 @@ const Login = (props) => {
 			>
 				<DialogTitle id='form-dialog-title'>Sign Up</DialogTitle>
 				<DialogContent>
-					<TextField
-						variant='outlined'
-						margin='normal'
-						required
-						fullWidth
-						label='Email Address'
-						name='email'
-						autoComplete='email'
-						color='secondary'
-					/>
-					<TextField
-						variant='outlined'
-						margin='normal'
-						required
-						fullWidth
-						label='First Name'
-						name='fname'
-						autoComplete='given-name'
-						color='secondary'
-					/>
-					<TextField
-						variant='outlined'
-						margin='normal'
-						required
-						fullWidth
-						label='Last Name'
-						name='lname'
-						autoComplete='family-name'
-						color='secondary'
-					/>
+					<form className={classes.form} id='signUp-form'>
+						<TextField
+							variant='outlined'
+							margin='normal'
+							required
+							fullWidth
+							label='Email Address'
+							name='email'
+							autoComplete='email'
+							color='secondary'
+						/>
+						<TextField
+							variant='outlined'
+							margin='normal'
+							required
+							fullWidth
+							label='First Name'
+							name='fname'
+							autoComplete='given-name'
+							color='secondary'
+						/>
+						<TextField
+							variant='outlined'
+							margin='normal'
+							required
+							fullWidth
+							label='Last Name'
+							name='lname'
+							autoComplete='family-name'
+							color='secondary'
+						/>
 
-					<TextField
-						variant='outlined'
-						margin='normal'
-						required
-						fullWidth
-						label='Password'
-						name='password'
-						type='password'
-						color='secondary'
-					/>
-					<TextField
-						variant='outlined'
-						margin='normal'
-						required
-						fullWidth
-						label='Verify Password'
-						name='vpassword'
-						type='password'
-						color='secondary'
-					/>
+						<TextField
+							variant='outlined'
+							margin='normal'
+							required
+							fullWidth
+							label='Password'
+							name='password'
+							type='password'
+							color='secondary'
+						/>
+						<TextField
+							variant='outlined'
+							margin='normal'
+							required
+							fullWidth
+							label='Verify Password'
+							name='vpassword'
+							type='password'
+							color='secondary'
+						/>
+					</form>
 				</DialogContent>
 				<DialogActions>
 					<Button onClick={handleSignUpClose} color='inherit'>
 						Cancel
 					</Button>
-					<Button onClick={handleSignUpClose} color='inherit'>
+					<Button
+						onClick={(handleSignUpClose, signUp)}
+						color='inherit'
+					>
 						Sign up
 					</Button>
 				</DialogActions>

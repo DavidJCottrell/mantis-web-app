@@ -1,13 +1,16 @@
-function login(data) {
+function login(data, token) {
 	localStorage.setItem("logged-in", true);
-	localStorage.setItem("auth-token", data.token);
+	localStorage.setItem("auth-token", token);
 	localStorage.setItem("user-id", data._id);
+	localStorage.setItem("firstname", data.firstName);
+	localStorage.setItem("lastname", data.lastName);
+	localStorage.setItem("fullname", data.firstName + " " + data.lastName);
+	localStorage.setItem("username", data.username);
+	localStorage.setItem("email", data.email);
 }
 
 function logout() {
-	localStorage.setItem("logged-in", false);
-	localStorage.removeItem("auth-token");
-	localStorage.removeItem("user-id");
+	localStorage.clear();
 }
 
 function isAuthenticated() {

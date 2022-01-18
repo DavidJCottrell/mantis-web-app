@@ -20,7 +20,7 @@ const AddProjectDialog = ({ open, handleClose }) => {
 		if (document.getElementsByName("title")[0] !== null) {
 			const data = {
 				title: document.getElementsByName("title")[0].value,
-				users: [{ name: "David Cottrell" }],
+				users: [],
 				tasks: [],
 				githubURL: document.getElementsByName("githubURL")[0].value,
 				description: document.getElementsByName("description")[0].value,
@@ -31,13 +31,13 @@ const AddProjectDialog = ({ open, handleClose }) => {
 						"auth-token": localStorage.getItem("auth-token"),
 					},
 				})
-				// If they successfully login
-				.then((response) => {
+				// Project created successfully
+				.then((res) => {
 					handleClose();
+					window.location.reload();
 				})
-				// If they fail
+				// If failed
 				.catch((e) => {
-					// error.response.data
 					console.log("Error creating project: ", e);
 				});
 		}

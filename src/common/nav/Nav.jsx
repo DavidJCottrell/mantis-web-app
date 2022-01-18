@@ -40,7 +40,8 @@ const Nav = ({ userType, showDrawer, handleAddProjectOpen, children }) => {
 
 	// Profile Menu Logic
 	const [profileAnchor, setProfileAnchor] = useState(); //State
-	const handleProfileMenuOpen = (event) => setProfileAnchor(event.currentTarget); //Handle open
+	const handleProfileMenuOpen = (event) =>
+		setProfileAnchor(event.currentTarget); //Handle open
 	const handleProfileMenuClose = () => setProfileAnchor(null); //Handle close
 	const isProfileMenuOpen = Boolean(profileAnchor); //Is open
 
@@ -52,7 +53,8 @@ const Nav = ({ userType, showDrawer, handleAddProjectOpen, children }) => {
 
 	// Comment List Logic
 	const [taggedCommentsAnchor, setTaggedCommentsAnchor] = useState(); //State
-	const handleTaggedCommentsListOpen = (event) => setTaggedCommentsAnchor(event.currentTarget); //Handle open
+	const handleTaggedCommentsListOpen = (event) =>
+		setTaggedCommentsAnchor(event.currentTarget); //Handle open
 	const handleTaggedCommentsListClose = () => setTaggedCommentsAnchor(null); //Handle close
 	const isTaggedCommentsListOpen = Boolean(taggedCommentsAnchor); //Is open
 
@@ -93,15 +95,25 @@ const Nav = ({ userType, showDrawer, handleAddProjectOpen, children }) => {
 					<div className={classes.grow} />
 					{!showDrawer ? (
 						<Tooltip title='Add a project'>
-							<IconButton color='inherit' onClick={handleAddProjectOpen}>
+							<IconButton
+								color='inherit'
+								onClick={handleAddProjectOpen}
+							>
 								<AddIcon />
 							</IconButton>
 						</Tooltip>
 					) : null}
 					<Tooltip title='Tagged comments'>
-						<IconButton color='inherit' onClick={handleTaggedCommentsListOpen}>
+						<IconButton
+							color='inherit'
+							onClick={handleTaggedCommentsListOpen}
+						>
 							<Badge
-								badgeContent={taggedComments ? taggedComments.length : null}
+								badgeContent={
+									taggedComments
+										? taggedComments.length
+										: null
+								}
 								color='secondary'
 							>
 								<MailIcon />
@@ -110,13 +122,19 @@ const Nav = ({ userType, showDrawer, handleAddProjectOpen, children }) => {
 					</Tooltip>
 					<Tooltip title='Your tasks'>
 						<IconButton color='inherit' onClick={hanleTaskListOpen}>
-							<Badge badgeContent={tasks ? tasks.length : null} color='secondary'>
+							<Badge
+								badgeContent={tasks ? tasks.length : null}
+								color='secondary'
+							>
 								<AssignmentIcon />
 							</Badge>
 						</IconButton>
 					</Tooltip>
 					<Tooltip title='Account'>
-						<IconButton color='inherit' onClick={handleProfileMenuOpen}>
+						<IconButton
+							color='inherit'
+							onClick={handleProfileMenuOpen}
+						>
 							<AccountCircleIcon />
 						</IconButton>
 					</Tooltip>
@@ -139,11 +157,18 @@ const Nav = ({ userType, showDrawer, handleAddProjectOpen, children }) => {
 						}}
 					>
 						<div className={classes.toolbar}>
-							<Typography className={classes.grow} variant='body1'>
+							<Typography
+								className={classes.grow}
+								variant='body1'
+							>
 								{userType}
 							</Typography>
 							<IconButton onClick={handleDrawerClose}>
-								{theme.direction === "rtl" ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+								{theme.direction === "rtl" ? (
+									<ChevronRightIcon />
+								) : (
+									<ChevronLeftIcon />
+								)}
 							</IconButton>
 						</div>
 						<Divider />
