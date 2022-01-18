@@ -1,12 +1,15 @@
-function login(data, token) {
+function login(data) {
 	localStorage.setItem("logged-in", true);
-	localStorage.setItem("auth-token", token);
-	localStorage.setItem("user-id", data._id);
-	localStorage.setItem("firstname", data.firstName);
-	localStorage.setItem("lastname", data.lastName);
-	localStorage.setItem("fullname", data.firstName + " " + data.lastName);
-	localStorage.setItem("username", data.username);
-	localStorage.setItem("email", data.email);
+	localStorage.setItem("auth-token", data.token);
+	localStorage.setItem("user-id", data.user._id);
+	localStorage.setItem("firstname", data.user.firstName);
+	localStorage.setItem("lastname", data.user.lastName);
+	localStorage.setItem(
+		"fullname",
+		data.user.firstName + " " + data.user.lastName
+	);
+	localStorage.setItem("username", data.user.username);
+	localStorage.setItem("email", data.user.email);
 }
 
 function logout() {

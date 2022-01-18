@@ -35,17 +35,19 @@ const Login = (props) => {
 				email: email,
 				password: password,
 			})
-			.then((res1) => {
-				axios
-					.get("http://192.168.0.98:9000/user/details/", {
-						headers: {
-							"auth-token": res1.data.token,
-						},
-					})
-					.then((res2) => {
-						auth.login(res2.data, res1.data.token); // Front-end login, store auth-token, and user details
-						props.history.push("/");
-					});
+			.then((res) => {
+				auth.login(res.data); // Front-end login, store auth-token, and user details
+				props.history.push("/");
+				// axios
+				// 	.get("http://192.168.0.98:9000/user/details/", {
+				// 		headers: {
+				// 			"auth-token": res1.data.token,
+				// 		},
+				// 	})
+				// 	.then((res2) => {
+				// 		auth.login(res2.data, res1.data.token); // Front-end login, store auth-token, and user details
+				// 		props.history.push("/");
+				// 	});
 			})
 			.catch(() => {
 				toast.error("Error logging in. Please try again later...");

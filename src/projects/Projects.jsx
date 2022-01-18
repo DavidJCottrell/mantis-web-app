@@ -27,7 +27,16 @@ import TaskTableRow from "./TaskTableRow";
 const Projects = (props) => {
 	const theme = useTheme();
 	const isMobile = useMediaQuery(theme.breakpoints.up("sm"));
-	const { projectId } = props.location.state;
+
+	let projectId;
+
+	// if the page was navigated manually (without passing it an id)
+	try {
+		projectId = props.location.state.projectId;
+	} catch (error) {
+		// go back to dashboard
+		window.location.replace("/");
+	}
 
 	const { isSuccess, error, data } = useQuery("fetchProjectData", () =>
 		axios.get("http://192.168.0.98:9000/project/" + String(projectId), {
@@ -40,7 +49,7 @@ const Projects = (props) => {
 	if (error) console.log("Error loading project");
 
 	return (
-		<div>
+		<React.Fragment>
 			<Nav userType='Team Leader' showDrawer={true}>
 				<Grid
 					container
@@ -180,7 +189,7 @@ const Projects = (props) => {
 				</Grid>
 				{/* More Stuff */}
 			</Nav>
-		</div>
+		</React.Fragment>
 	);
 };
 

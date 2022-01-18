@@ -38,7 +38,8 @@ const App = () => {
 		<ThemeProvider theme={theme}>
 			<CssBaseline />
 			<Switch>
-				<Route exact path='/login' render={() => <Login />}></Route>
+				{/* <Route exact path='/login' render={() => <Login />}></Route> */}
+				<Route exact path='/login' component={Login}></Route>
 				<ProtectedRoute exact path='/' component={Dashboard} />
 				<ProtectedRoute exact path='/projects' component={Projects} />
 				<Route path='*' component={PageNotFound} />

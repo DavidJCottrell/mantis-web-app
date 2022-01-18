@@ -12,6 +12,7 @@ import FormatListBulletedIcon from "@material-ui/icons/FormatListBulleted";
 import GroupIcon from "@material-ui/icons/Group";
 import AssessmentIcon from "@material-ui/icons/Assessment";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import SettingsIcon from "@material-ui/icons/Settings";
 
 const UserOptions = ({ userType }) => {
 	switch (userType) {
@@ -76,6 +77,13 @@ const UserOptions = ({ userType }) => {
 							<GroupIcon />
 						</ListItemIcon>
 						<ListItemText primary='Team members' />
+					</ListItem>
+
+					<ListItem button>
+						<ListItemIcon>
+							<SettingsIcon />
+						</ListItemIcon>
+						<ListItemText primary='Project settings' />
 					</ListItem>
 
 					<ListItem button>
