@@ -68,7 +68,7 @@ const Nav = ({
 	const isTaggedCommentsListOpen = Boolean(taggedCommentsAnchor); //Is open
 
 	const taskData = useQuery("fetchUsersTasks", () =>
-		axios.get("http://192.168.0.98:9000/user/usertasks/", {
+		axios.get("http://localhost:9000/user/usertasks/", {
 			headers: {
 				"auth-token": localStorage.getItem("auth-token"),
 			},

@@ -20,7 +20,7 @@ import AddProjectDialog from "./AddProjectDialog";
 
 const Dashboard = () => {
 	const projects = useQuery("fetchProjects", () =>
-		axios.get("http://192.168.0.98:9000/user/projects/", {
+		axios.get("http://localhost:9000/user/projects/", {
 			headers: {
 				"auth-token": localStorage.getItem("auth-token"),
 			},

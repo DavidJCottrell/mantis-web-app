@@ -37,6 +37,13 @@ const UserOptions = ({ userType, handleAddUserOpen, handleAddTaskOpen }) => {
 							<ListItemText primary='Invite user' />
 						</ListItem>
 					</div>
+
+					<ListItem button>
+						<ListItemIcon>
+							<SettingsIcon />
+						</ListItemIcon>
+						<ListItemText primary='Project settings' />
+					</ListItem>
 				</List>
 			);
 		case "Developer":
@@ -83,13 +90,6 @@ const UserOptions = ({ userType, handleAddUserOpen, handleAddTaskOpen }) => {
 							<GroupIcon />
 						</ListItemIcon>
 						<ListItemText primary='Team members' />
-					</ListItem>
-
-					<ListItem button>
-						<ListItemIcon>
-							<SettingsIcon />
-						</ListItemIcon>
-						<ListItemText primary='Project settings' />
 					</ListItem>
 
 					<ListItem button>

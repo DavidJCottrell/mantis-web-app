@@ -31,7 +31,7 @@ const Login = (props) => {
 
 	const login = (email, password) => {
 		axios
-			.post("http://192.168.0.98:9000/user/login/", {
+			.post("http://localhost:9000/user/login/", {
 				email: email,
 				password: password,
 			})
@@ -39,7 +39,7 @@ const Login = (props) => {
 				auth.login(res.data); // Front-end login, store auth-token, and user details
 				props.history.push("/");
 				// axios
-				// 	.get("http://192.168.0.98:9000/user/details/", {
+				// 	.get("http://localhost:9000/user/details/", {
 				// 		headers: {
 				// 			"auth-token": res1.data.token,
 				// 		},
@@ -64,7 +64,7 @@ const Login = (props) => {
 
 		if (password === vpassword) {
 			axios
-				.post("http://192.168.0.98:9000/user/register/", {
+				.post("http://localhost:9000/user/register/", {
 					firstName: fname,
 					lastName: lname,
 					email: email,

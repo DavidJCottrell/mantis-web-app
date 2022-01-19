@@ -56,7 +56,7 @@ const Projects = (props) => {
 	}
 
 	const { isSuccess, error, data } = useQuery("fetchProjectData", () =>
-		axios.get("http://192.168.0.98:9000/project/" + String(projectId), {
+		axios.get("http://localhost:9000/project/" + String(projectId), {
 			headers: {
 				"auth-token": localStorage.getItem("auth-token"),
 			},
