@@ -1,13 +1,9 @@
 import React from "react";
 
 // Material-UI
-import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import Divider from "@material-ui/core/Divider";
-import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import axios from "axios";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -18,7 +14,7 @@ import Box from "@material-ui/core/Box";
 
 import toast, { Toaster } from "react-hot-toast";
 
-// Custom components
+// -- Custom components --
 import AddUserField from "../common/AddUserField";
 
 const AddProjectDialog = ({ open, handleClose, projectId }) => {
@@ -26,8 +22,6 @@ const AddProjectDialog = ({ open, handleClose, projectId }) => {
 		e.preventDefault();
 		const role = document.getElementById("role-select").innerText;
 		const username = document.getElementById("username-field").value;
-
-		//JT343254
 
 		var config = {
 			method: "post",
@@ -47,7 +41,6 @@ const AddProjectDialog = ({ open, handleClose, projectId }) => {
 			})
 			.catch((e) => {
 				toast.error(e.response.data);
-				console.log("Error adding user: ", e.response.data);
 			});
 	};
 
@@ -69,11 +62,9 @@ const AddProjectDialog = ({ open, handleClose, projectId }) => {
 								<InputLabel>Role</InputLabel>
 								<Select
 									id='role-select'
-									// value={role}
 									required
 									label='Role'
 									defaultValue={""}
-									// onChange={handleChange}
 								>
 									<MenuItem value={"Team Leader"}>
 										Team Leader
