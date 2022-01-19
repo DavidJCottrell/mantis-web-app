@@ -41,8 +41,8 @@ const AddProjectDialog = ({ open, handleClose, projectId }) => {
 		};
 
 		axios(config)
-			.then(() => {
-				console.log("Success");
+			.then((res) => {
+				toast.success(res.data.message);
 				handleClose();
 			})
 			.catch((e) => {
