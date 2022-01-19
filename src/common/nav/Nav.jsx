@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import clsx from "clsx";
+import axios from "axios";
+import { useQuery } from "react-query";
 
 //Material-UI Components
 import AppBar from "@material-ui/core/AppBar";
@@ -27,7 +29,7 @@ import { NavStyles } from "./navStyles";
 import UserOptions from "./UserOptions";
 import ProfileMenu from "./ProfileMenu";
 import NotificationList from "./NotificationList";
-import { commentsData, taskData } from "../../testData";
+import { commentsData } from "../../testData";
 
 const Nav = ({
 	userType,
@@ -65,12 +67,21 @@ const Nav = ({
 	const handleTaggedCommentsListClose = () => setTaggedCommentsAnchor(null); //Handle close
 	const isTaggedCommentsListOpen = Boolean(taggedCommentsAnchor); //Is open
 
+	const taskData = useQuery("fetchUsersTasks", () =>
+		axios.get("http://192.168.0.98:9000/user/usertasks/", {
+			headers: {
+				"auth-token": localStorage.getItem("auth-token"),
+			},
+		})
+	);
+	if (taskData.error) console.log(taskData.error);
+
+	// if (taskData.isSuccess) console.log(taskData.data.data.length);
+
 	//Get Task and Comment Data
 	const [taggedComments, setTaggedComments] = useState(false);
-	const [tasks, setTasks] = useState(false);
 	useEffect(() => {
 		setTaggedComments(commentsData);
-		setTasks(taskData);
 	}, []);
 
 	return (
@@ -130,7 +141,11 @@ const Nav = ({
 					<Tooltip title='Your tasks'>
 						<IconButton color='inherit' onClick={hanleTaskListOpen}>
 							<Badge
-								badgeContent={tasks ? tasks.length : null}
+								badgeContent={
+									taskData.data
+										? taskData.data.data.length
+										: null
+								}
 								color='secondary'
 							>
 								<AssignmentIcon />
@@ -202,24 +217,27 @@ const Nav = ({
 			/>
 
 			{/* Tagged Comments List */}
-			<NotificationList
+			{/* <NotificationList
 				title={"Your tagged comments:"}
 				type={"comments"}
 				open={isTaggedCommentsListOpen}
 				anchorElement={taggedCommentsAnchor}
 				handleClose={handleTaggedCommentsListClose}
 				data={taggedComments}
-			/>
+			/> */}
 
 			{/* Tasks List */}
-			<NotificationList
-				title={"Your tasks:"}
-				type={"tasks"}
-				open={isTaskMenuOpen}
-				anchorElement={tasksAnchor}
-				handleClose={handleTaskListClose}
-				data={tasks}
-			/>
+			{taskData.isSuccess ? (
+				<NotificationList
+					title={"Your tasks:"}
+					type={"tasks"}
+					open={isTaskMenuOpen}
+					anchorElement={tasksAnchor}
+					handleClose={handleTaskListClose}
+					data={taskData.data.data}
+				/>
+			) : null}
+
 			<Toolbar style={{ marginBottom: "20px" }} />
 		</div>
 	);

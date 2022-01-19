@@ -26,7 +26,6 @@ const Dashboard = () => {
 			},
 		})
 	);
-
 	if (projects.error) console.log(projects.error);
 
 	const [addProjectOpen, setAddProjectOpen] = useState(false);
@@ -41,7 +40,10 @@ const Dashboard = () => {
 
 	return (
 		<React.Fragment>
-			<Nav handleAddProjectOpen={handleAddProjectOpen} />
+			<Nav
+				handleAddProjectOpen={handleAddProjectOpen}
+				commentData={null}
+			/>
 			<Container>
 				<Typography variant='h4'>
 					{localStorage.getItem("fullname")}
