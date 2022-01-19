@@ -70,9 +70,13 @@ const TaskTableRow = ({ task, isMobile }) => {
 							<Typography variant='body1'>
 								Reporter: <b>{task.reporter.name}</b>
 							</Typography>
-							<Typography variant='body1'>
-								Assignee: <b>{task.assignee.name}</b>
-							</Typography>
+							{task.assignees.map((user, i) => (
+								<Typography variant='body1' key={i}>
+									{"Assignee " + (i + 1) + ": "}{" "}
+									<b>{user.name}</b>
+								</Typography>
+							))}
+
 							<Typography variant='body1'>
 								Created: <b>{task.dateCreated}</b>
 							</Typography>

@@ -22,6 +22,7 @@ const NotificationList = ({
 	type,
 }) => {
 	const classes = notificationListStyles();
+	// console.log(data)
 	return (
 		<Menu
 			id='simple-menu'

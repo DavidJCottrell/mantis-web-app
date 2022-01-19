@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 // Material-UI
 import Dialog from "@material-ui/core/Dialog";
@@ -15,7 +15,11 @@ import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import TextField from "@material-ui/core/TextField";
 import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
-import DateFnsUtils from "@date-io/date-fns"; // choose your lib
+import DateFnsUtils from "@date-io/date-fns";
+import AddIcon from "@material-ui/icons/Add";
+import RemoveIcon from "@material-ui/icons/Remove";
+import IconButton from "@material-ui/core/IconButton";
+import Tooltip from "@material-ui/core/Tooltip";
 
 import toast, { Toaster } from "react-hot-toast";
 
@@ -32,6 +36,8 @@ const AddTaskDialog = ({ open, handleClose, projectId, totalTasks }) => {
 		setChosenDate(newDate);
 	};
 
+	const [userInputFields, setInputFields] = useState(1);
+
 	const handleSubmit = (e) => {
 		e.preventDefault();
 
@@ -39,9 +45,18 @@ const AddTaskDialog = ({ open, handleClose, projectId, totalTasks }) => {
 
 		const type = document.getElementById("type-select").innerText;
 		const title = document.getElementById("title-field").value;
-		const assigneeUsername =
-			document.getElementById("assignee-field").value;
+		// const assigneeUsername =
+		// 	document.getElementById("assignee-field").value;
 		const description = document.getElementById("description-field").value;
+
+		let assignees = [];
+
+		Array.from({ length: userInputFields }, (x, i) => {
+			assignees.push({
+				username: document.getElementById("assignee-field-" + String(i))
+					.value,
+			});
+		});
 
 		const config = {
 			method: "patch",
@@ -55,9 +70,7 @@ const AddTaskDialog = ({ open, handleClose, projectId, totalTasks }) => {
 				resolution: "Unresolved",
 				type: type,
 				dateCreated: currentDate,
-				assignee: {
-					username: assigneeUsername,
-				},
+				assignees: assignees,
 				reporter: {
 					userId: localStorage.getItem("user-id"),
 					name: localStorage.getItem("fullname"),
@@ -68,8 +81,8 @@ const AddTaskDialog = ({ open, handleClose, projectId, totalTasks }) => {
 		axios(config)
 			.then((res) => {
 				toast.success(res.data.message);
-				handleClose();
-				window.location.reload();
+				// handleClose();
+				// window.location.reload();
 			})
 			.catch((e) => {
 				toast.error(e.response.data);
@@ -101,17 +114,43 @@ const AddTaskDialog = ({ open, handleClose, projectId, totalTasks }) => {
 							color='secondary'
 							fullWidth
 						/>
-						<TextField
-							variant='outlined'
-							margin='normal'
-							label='Assignee Username'
-							id='assignee-field'
-							name='assignee'
-							required
-							autoComplete='off'
-							color='secondary'
-							fullWidth
-						/>
+						{[...Array(userInputFields)].map((e, i) => (
+							<TextField
+								key={i}
+								variant='outlined'
+								margin='normal'
+								label='Assignee Username'
+								id={"assignee-field-" + String(i)}
+								name='assignee'
+								required
+								autoComplete='off'
+								color='secondary'
+								fullWidth
+							/>
+						))}
+
+						<Tooltip title='Add another member'>
+							<IconButton
+								color='inherit'
+								onClick={() => {
+									setInputFields(userInputFields + 1);
+								}}
+							>
+								<AddIcon />
+							</IconButton>
+						</Tooltip>
+						<Tooltip title='Remove member'>
+							<IconButton
+								color='inherit'
+								onClick={() => {
+									if (userInputFields > 1) {
+										setInputFields(userInputFields - 1);
+									}
+								}}
+							>
+								<RemoveIcon />
+							</IconButton>
+						</Tooltip>
 						<TextField
 							variant='outlined'
 							margin='normal'
