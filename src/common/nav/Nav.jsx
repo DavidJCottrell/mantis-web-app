@@ -29,7 +29,13 @@ import ProfileMenu from "./ProfileMenu";
 import NotificationList from "./NotificationList";
 import { commentsData, taskData } from "../../testData";
 
-const Nav = ({ userType, showDrawer, handleAddProjectOpen, children }) => {
+const Nav = ({
+	userType,
+	showDrawer,
+	handleAddProjectOpen,
+	handleAddUserOpen,
+	children,
+}) => {
 	const classes = NavStyles();
 	const theme = useTheme();
 
@@ -174,7 +180,10 @@ const Nav = ({ userType, showDrawer, handleAddProjectOpen, children }) => {
 						<Divider />
 						<UserOptions userType='All' />
 						<Divider />
-						<UserOptions userType={userType} />
+						<UserOptions
+							userType={userType}
+							handleAddUserOpen={handleAddUserOpen}
+						/>
 					</Drawer>
 					{/* Main content of page */}
 					<main className={classes.content}>

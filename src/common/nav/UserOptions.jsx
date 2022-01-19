@@ -14,7 +14,7 @@ import AssessmentIcon from "@material-ui/icons/Assessment";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import SettingsIcon from "@material-ui/icons/Settings";
 
-const UserOptions = ({ userType }) => {
+const UserOptions = ({ userType, handleAddUserOpen }) => {
 	switch (userType) {
 		case "Team Leader":
 			return (
@@ -25,12 +25,16 @@ const UserOptions = ({ userType }) => {
 						</ListItemIcon>
 						<ListItemText primary='Create task' />
 					</ListItem>
-					<ListItem button>
-						<ListItemIcon>
-							<GroupAddIcon />
-						</ListItemIcon>
-						<ListItemText primary='Invite user' />
-					</ListItem>
+
+					<div onClick={handleAddUserOpen}>
+						<ListItem button>
+							<ListItemIcon>
+								<GroupAddIcon />
+							</ListItemIcon>
+
+							<ListItemText primary='Invite user' />
+						</ListItem>
+					</div>
 				</List>
 			);
 		case "Developer":

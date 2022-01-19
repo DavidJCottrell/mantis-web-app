@@ -16,7 +16,7 @@ import useMediaQuery from "@material-ui/core/useMediaQuery";
 import Grid from "@material-ui/core/Grid";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
-import Button from "@material-ui/core/Button";
+// import Button from "@material-ui/core/Button";
 import Hidden from "@material-ui/core/Hidden";
 
 // Custom components
@@ -59,7 +59,11 @@ const Projects = (props) => {
 
 	return (
 		<React.Fragment>
-			<Nav userType='Team Leader' showDrawer={true}>
+			<Nav
+				userType={role}
+				showDrawer={true}
+				handleAddUserOpen={handleAddUserOpen}
+			>
 				<Grid
 					container
 					justify='center'
@@ -182,15 +186,6 @@ const Projects = (props) => {
 													) : null
 											)}
 										</ul>
-
-										<br />
-										<Button
-											variant='contained'
-											color='secondary'
-											onClick={handleAddUserOpen}
-										>
-											Add users
-										</Button>
 									</CardContent>
 								</Card>
 							</Grid>
