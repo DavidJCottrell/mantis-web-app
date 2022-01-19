@@ -43,7 +43,11 @@ const Dashboard = () => {
 		<React.Fragment>
 			<Nav handleAddProjectOpen={handleAddProjectOpen} />
 			<Container>
-				<Typography variant='h4'>Your Projects</Typography>
+				<Typography variant='h4'>
+					{localStorage.getItem("fullname")}
+				</Typography>
+				<br />
+				<Typography variant='h5'>Your Projects</Typography>
 				<Box py={3}>
 					<TextField
 						id='outlined-basic'
@@ -60,7 +64,6 @@ const Dashboard = () => {
 						width: "100%",
 					}}
 					id='project-grid'
-					key='1'
 				>
 					{projects.isSuccess ? (
 						projects.data.data.map(({ project, role }) => (

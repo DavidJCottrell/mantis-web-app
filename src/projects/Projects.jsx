@@ -24,6 +24,7 @@ import Hidden from "@material-ui/core/Hidden";
 import Nav from "../common/nav/Nav";
 import TaskTableRow from "./TaskTableRow";
 import AddUserDialog from "./AddUserDialog";
+import AddTaskDialog from "./AddTaskDialog";
 
 const Projects = (props) => {
 	const theme = useTheme();
@@ -35,9 +36,16 @@ const Projects = (props) => {
 	const handleAddUserClose = () => setAddUserAnchor(null); //Handle close
 	const isAddUserOpen = Boolean(addUserAnchor); //Is open
 
+	// Add Task Logic
+	const [addTaskAnchor, setAddTaskAnchor] = useState(); //State
+	const handleAddTaskOpen = (event) => setAddTaskAnchor(event.currentTarget); //Handle open
+	const handleAddTaskClose = () => setAddTaskAnchor(null); //Handle close
+	const isAddTaskOpen = Boolean(addTaskAnchor); //Is open
+
 	const role = props.location.state.role;
 
 	let projectId;
+	let totalTasks = 0;
 
 	// if the page was navigated manually (without passing it an id)
 	try {
@@ -56,6 +64,7 @@ const Projects = (props) => {
 	);
 
 	if (error) console.log("Error loading project");
+	if (isSuccess) totalTasks = data.data.project.tasks.length;
 
 	return (
 		<React.Fragment>
@@ -63,6 +72,7 @@ const Projects = (props) => {
 				userType={role}
 				showDrawer={true}
 				handleAddUserOpen={handleAddUserOpen}
+				handleAddTaskOpen={handleAddTaskOpen}
 			>
 				<Grid
 					container
@@ -104,7 +114,7 @@ const Projects = (props) => {
 										{data.data.project.tasks.map((task) => (
 											<TaskTableRow
 												key={task.taskKey}
-												row={task}
+												task={task}
 												isMobile={isMobile}
 											/>
 										))}
@@ -194,6 +204,13 @@ const Projects = (props) => {
 				</Grid>
 				{/* More Stuff */}
 			</Nav>
+			<AddTaskDialog
+				open={isAddTaskOpen}
+				anchorElement={addTaskAnchor}
+				handleClose={handleAddTaskClose}
+				projectId={projectId}
+				totalTasks={totalTasks}
+			/>
 			<AddUserDialog
 				open={isAddUserOpen}
 				anchorElement={addUserAnchor}

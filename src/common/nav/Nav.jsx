@@ -34,6 +34,7 @@ const Nav = ({
 	showDrawer,
 	handleAddProjectOpen,
 	handleAddUserOpen,
+	handleAddTaskOpen,
 	children,
 }) => {
 	const classes = NavStyles();
@@ -183,6 +184,7 @@ const Nav = ({
 						<UserOptions
 							userType={userType}
 							handleAddUserOpen={handleAddUserOpen}
+							handleAddTaskOpen={handleAddTaskOpen}
 						/>
 					</Drawer>
 					{/* Main content of page */}

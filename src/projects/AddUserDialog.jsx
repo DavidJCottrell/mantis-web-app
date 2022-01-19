@@ -11,13 +11,13 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import Box from "@material-ui/core/Box";
+import Typography from "@material-ui/core/Typography";
+import Divider from "@material-ui/core/Divider";
+import TextField from "@material-ui/core/TextField";
 
 import toast, { Toaster } from "react-hot-toast";
 
-// -- Custom components --
-import AddUserField from "../common/AddUserField";
-
-const AddProjectDialog = ({ open, handleClose, projectId }) => {
+const AddUserDialog = ({ open, handleClose, projectId }) => {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		const role = document.getElementById("role-select").innerText;
@@ -38,6 +38,7 @@ const AddProjectDialog = ({ open, handleClose, projectId }) => {
 			.then((res) => {
 				toast.success(res.data.message);
 				handleClose();
+				window.location.reload();
 			})
 			.catch((e) => {
 				toast.error(e.response.data);
@@ -56,7 +57,21 @@ const AddProjectDialog = ({ open, handleClose, projectId }) => {
 				<form onSubmit={handleSubmit} autoComplete='off'>
 					<DialogContent>
 						{/* Add user field */}
-						<AddUserField required={true} />
+						<Typography variant='subtitle1'>
+							Add a member
+						</Typography>
+						<Divider />
+						<TextField
+							variant='outlined'
+							margin='normal'
+							label='Username'
+							id='username-field'
+							name='user'
+							required
+							autoComplete='off'
+							color='secondary'
+							fullWidth
+						/>
 						<Box sx={{ minWidth: 120 }}>
 							<FormControl fullWidth>
 								<InputLabel>Role</InputLabel>
@@ -91,4 +106,4 @@ const AddProjectDialog = ({ open, handleClose, projectId }) => {
 	);
 };
 
-export default AddProjectDialog;
+export default AddUserDialog;

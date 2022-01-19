@@ -11,9 +11,6 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import axios from "axios";
 
-// Custom components
-import AddUserField from "../common/AddUserField";
-
 const AddProjectDialog = ({ open, handleClose }) => {
 	const handleSubmit = (e) => {
 		e.preventDefault();
@@ -87,8 +84,6 @@ const AddProjectDialog = ({ open, handleClose }) => {
 						autoComplete='off'
 						color='secondary'
 					/>
-					{/* Add user field */}
-					<AddUserField />
 				</DialogContent>
 				<DialogActions>
 					<Button onClick={handleClose} color='inherit'>

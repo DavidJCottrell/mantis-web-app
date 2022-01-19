@@ -15,8 +15,8 @@ import Button from "@material-ui/core/Button";
 // Custom Components
 import { taskTableRowStyles } from "./projectStyles";
 
-const TaskTableRow = (props) => {
-	const { isMobile, row } = props;
+const TaskTableRow = ({ task, isMobile }) => {
+	// const { isMobile, row } = mobile;
 	const [open, setOpen] = React.useState(false);
 	const classes = taskTableRowStyles();
 
@@ -24,13 +24,13 @@ const TaskTableRow = (props) => {
 		<React.Fragment>
 			<TableRow className={classes.root}>
 				<TableCell component='th' scope='row'>
-					{row.taskKey}
+					{task.taskKey}
 				</TableCell>
-				<TableCell align='left'>{row.title}</TableCell>
+				<TableCell align='left'>{task.title}</TableCell>
 				{isMobile ? (
 					<React.Fragment>
-						<TableCell align='left'>{row.status}</TableCell>
-						<TableCell align='left'>{row.resolution}</TableCell>
+						<TableCell align='left'>{task.status}</TableCell>
+						<TableCell align='left'>{task.resolution}</TableCell>
 					</React.Fragment>
 				) : null}
 				<TableCell>
@@ -39,12 +39,19 @@ const TaskTableRow = (props) => {
 						size='small'
 						onClick={() => setOpen(!open)}
 					>
-						{open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+						{open ? (
+							<KeyboardArrowUpIcon />
+						) : (
+							<KeyboardArrowDownIcon />
+						)}
 					</IconButton>
 				</TableCell>
 			</TableRow>
 			<TableRow>
-				<TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+				<TableCell
+					style={{ paddingBottom: 0, paddingTop: 0 }}
+					colSpan={6}
+				>
 					<Collapse in={open} timeout='auto' unmountOnExit>
 						<Typography variant='body1'>Task Details</Typography>
 						<Divider />
@@ -52,28 +59,28 @@ const TaskTableRow = (props) => {
 							{!isMobile ? (
 								<React.Fragment>
 									<Typography variant='body1'>
-										Status: <b>In-progress</b>
+										Status: <b>{task.status}</b>
 									</Typography>
 									<Typography variant='body1'>
-										Resolution: <b>Unresolved</b>
+										Resolution: <b>{task.resolution}</b>
 									</Typography>
 								</React.Fragment>
 							) : null}
 
 							<Typography variant='body1'>
-								Reporter: <b>Ben Swanson</b>
+								Reporter: <b>{task.reporter.name}</b>
 							</Typography>
 							<Typography variant='body1'>
-								Assignee: <b>John Smith</b>
+								Assignee: <b>{task.assignee.name}</b>
 							</Typography>
 							<Typography variant='body1'>
-								Created: <b>01/02/21</b>
+								Created: <b>{task.dateCreated}</b>
 							</Typography>
 							<Typography variant='body1'>
-								Updated: <b>23/05/21</b>
+								Updated: <b>{task.dateUpdated}</b>
 							</Typography>
 							<Typography variant='body1'>
-								Due: <b>12/08/21</b>
+								Due: <b>{task.dateDue}</b>
 							</Typography>
 							<br />
 							<Button variant='contained' color='secondary'>
