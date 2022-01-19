@@ -63,7 +63,7 @@ const Dashboard = () => {
 					key='1'
 				>
 					{projects.isSuccess ? (
-						projects.data.data.map((project) => (
+						projects.data.data.map(({ project, role }) => (
 							<Grid item xs={12} sm={6} md={4} key={project._id}>
 								<Card>
 									<CardContent>
@@ -71,8 +71,9 @@ const Dashboard = () => {
 											{project.title}
 										</Typography>
 										<Typography color='textSecondary'>
-											{project.role}
+											Role: {role}
 										</Typography>
+										<br />
 										<Typography
 											variant='body2'
 											component='p'
@@ -100,6 +101,7 @@ const Dashboard = () => {
 												pathname: "/projects",
 												state: {
 													projectId: project._id,
+													role: role,
 												},
 											}}
 											style={{

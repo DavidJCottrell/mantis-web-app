@@ -35,6 +35,8 @@ const Projects = (props) => {
 	const handleAddUserClose = () => setAddUserAnchor(null); //Handle close
 	const isAddUserOpen = Boolean(addUserAnchor); //Is open
 
+	const role = props.location.state.role;
+
 	let projectId;
 
 	// if the page was navigated manually (without passing it an id)
