@@ -117,6 +117,9 @@ const Dashboard = () => {
 					) : (
 						<h1>Loading Your Projects...</h1>
 					)}
+					{projects.isSuccess && projects.data.data.length === 0 ? (
+						<h2>You currently have no projects</h2>
+					) : null}
 				</Grid>
 				<br />
 			</Container>

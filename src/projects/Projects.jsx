@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { useQuery } from "react-query";
 
@@ -23,10 +23,17 @@ import Hidden from "@material-ui/core/Hidden";
 // import ProjectNav from "./nav/ProjectsNav";
 import Nav from "../common/nav/Nav";
 import TaskTableRow from "./TaskTableRow";
+import AddUserDialog from "./AddUserDialog";
 
 const Projects = (props) => {
 	const theme = useTheme();
 	const isMobile = useMediaQuery(theme.breakpoints.up("sm"));
+
+	// Add User Logic
+	const [addUserAnchor, setAddUserAnchor] = useState(); //State
+	const handleAddUserOpen = (event) => setAddUserAnchor(event.currentTarget); //Handle open
+	const handleAddUserClose = () => setAddUserAnchor(null); //Handle close
+	const isAddUserOpen = Boolean(addUserAnchor); //Is open
 
 	let projectId;
 
@@ -178,6 +185,7 @@ const Projects = (props) => {
 										<Button
 											variant='contained'
 											color='secondary'
+											onClick={handleAddUserOpen}
 										>
 											Add users
 										</Button>
@@ -189,6 +197,12 @@ const Projects = (props) => {
 				</Grid>
 				{/* More Stuff */}
 			</Nav>
+			<AddUserDialog
+				open={isAddUserOpen}
+				anchorElement={addUserAnchor}
+				handleClose={handleAddUserClose}
+				projectId={projectId}
+			/>
 		</React.Fragment>
 	);
 };
