@@ -156,7 +156,10 @@ const Projects = (props) => {
 													person.role ===
 													"Team Leader" ? (
 														<li key={i}>
-															{person.name}
+															{person.name +
+																" (" +
+																person.username +
+																")"}
 														</li>
 													) : null
 											)}
@@ -173,7 +176,10 @@ const Projects = (props) => {
 													person.role ===
 													"Developer" ? (
 														<li key={i}>
-															{person.name}
+															{person.name +
+																" (" +
+																person.username +
+																")"}
 														</li>
 													) : null
 											)}
@@ -191,7 +197,10 @@ const Projects = (props) => {
 												(person, i) =>
 													person.role === "Client" ? (
 														<li key={i}>
-															{person.name}
+															{person.name +
+																" (" +
+																person.username +
+																")"}
 														</li>
 													) : null
 											)}

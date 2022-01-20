@@ -19,7 +19,6 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
-// Snackbar
 
 import auth from "../utils/auth.js";
 
@@ -38,16 +37,6 @@ const Login = (props) => {
 			.then((res) => {
 				auth.login(res.data); // Front-end login, store auth-token, and user details
 				props.history.push("/");
-				// axios
-				// 	.get("http://localhost:9000/user/details/", {
-				// 		headers: {
-				// 			"auth-token": res1.data.token,
-				// 		},
-				// 	})
-				// 	.then((res2) => {
-				// 		auth.login(res2.data, res1.data.token); // Front-end login, store auth-token, and user details
-				// 		props.history.push("/");
-				// 	});
 			})
 			.catch(() => {
 				toast.error("Error logging in. Please try again later...");

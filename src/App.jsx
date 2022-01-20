@@ -21,7 +21,7 @@ const App = () => {
 				palette: {
 					type: prefersDarkMode ? "dark" : "light",
 					primary: {
-						main: "#424242",
+						main: "#6bc754", //424242
 					},
 					secondary: {
 						main: "#43a047",

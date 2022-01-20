@@ -83,6 +83,13 @@ const Dashboard = () => {
 											variant='body2'
 											component='p'
 										>
+											{project.description}
+										</Typography>
+										<br />
+										<Typography
+											variant='body2'
+											component='p'
+										>
 											Tasks: {project.tasks.length}
 										</Typography>
 										<Typography
@@ -91,13 +98,6 @@ const Dashboard = () => {
 										>
 											Team Size:
 											{" " + project.users.length}
-										</Typography>
-										<br />
-										<Typography
-											variant='body2'
-											component='p'
-										>
-											{project.description}
 										</Typography>
 									</CardContent>
 									<CardActions>

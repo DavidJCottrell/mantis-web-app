@@ -10,6 +10,8 @@ const NavStyles = makeStyles((theme) => ({
 			easing: theme.transitions.easing.sharp,
 			duration: theme.transitions.duration.leavingScreen,
 		}),
+		backgroundColor: theme.palette.background.paper,
+		color: theme.palette.text.primary,
 	},
 	appBarShift: {
 		marginLeft: drawerWidth,

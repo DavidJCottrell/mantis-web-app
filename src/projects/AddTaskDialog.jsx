@@ -14,7 +14,10 @@ import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import TextField from "@material-ui/core/TextField";
-import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
+import {
+	KeyboardDatePicker,
+	MuiPickersUtilsProvider,
+} from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import AddIcon from "@material-ui/icons/Add";
 import RemoveIcon from "@material-ui/icons/Remove";
@@ -30,24 +33,25 @@ const AddTaskDialog = ({ open, handleClose, projectId, totalTasks }) => {
 	const year = today.getFullYear();
 
 	const currentDate = day + "/" + month + "/" + year;
-	const [chosenDate, setChosenDate] = React.useState(currentDate);
+	const [selectedDate, handleDateChange] = useState(new Date());
 
 	const handleChange = (newDate) => {
-		setChosenDate(newDate);
+		console.log(newDate);
+		// setChosenDate(newDate);
 	};
 
 	const [userInputFields, setInputFields] = useState(1);
+	const [dueDateEnabled, setDueDateEnabled] = useState(false);
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
 
-		// JT343254
-
 		const type = document.getElementById("type-select").innerText;
 		const title = document.getElementById("title-field").value;
-		// const assigneeUsername =
-		// 	document.getElementById("assignee-field").value;
 		const description = document.getElementById("description-field").value;
+		const dateDue = dueDateEnabled
+			? document.getElementById("dueDate-selector").value
+			: "";
 
 		let assignees = [];
 
@@ -70,6 +74,7 @@ const AddTaskDialog = ({ open, handleClose, projectId, totalTasks }) => {
 				resolution: "Unresolved",
 				type: type,
 				dateCreated: currentDate,
+				dateDue: dateDue,
 				assignees: assignees,
 				reporter: {
 					userId: localStorage.getItem("user-id"),
@@ -81,8 +86,8 @@ const AddTaskDialog = ({ open, handleClose, projectId, totalTasks }) => {
 		axios(config)
 			.then((res) => {
 				toast.success(res.data.message);
-				// handleClose();
-				// window.location.reload();
+				handleClose();
+				window.location.reload();
 			})
 			.catch((e) => {
 				toast.error(e.response.data);
@@ -151,6 +156,7 @@ const AddTaskDialog = ({ open, handleClose, projectId, totalTasks }) => {
 								<RemoveIcon />
 							</IconButton>
 						</Tooltip>
+
 						<TextField
 							variant='outlined'
 							margin='normal'
@@ -161,16 +167,35 @@ const AddTaskDialog = ({ open, handleClose, projectId, totalTasks }) => {
 							color='secondary'
 							fullWidth
 						/>
+
+						<br />
+						<br />
 						<MuiPickersUtilsProvider utils={DateFnsUtils}>
-							<DatePicker
-								disableToolbar
-								variant='inline'
-								label='Only calendar'
-								helperText='No year selection'
-								value={chosenDate}
-								onChange={handleChange}
+							<KeyboardDatePicker
+								clearable
+								disablePast
+								disabled={!dueDateEnabled}
+								value={selectedDate}
+								onChange={(date) => handleDateChange(date)}
+								placeholder={currentDate}
+								minDate={new Date()}
+								format='dd/MM/yyyy'
+								id='dueDate-selector'
 							/>
 						</MuiPickersUtilsProvider>
+						<br />
+						<br />
+						<Button
+							variant='outlined'
+							onClick={() => {
+								setDueDateEnabled(!dueDateEnabled);
+							}}
+						>
+							{dueDateEnabled
+								? "Remove due date"
+								: "Add due date"}
+						</Button>
+
 						<br />
 						<Box sx={{ minWidth: 120 }}>
 							<FormControl fullWidth>
