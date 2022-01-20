@@ -1,24 +1,23 @@
 import React, { useState } from "react";
-import { withRouter } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 
 import axios from "axios";
 
 // Material-UI
-import Avatar from "@material-ui/core/Avatar";
-import Button from "@material-ui/core/Button";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
-import Link from "@material-ui/core/Link";
-import Paper from "@material-ui/core/Paper";
-import Hidden from "@material-ui/core/Hidden";
-import Grid from "@material-ui/core/Grid";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import Typography from "@material-ui/core/Typography";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogTitle from "@material-ui/core/DialogTitle";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import CssBaseline from "@mui/material/CssBaseline";
+import TextField from "@mui/material/TextField";
+import Link from "@mui/material/Link";
+import Paper from "@mui/material/Paper";
+import Hidden from "@mui/material/Hidden";
+import Grid from "@mui/material/Grid";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import Typography from "@mui/material/Typography";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
 
 import auth from "../utils/auth.js";
 
@@ -36,9 +35,10 @@ const Login = (props) => {
 			})
 			.then((res) => {
 				auth.login(res.data); // Front-end login, store auth-token, and user details
-				props.history.push("/");
+				window.location.href = "/";
 			})
-			.catch(() => {
+			.catch((e) => {
+				console.log(e);
 				toast.error("Error logging in. Please try again later...");
 			});
 	};
@@ -259,4 +259,4 @@ const Login = (props) => {
 	);
 };
 
-export default withRouter(Login);
+export default Login;

@@ -4,15 +4,15 @@ import axios from "axios";
 import { useQuery } from "react-query";
 
 // Material-UI
-import Button from "@material-ui/core/Button";
-import Container from "@material-ui/core/Container";
-import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
-import Typography from "@material-ui/core/Typography";
-import Grid from "@material-ui/core/Grid";
-import TextField from "@material-ui/core/TextField";
-import Box from "@material-ui/core/Box";
+import Button from "@mui/material/Button";
+import Container from "@mui/material/Container";
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
+import Typography from "@mui/material/Typography";
+import Grid from "@mui/material/Grid";
+import TextField from "@mui/material/TextField";
+import Box from "@mui/material/Box";
 
 // Custom components
 import Nav from "../common/nav/Nav";
@@ -102,12 +102,10 @@ const Dashboard = () => {
 									</CardContent>
 									<CardActions>
 										<Link
-											to={{
-												pathname: "/projects",
-												state: {
-													projectId: project._id,
-													role: role,
-												},
+											to={"/projects"}
+											state={{
+												projectId: project._id,
+												role: role,
 											}}
 											style={{
 												textDecoration: "none",

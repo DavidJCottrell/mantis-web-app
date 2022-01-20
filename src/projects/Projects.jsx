@@ -1,23 +1,24 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useQuery } from "react-query";
+import { useLocation } from "react-router-dom";
 
 // Material-UI
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import Typography from "@material-ui/core/Typography";
-import Paper from "@material-ui/core/Paper";
-import { useTheme } from "@material-ui/core/styles";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
-import Grid from "@material-ui/core/Grid";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
-// import Button from "@material-ui/core/Button";
-import Hidden from "@material-ui/core/Hidden";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Typography from "@mui/material/Typography";
+import Paper from "@mui/material/Paper";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import Grid from "@mui/material/Grid";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+// import Button from "@mui/material/Button";
+import Hidden from "@mui/material/Hidden";
 
 // Custom components
 // import ProjectNav from "./nav/ProjectsNav";
@@ -29,6 +30,7 @@ import AddTaskDialog from "./AddTaskDialog";
 const Projects = (props) => {
 	const theme = useTheme();
 	const isMobile = useMediaQuery(theme.breakpoints.up("sm"));
+	const location = useLocation();
 
 	// Add User Logic
 	const [addUserAnchor, setAddUserAnchor] = useState(); //State
@@ -42,18 +44,17 @@ const Projects = (props) => {
 	const handleAddTaskClose = () => setAddTaskAnchor(null); //Handle close
 	const isAddTaskOpen = Boolean(addTaskAnchor); //Is open
 
-	const role = props.location.state.role;
-
-	let projectId;
-	let totalTasks = 0;
-
-	// if the page was navigated manually (without passing it an id)
-	try {
-		projectId = props.location.state.projectId;
-	} catch (error) {
-		// go back to dashboard
-		window.location.replace("/");
-	}
+	// Get params passed from dashboard
+	const { role, projectId } = (() => {
+		try {
+			return {
+				role: location.state.role,
+				projectId: location.state.projectId,
+			};
+		} catch (error) {
+			window.location.replace("/");
+		}
+	})();
 
 	const { isSuccess, error, data } = useQuery("fetchProjectData", () =>
 		axios.get("http://localhost:9000/project/" + String(projectId), {
@@ -63,6 +64,7 @@ const Projects = (props) => {
 		})
 	);
 
+	let totalTasks = 0;
 	if (error) console.log("Error loading project");
 	if (isSuccess) totalTasks = data.data.project.tasks.length;
 
@@ -76,7 +78,7 @@ const Projects = (props) => {
 			>
 				<Grid
 					container
-					justify='center'
+					justifyContent='center'
 					style={{
 						margin: 0,
 						width: "100%",

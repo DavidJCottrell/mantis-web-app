@@ -1,28 +1,28 @@
 import React, { useState } from "react";
 
 // Material-UI
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import Button from "@material-ui/core/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import Button from "@mui/material/Button";
 import axios from "axios";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
-import Box from "@material-ui/core/Box";
-import Typography from "@material-ui/core/Typography";
-import Divider from "@material-ui/core/Divider";
-import TextField from "@material-ui/core/TextField";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Divider from "@mui/material/Divider";
+import TextField from "@mui/material/TextField";
 import {
 	KeyboardDatePicker,
 	MuiPickersUtilsProvider,
 } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
-import AddIcon from "@material-ui/icons/Add";
-import RemoveIcon from "@material-ui/icons/Remove";
-import IconButton from "@material-ui/core/IconButton";
-import Tooltip from "@material-ui/core/Tooltip";
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
 
 import toast, { Toaster } from "react-hot-toast";
 
@@ -170,7 +170,7 @@ const AddTaskDialog = ({ open, handleClose, projectId, totalTasks }) => {
 
 						<br />
 						<br />
-						<MuiPickersUtilsProvider utils={DateFnsUtils}>
+						{/* <MuiPickersUtilsProvider utils={DateFnsUtils}>
 							<KeyboardDatePicker
 								clearable
 								disablePast
@@ -182,7 +182,7 @@ const AddTaskDialog = ({ open, handleClose, projectId, totalTasks }) => {
 								format='dd/MM/yyyy'
 								id='dueDate-selector'
 							/>
-						</MuiPickersUtilsProvider>
+						</MuiPickersUtilsProvider> */}
 						<br />
 						<br />
 						<Button

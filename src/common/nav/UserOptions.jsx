@@ -1,18 +1,15 @@
 import React from "react";
 
-import { Link } from "react-router-dom";
-
-import AddIcon from "@material-ui/icons/Add";
-import GroupAddIcon from "@material-ui/icons/GroupAdd";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import List from "@material-ui/core/List";
-import FormatListBulletedIcon from "@material-ui/icons/FormatListBulleted";
-import GroupIcon from "@material-ui/icons/Group";
-import AssessmentIcon from "@material-ui/icons/Assessment";
-import ArrowBackIcon from "@material-ui/icons/ArrowBack";
-import SettingsIcon from "@material-ui/icons/Settings";
+import AddIcon from "@mui/icons-material/Add";
+import GroupAddIcon from "@mui/icons-material/GroupAdd";
+import ListItem from "@mui/material/ListItem";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import List from "@mui/material/List";
+import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
+import GroupIcon from "@mui/icons-material/Group";
+import AssessmentIcon from "@mui/icons-material/Assessment";
+import SettingsIcon from "@mui/icons-material/Settings";
 
 const UserOptions = ({ userType, handleAddUserOpen, handleAddTaskOpen }) => {
 	switch (userType) {
@@ -90,22 +87,6 @@ const UserOptions = ({ userType, handleAddUserOpen, handleAddTaskOpen }) => {
 							<GroupIcon />
 						</ListItemIcon>
 						<ListItemText primary='Team members' />
-					</ListItem>
-
-					<ListItem button>
-						<Link
-							to={{
-								pathname: "/",
-							}}
-							style={{
-								textDecoration: "none",
-							}}
-						>
-							<ListItemIcon>
-								<ArrowBackIcon />
-							</ListItemIcon>
-						</Link>
-						<ListItemText primary='Back to Dashboard' />
 					</ListItem>
 				</List>
 			);

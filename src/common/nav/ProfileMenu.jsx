@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { withRouter, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 // Material-UI
-import MenuItem from "@material-ui/core/MenuItem";
-import Menu from "@material-ui/core/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import Menu from "@mui/material/Menu";
 
 import auth from "../../utils/auth";
 
@@ -65,4 +65,4 @@ const ProfileMenu = (props) => {
 	);
 };
 
-export default withRouter(ProfileMenu);
+export default ProfileMenu;

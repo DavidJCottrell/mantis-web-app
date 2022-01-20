@@ -1,4 +1,4 @@
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@mui/styles";
 const drawerWidth = 240;
 const NavStyles = makeStyles((theme) => ({
 	root: {
@@ -10,7 +10,7 @@ const NavStyles = makeStyles((theme) => ({
 			easing: theme.transitions.easing.sharp,
 			duration: theme.transitions.duration.leavingScreen,
 		}),
-		backgroundColor: theme.palette.background.paper,
+		// backgroundColor: theme.palette.background.paper,
 		color: theme.palette.text.primary,
 	},
 	appBarShift: {
