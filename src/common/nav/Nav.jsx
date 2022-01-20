@@ -5,16 +5,17 @@ import axios from "axios";
 import { useQuery } from "react-query";
 
 //Material-UI Components
-import AppBar from "@mui/material/AppBar";
+import MuiAppBar from "@mui/material/AppBar";
+import MuiDrawer from "@mui/material/Drawer";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import Badge from "@mui/material/Badge";
 import Tooltip from "@mui/material/Tooltip";
-import { useTheme } from "@mui/material/styles";
-import Drawer from "@mui/material/Drawer";
+import { styled, useTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import Divider from "@mui/material/Divider";
+import Box from "@mui/material/Box";
 
 // Icons
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
@@ -30,6 +31,73 @@ import UserOptions from "./UserOptions";
 import ProfileMenu from "./ProfileMenu";
 import NotificationList from "./NotificationList";
 import { commentsData } from "../../testData";
+
+const drawerWidth = 240;
+
+const openedMixin = (theme) => ({
+	width: drawerWidth,
+	transition: theme.transitions.create("width", {
+		easing: theme.transitions.easing.sharp,
+		duration: theme.transitions.duration.enteringScreen,
+	}),
+	overflowX: "hidden",
+});
+
+const closedMixin = (theme) => ({
+	transition: theme.transitions.create("width", {
+		easing: theme.transitions.easing.sharp,
+		duration: theme.transitions.duration.leavingScreen,
+	}),
+	overflowX: "hidden",
+	width: `calc(${theme.spacing(7)} + 1px)`,
+	[theme.breakpoints.up("sm")]: {
+		width: `calc(${theme.spacing(9)} + 1px)`,
+	},
+});
+
+const DrawerHeader = styled("div")(({ theme }) => ({
+	display: "flex",
+	alignItems: "center",
+	justifyContent: "flex-end",
+	padding: theme.spacing(0, 1),
+	// necessary for content to be below app bar
+	...theme.mixins.toolbar,
+}));
+
+const AppBar = styled(MuiAppBar, {
+	shouldForwardProp: (prop) => prop !== "drawerOpen",
+})(({ theme, drawerOpen }) => ({
+	zIndex: theme.zIndex.drawer + 1,
+	transition: theme.transitions.create(["width", "margin"], {
+		easing: theme.transitions.easing.sharp,
+		duration: theme.transitions.duration.leavingScreen,
+	}),
+	...(drawerOpen && {
+		marginLeft: drawerWidth,
+		width: `calc(100% - ${drawerWidth}px)`,
+		transition: theme.transitions.create(["width", "margin"], {
+			easing: theme.transitions.easing.sharp,
+			duration: theme.transitions.duration.enteringScreen,
+		}),
+	}),
+}));
+
+const Drawer = styled(MuiDrawer, {
+	shouldForwardProp: (prop) => prop !== "drawerOpen",
+})(({ theme, drawerOpen }) => ({
+	width: drawerWidth,
+	flexShrink: 0,
+	whiteSpace: "nowrap",
+	boxSizing: "border-box",
+	...(drawerOpen && {
+		...openedMixin(theme),
+		"& .MuiDrawer-paper": openedMixin(theme),
+	}),
+	...(!drawerOpen && {
+		...closedMixin(theme),
+		"& .MuiDrawer-paper": closedMixin(theme),
+	}),
+}));
 
 const Nav = ({
 	userType,
@@ -85,14 +153,9 @@ const Nav = ({
 	}, []);
 
 	return (
-		<div className={classes.root}>
+		<Box sx={{ display: "flex" }}>
 			<CssBaseline />
-			<AppBar
-				position='fixed'
-				className={clsx(classes.appBar, {
-					[classes.appBarShift]: drawerOpen,
-				})}
-			>
+			<AppBar position='fixed' drawerOpen={drawerOpen}>
 				<Toolbar>
 					{showDrawer ? (
 						<IconButton
@@ -100,9 +163,6 @@ const Nav = ({
 							aria-label='open drawer'
 							onClick={handleDrawerOpen}
 							edge='start'
-							className={clsx(classes.menuButton, {
-								[classes.hide]: drawerOpen,
-							})}
 						>
 							<MenuIcon />
 						</IconButton>
@@ -165,20 +225,24 @@ const Nav = ({
 
 			{showDrawer ? (
 				<React.Fragment>
-					<Drawer
-						variant='permanent'
-						className={clsx(classes.drawer, {
-							[classes.drawerOpen]: drawerOpen,
-							[classes.drawerClose]: !drawerOpen,
-						})}
-						classes={{
-							paper: clsx({
-								[classes.drawerOpen]: drawerOpen,
-								[classes.drawerClose]: !drawerOpen,
-							}),
-						}}
-					>
-						<div className={classes.toolbar}>
+					<Drawer variant='permanent' drawerOpen={drawerOpen}>
+						<DrawerHeader>
+							<Typography
+								className={classes.grow}
+								variant='body1'
+								style={{ paddingLeft: "10px" }}
+							>
+								{userType}
+							</Typography>
+							<IconButton onClick={handleDrawerClose}>
+								{theme.direction === "rtl" ? (
+									<ChevronRightIcon />
+								) : (
+									<ChevronLeftIcon />
+								)}
+							</IconButton>
+						</DrawerHeader>
+						{/* <div className={classes.toolbar}>
 							<Typography
 								className={classes.grow}
 								variant='body1'
@@ -192,7 +256,7 @@ const Nav = ({
 									<ChevronLeftIcon />
 								)}
 							</IconButton>
-						</div>
+						</div> */}
 						<Divider />
 						<UserOptions userType='All' />
 						<Divider />
@@ -239,7 +303,7 @@ const Nav = ({
 			) : null}
 
 			<Toolbar style={{ marginBottom: "20px" }} />
-		</div>
+		</Box>
 	);
 };
 
