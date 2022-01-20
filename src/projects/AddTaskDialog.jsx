@@ -14,11 +14,9 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import TextField from "@mui/material/TextField";
-import {
-	KeyboardDatePicker,
-	MuiPickersUtilsProvider,
-} from "@material-ui/pickers";
-import DateFnsUtils from "@date-io/date-fns";
+import MobileDatePicker from "@mui/lab/MobileDatePicker";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import IconButton from "@mui/material/IconButton";
@@ -27,21 +25,21 @@ import Tooltip from "@mui/material/Tooltip";
 import toast, { Toaster } from "react-hot-toast";
 
 const AddTaskDialog = ({ open, handleClose, projectId, totalTasks }) => {
-	const today = new Date();
-	const day = String(today.getDate()).padStart(2, "0");
-	const month = String(today.getMonth() + 1).padStart(2, "0");
-	const year = today.getFullYear();
+	const [selectedDate, setSelectedDate] = useState(new Date());
 
-	const currentDate = day + "/" + month + "/" + year;
-	const [selectedDate, handleDateChange] = useState(new Date());
-
-	const handleChange = (newDate) => {
-		console.log(newDate);
-		// setChosenDate(newDate);
+	const handleDateChanged = (newDate) => {
+		setSelectedDate(newDate);
 	};
 
 	const [userInputFields, setInputFields] = useState(1);
 	const [dueDateEnabled, setDueDateEnabled] = useState(false);
+
+	const formatDate = (date) => {
+		const day = String(date.getDate()).padStart(2, "0");
+		const month = String(date.getMonth() + 1).padStart(2, "0");
+		const year = date.getFullYear();
+		return day + "/" + month + "/" + year;
+	};
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
@@ -49,9 +47,9 @@ const AddTaskDialog = ({ open, handleClose, projectId, totalTasks }) => {
 		const type = document.getElementById("type-select").innerText;
 		const title = document.getElementById("title-field").value;
 		const description = document.getElementById("description-field").value;
-		const dateDue = dueDateEnabled
-			? document.getElementById("dueDate-selector").value
-			: "";
+
+		const today = formatDate(new Date());
+		const dateDue = dueDateEnabled ? formatDate(selectedDate) : "";
 
 		let assignees = [];
 
@@ -73,7 +71,7 @@ const AddTaskDialog = ({ open, handleClose, projectId, totalTasks }) => {
 				status: "Open",
 				resolution: "Unresolved",
 				type: type,
-				dateCreated: currentDate,
+				dateCreated: today,
 				dateDue: dateDue,
 				assignees: assignees,
 				reporter: {
@@ -170,19 +168,18 @@ const AddTaskDialog = ({ open, handleClose, projectId, totalTasks }) => {
 
 						<br />
 						<br />
-						{/* <MuiPickersUtilsProvider utils={DateFnsUtils}>
-							<KeyboardDatePicker
-								clearable
-								disablePast
+						<LocalizationProvider dateAdapter={AdapterDateFns}>
+							<MobileDatePicker
 								disabled={!dueDateEnabled}
+								label='Date mobile'
+								inputFormat='dd/MM/yyyy'
 								value={selectedDate}
-								onChange={(date) => handleDateChange(date)}
-								placeholder={currentDate}
-								minDate={new Date()}
-								format='dd/MM/yyyy'
-								id='dueDate-selector'
+								onChange={handleDateChanged}
+								renderInput={(params) => (
+									<TextField {...params} />
+								)}
 							/>
-						</MuiPickersUtilsProvider> */}
+						</LocalizationProvider>
 						<br />
 						<br />
 						<Button
@@ -195,7 +192,7 @@ const AddTaskDialog = ({ open, handleClose, projectId, totalTasks }) => {
 								? "Remove due date"
 								: "Add due date"}
 						</Button>
-
+						<br />
 						<br />
 						<Box sx={{ minWidth: 120 }}>
 							<FormControl fullWidth>
