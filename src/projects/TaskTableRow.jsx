@@ -53,8 +53,9 @@ const TaskTableRow = ({ task, isMobile }) => {
 					colSpan={6}
 				>
 					<Collapse in={open} timeout='auto' unmountOnExit>
+						<br />
 						<Typography variant='body1'>Task Details</Typography>
-						<Divider />
+
 						<Box margin={2}>
 							{!isMobile ? (
 								<React.Fragment>

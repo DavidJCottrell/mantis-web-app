@@ -102,7 +102,7 @@ const Dashboard = () => {
 									</CardContent>
 									<CardActions>
 										<Link
-											to={"/projects"}
+											to={"/project"}
 											state={{
 												projectId: project._id,
 												role: role,

@@ -6,6 +6,8 @@ import ProtectedRoute from "./common/ProtectedRoute";
 import Login from "./login/Login";
 import Dashboard from "./dashboard/Dashboard";
 import Projects from "./projects/Projects";
+import Requirements from "./requirements/Requirements";
+import Task from "./task/Task";
 import PageNotFound from "./PageNotFound";
 
 //Theme
@@ -43,7 +45,28 @@ const App = () => {
 				<Route exact path='/projects' element={<ProtectedRoute />}>
 					<Route exact path='/projects' element={<Projects />} />
 				</Route>
-				<Route path='*' element={PageNotFound} />
+
+				<Route exact path='/project' element={<ProtectedRoute />}>
+					<Route exact path='/project' element={<Projects />} />
+				</Route>
+
+				<Route
+					exact
+					path='/project/requirements'
+					element={<ProtectedRoute />}
+				>
+					<Route
+						exact
+						path='/project/requirements'
+						element={<Requirements />}
+					/>
+				</Route>
+
+				<Route exact path='/project/task' element={<ProtectedRoute />}>
+					<Route exact path='/project/task' element={<Task />} />
+				</Route>
+
+				<Route path='*' element={<PageNotFound />} />
 			</Routes>
 		</ThemeProvider>
 	);
