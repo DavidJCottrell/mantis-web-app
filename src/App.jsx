@@ -13,6 +13,7 @@ import PageNotFound from "./PageNotFound";
 //Theme
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
 
 const App = () => {
 	const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
@@ -37,6 +38,7 @@ const App = () => {
 
 	return (
 		<ThemeProvider theme={theme}>
+			<CssBaseline />
 			<Routes>
 				<Route exact path='/login' element={<Login />}></Route>
 				<Route exact path='/' element={<ProtectedRoute />}>

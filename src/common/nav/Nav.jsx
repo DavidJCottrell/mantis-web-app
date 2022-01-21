@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import clsx from "clsx";
 import axios from "axios";
 import { useQuery } from "react-query";
 
@@ -106,6 +105,7 @@ const Nav = ({
 	handleAddUserOpen,
 	handleAddTaskOpen,
 	children,
+	showAddProject,
 }) => {
 	const classes = NavStyles();
 	const theme = useTheme();
@@ -154,7 +154,6 @@ const Nav = ({
 
 	return (
 		<Box sx={{ display: "flex" }}>
-			<CssBaseline />
 			<AppBar position='fixed' drawerOpen={drawerOpen}>
 				<Toolbar>
 					{showDrawer ? (
@@ -171,7 +170,7 @@ const Nav = ({
 						Mantis
 					</Typography>
 					<div className={classes.grow} />
-					{!showDrawer ? (
+					{showAddProject ? (
 						<Tooltip title='Add a project'>
 							<IconButton
 								color='inherit'
@@ -242,21 +241,6 @@ const Nav = ({
 								)}
 							</IconButton>
 						</DrawerHeader>
-						{/* <div className={classes.toolbar}>
-							<Typography
-								className={classes.grow}
-								variant='body1'
-							>
-								{userType}
-							</Typography>
-							<IconButton onClick={handleDrawerClose}>
-								{theme.direction === "rtl" ? (
-									<ChevronRightIcon />
-								) : (
-									<ChevronLeftIcon />
-								)}
-							</IconButton>
-						</div> */}
 						<Divider />
 						<UserOptions userType='All' />
 						<Divider />
