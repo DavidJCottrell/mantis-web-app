@@ -42,6 +42,7 @@ const Dashboard = () => {
 		<React.Fragment>
 			<Nav
 				handleAddProjectOpen={handleAddProjectOpen}
+				showAddProject={true}
 				commentData={null}
 			/>
 			<Container>

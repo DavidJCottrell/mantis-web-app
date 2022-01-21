@@ -17,17 +17,15 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-// import Button from "@mui/material/Button";
 import Hidden from "@mui/material/Hidden";
 
 // Custom components
-// import ProjectNav from "./nav/ProjectsNav";
 import Nav from "../common/nav/Nav";
 import TaskTableRow from "./TaskTableRow";
 import AddUserDialog from "./AddUserDialog";
 import AddTaskDialog from "./AddTaskDialog";
 
-const Projects = (props) => {
+const Projects = () => {
 	const theme = useTheme();
 	const isMobile = useMediaQuery(theme.breakpoints.up("sm"));
 	const location = useLocation();
@@ -73,6 +71,7 @@ const Projects = (props) => {
 			<Nav
 				userType={role}
 				showDrawer={true}
+				showAddProject={false}
 				handleAddUserOpen={handleAddUserOpen}
 				handleAddTaskOpen={handleAddTaskOpen}
 			>
@@ -117,6 +116,8 @@ const Projects = (props) => {
 											<TaskTableRow
 												key={task.taskKey}
 												task={task}
+												role={role}
+												projectId={projectId}
 												isMobile={isMobile}
 											/>
 										))}

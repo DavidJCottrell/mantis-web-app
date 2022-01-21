@@ -9,16 +9,38 @@ import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
+import axios from "axios";
+import { Link } from "react-router-dom";
 
 // Custom Components
 import { taskTableRowStyles } from "./projectStyles";
 
-const TaskTableRow = ({ task, isMobile }) => {
-	// const { isMobile, row } = mobile;
+const TaskTableRow = ({ task, role, projectId, isMobile }) => {
 	const [open, setOpen] = React.useState(false);
 	const classes = taskTableRowStyles();
+
+	const handleDelete = () => {
+		if (window.confirm("Are you sure you want to delete this task?")) {
+			const config = {
+				method: "patch",
+				url:
+					"http://localhost:9000/project/" +
+					String(projectId) +
+					"/" +
+					String(task._id),
+				headers: { "auth-token": localStorage.getItem("auth-token") },
+			};
+
+			axios(config)
+				.then((res) => {
+					window.location.reload();
+				})
+				.catch((err) => {
+					console.log(err);
+				});
+		}
+	};
 
 	return (
 		<React.Fragment>
@@ -88,8 +110,29 @@ const TaskTableRow = ({ task, isMobile }) => {
 								Due: <b>{task.dateDue}</b>
 							</Typography>
 							<br />
-							<Button variant='contained' color='secondary'>
-								Open task
+
+							<Link
+								to={"/project/task"}
+								state={{
+									task: task,
+									role: role,
+								}}
+								style={{
+									textDecoration: "none",
+								}}
+							>
+								<Button variant='contained' color='secondary'>
+									Open task
+								</Button>
+							</Link>
+							<br />
+							<br />
+							<Button
+								variant='outlined'
+								color='warning'
+								onClick={handleDelete}
+							>
+								Delete task
 							</Button>
 						</Box>
 					</Collapse>
