@@ -6,43 +6,33 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import Button from "@mui/material/Button";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
-import TextField from "@mui/material/TextField";
-import { styled } from "@mui/material/styles";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
-import ListItemAvatar from "@mui/material/ListItemAvatar";
-import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import Avatar from "@mui/material/Avatar";
 import IconButton from "@mui/material/IconButton";
-import FormGroup from "@mui/material/FormGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import Grid from "@mui/material/Grid";
-import FolderIcon from "@mui/icons-material/Folder";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import EditIcon from "@mui/icons-material/Edit";
 import Tooltip from "@mui/material/Tooltip";
 
 import toast, { Toaster } from "react-hot-toast";
 
-const ManageTeamDialog = ({ open, handleClose, projectId, title, users }) => {
+const ManageTeamDialog = ({
+	open,
+	handleClose,
+	projectId,
+	users,
+	invitations,
+}) => {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 	};
 
 	const handleRemoveUser = (index) => {
 		if (window.confirm("Are you sure you want to remove this user?")) {
-			// console.log(users[index].userId);
-			// console.log(String(projectId));
 			const config = {
 				method: "patch",
 				url:
@@ -66,6 +56,28 @@ const ManageTeamDialog = ({ open, handleClose, projectId, title, users }) => {
 
 	const handleEditRole = (e) => {
 		console.log("Edit Role");
+	};
+
+	const handleRemoveInvitation = (index) => {
+		if (
+			window.confirm("Are you sure you want to remove this invitation?")
+		) {
+			const config = {
+				method: "delete",
+				url:
+					process.env.REACT_APP_BASE_URL +
+					"/invitation/delete/" +
+					String(invitations[index]._id),
+				headers: { "auth-token": localStorage.getItem("auth-token") },
+			};
+			axios(config)
+				.then((res) => {
+					toast.success("Removed invitation");
+				})
+				.catch((err) => {
+					console.log(err);
+				});
+		}
 	};
 
 	return (
@@ -144,16 +156,56 @@ const ManageTeamDialog = ({ open, handleClose, projectId, title, users }) => {
 											</ListItem>
 										))}
 									</List>
+									<Divider />
+									<Typography
+										sx={{ mt: 4, mb: 2 }}
+										variant='h6'
+										component='div'
+									>
+										Invited Users
+									</Typography>
+									{invitations.map((invitation, i) => (
+										<ListItem
+											key={i}
+											secondaryAction={
+												<React.Fragment>
+													<Tooltip title='Remove user'>
+														<IconButton
+															edge='end'
+															aria-label='delete'
+															style={{
+																marginRight:
+																	"1px",
+															}}
+															onClick={() => {
+																handleRemoveInvitation(
+																	i
+																);
+															}}
+														>
+															<RemoveCircleIcon />
+														</IconButton>
+													</Tooltip>
+												</React.Fragment>
+											}
+										>
+											<ListItemText
+												primary={
+													invitation.invitee.name +
+													" (" +
+													invitation.role +
+													")"
+												}
+											/>
+										</ListItem>
+									))}
 								</Grid>
 							</Grid>
 						</Box>
 					</DialogContent>
 					<DialogActions>
 						<Button onClick={handleClose} color='inherit'>
-							Cancel
-						</Button>
-						<Button type='submit' color='inherit'>
-							Create
+							Close
 						</Button>
 					</DialogActions>
 				</form>

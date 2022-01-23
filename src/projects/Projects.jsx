@@ -217,8 +217,8 @@ const Projects = () => {
 						anchorElement={manageTeamAnchor}
 						handleClose={handleManageTeamClose}
 						projectId={projectId}
-						title={projectData.data.data.project.title}
 						users={projectData.data.data.project.users}
+						invitations={invitationData.data.data.invitations}
 					/>
 				</React.Fragment>
 			) : null}
