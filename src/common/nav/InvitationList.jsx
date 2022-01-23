@@ -69,11 +69,26 @@ const InvitationList = ({
 		window.location.reload();
 	};
 	const handleDeclineClick = (e) => {
-		console.log("Decline");
-		const projectId = e.target.dataset.pid;
-		// invitation/delete
-		// ...
-		// handleClose();
+		const index = e.target.dataset.index;
+		const config = {
+			method: "delete",
+			url:
+				process.env.REACT_APP_BASE_URL +
+				"/invitation/delete/" +
+				String(invitationData[index]._id),
+			headers: { "auth-token": localStorage.getItem("auth-token") },
+		};
+
+		if (window.confirm("Are you sure you want to decline?")) {
+			axios(config)
+				.then((res) => {
+					toast.error("Invitation declined");
+				})
+				.catch((e) => {
+					toast.error(e.response.data);
+				});
+		}
+		handleClose();
 	};
 
 	return (
