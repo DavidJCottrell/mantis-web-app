@@ -24,12 +24,12 @@ import auth from "../utils/auth.js";
 // Styles
 import { loginStyles } from "./loginStyles";
 
-const Login = (props) => {
+const Login = () => {
 	const classes = loginStyles();
 
 	const login = (email, password) => {
 		axios
-			.post("http://localhost:9000/user/login/", {
+			.post(process.env.REACT_APP_BASE_URL + "/user/login/", {
 				email: email,
 				password: password,
 			})
@@ -38,8 +38,7 @@ const Login = (props) => {
 				window.location.href = "/";
 			})
 			.catch((e) => {
-				console.log(e);
-				toast.error("Error logging in. Please try again later...");
+				toast.error(e.response.data);
 			});
 	};
 
@@ -49,11 +48,11 @@ const Login = (props) => {
 		const vpassword = form.elements["vpassword"].value;
 		const fname = form.elements["fname"].value;
 		const lname = form.elements["lname"].value;
-		const email = form.elements["email"].value;
+		const email = form.elements["email"].value.toLowerCase();
 
 		if (password === vpassword) {
 			axios
-				.post("http://localhost:9000/user/register/", {
+				.post(process.env.REACT_APP_BASE_URL + "/user/register/", {
 					firstName: fname,
 					lastName: lname,
 					email: email,

@@ -55,11 +55,14 @@ const Projects = () => {
 	})();
 
 	const { isSuccess, error, data } = useQuery("fetchProjectData", () =>
-		axios.get("http://localhost:9000/project/" + String(projectId), {
-			headers: {
-				"auth-token": localStorage.getItem("auth-token"),
-			},
-		})
+		axios.get(
+			process.env.REACT_APP_BASE_URL + "/project/" + String(projectId),
+			{
+				headers: {
+					"auth-token": localStorage.getItem("auth-token"),
+				},
+			}
+		)
 	);
 
 	let totalTasks = 0;
@@ -216,19 +219,24 @@ const Projects = () => {
 				</Grid>
 				{/* More Stuff */}
 			</Nav>
-			<AddTaskDialog
-				open={isAddTaskOpen}
-				anchorElement={addTaskAnchor}
-				handleClose={handleAddTaskClose}
-				projectId={projectId}
-				totalTasks={totalTasks}
-			/>
-			<AddUserDialog
-				open={isAddUserOpen}
-				anchorElement={addUserAnchor}
-				handleClose={handleAddUserClose}
-				projectId={projectId}
-			/>
+			{isSuccess ? (
+				<React.Fragment>
+					<AddTaskDialog
+						open={isAddTaskOpen}
+						anchorElement={addTaskAnchor}
+						handleClose={handleAddTaskClose}
+						projectId={projectId}
+						totalTasks={totalTasks}
+					/>
+					<AddUserDialog
+						open={isAddUserOpen}
+						anchorElement={addUserAnchor}
+						handleClose={handleAddUserClose}
+						projectId={projectId}
+						title={data.data.project.title}
+					/>
+				</React.Fragment>
+			) : null}
 		</React.Fragment>
 	);
 };

@@ -17,20 +17,45 @@ import TextField from "@mui/material/TextField";
 
 import toast, { Toaster } from "react-hot-toast";
 
-const AddUserDialog = ({ open, handleClose, projectId }) => {
+const AddUserDialog = ({ open, handleClose, projectId, title }) => {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		const role = document.getElementById("role-select").innerText;
 		const username = document.getElementById("username-field").value;
 
+		// var config = {
+		// 	method: "post",
+		// 	url: process.env.REACT_APP_BASE_URL + "/project/adduser",
+		// 	headers: { "auth-token": localStorage.getItem("auth-token") },
+		// 	data: {
+		// 		projectId: String(projectId),
+		// 		username: String(username),
+		// 		role: String(role),
+		// 	},
+		// };
+
+		// axios(config)
+		// 	.then((res) => {
+		// 		toast.success(res.data.message);
+		// 		handleClose();
+		// 		window.location.reload();
+		// 	})
+		// 	.catch((e) => {
+		// 		toast.error(e.response.data);
+		// 	});
+
 		var config = {
 			method: "post",
-			url: "http://localhost:9000/project/adduser",
+			url:
+				process.env.REACT_APP_BASE_URL +
+				"/invitation/sendinvite/" +
+				String(username),
 			headers: { "auth-token": localStorage.getItem("auth-token") },
 			data: {
-				projectId: String(projectId),
-				username: String(username),
-				role: String(role),
+				inviter: localStorage.getItem("fullname"),
+				projectTitle: title,
+				projectId: projectId,
+				role: role,
 			},
 		};
 
@@ -41,7 +66,7 @@ const AddUserDialog = ({ open, handleClose, projectId }) => {
 				window.location.reload();
 			})
 			.catch((e) => {
-				toast.error(e.response.data);
+				toast.error(e.response.data.message);
 			});
 	};
 

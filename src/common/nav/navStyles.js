@@ -39,4 +39,24 @@ const notificationListStyles = makeStyles(() => ({
 	},
 }));
 
-export { NavStyles, notificationListStyles };
+const invitationListStyles = makeStyles(() => ({
+	grow: {
+		flexGrow: 1,
+		display: "flex",
+	},
+	card: {
+		width: 250,
+		maxHeight: 200,
+		// "&:hover": {
+		// 	backgroundColor: "rgba(0, 0, 0, 0.04)",
+		// },
+	},
+	title: {
+		fontSize: 14,
+	},
+	pos: {
+		marginBottom: 12,
+	},
+}));
+
+export { NavStyles, notificationListStyles, invitationListStyles };

@@ -23,7 +23,7 @@ const AddProjectDialog = ({ open, handleClose }) => {
 				description: document.getElementsByName("description")[0].value,
 			};
 			axios
-				.post("http://localhost:9000/project/add", data, {
+				.post(process.env.REACT_APP_BASE_URL + "/project/add", data, {
 					headers: {
 						"auth-token": localStorage.getItem("auth-token"),
 					},

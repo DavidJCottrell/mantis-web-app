@@ -60,9 +60,14 @@ const AddTaskDialog = ({ open, handleClose, projectId, totalTasks }) => {
 			});
 		});
 
+		console.log(assignees);
+
 		const config = {
 			method: "patch",
-			url: "http://localhost:9000/project/addtask/" + String(projectId),
+			url:
+				process.env.REACT_APP_BASE_URL +
+				"/project/addtask/" +
+				String(projectId),
 			headers: { "auth-token": localStorage.getItem("auth-token") },
 			data: {
 				taskKey: "T" + String(totalTasks + 1),
@@ -83,9 +88,10 @@ const AddTaskDialog = ({ open, handleClose, projectId, totalTasks }) => {
 
 		axios(config)
 			.then((res) => {
+				console.log(res.data);
 				toast.success(res.data.message);
 				handleClose();
-				window.location.reload();
+				// window.location.reload();
 			})
 			.catch((e) => {
 				toast.error(e.response.data);

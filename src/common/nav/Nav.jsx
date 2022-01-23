@@ -12,7 +12,6 @@ import Typography from "@mui/material/Typography";
 import Badge from "@mui/material/Badge";
 import Tooltip from "@mui/material/Tooltip";
 import { styled, useTheme } from "@mui/material/styles";
-import CssBaseline from "@mui/material/CssBaseline";
 import Divider from "@mui/material/Divider";
 import Box from "@mui/material/Box";
 
@@ -24,12 +23,14 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import MailIcon from "@mui/icons-material/Mail";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import AddIcon from "@mui/icons-material/Add";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
 
 import { NavStyles } from "./navStyles";
 import UserOptions from "./UserOptions";
 import ProfileMenu from "./ProfileMenu";
 import NotificationList from "./NotificationList";
-import { commentsData } from "../../testData";
+import InvitationList from "./InvitationList";
+import { commentsData, invitationData } from "../../testData";
 
 const drawerWidth = 240;
 
@@ -50,7 +51,7 @@ const closedMixin = (theme) => ({
 	overflowX: "hidden",
 	width: `calc(${theme.spacing(7)} + 1px)`,
 	[theme.breakpoints.up("sm")]: {
-		width: `calc(${theme.spacing(9)} + 1px)`,
+		width: `calc(${theme.spacing(7)} + 1px)`, // prev 9
 	},
 });
 
@@ -128,6 +129,13 @@ const Nav = ({
 	const handleTaskListClose = () => setTasksAnchor(null); //Handle close
 	const isTaskMenuOpen = Boolean(tasksAnchor); //Is open
 
+	// Invitations List Logic
+	const [invitationAnchor, setInvitationAnchor] = useState(); //State
+	const hanleInvitationListOpen = (event) =>
+		setInvitationAnchor(event.currentTarget); //Handle open
+	const handleInvitationListClose = () => setInvitationAnchor(null); //Handle close
+	const isInvitationMenuOpen = Boolean(invitationAnchor); //Is open
+
 	// Comment List Logic
 	const [taggedCommentsAnchor, setTaggedCommentsAnchor] = useState(); //State
 	const handleTaggedCommentsListOpen = (event) =>
@@ -136,7 +144,7 @@ const Nav = ({
 	const isTaggedCommentsListOpen = Boolean(taggedCommentsAnchor); //Is open
 
 	const taskData = useQuery("fetchUsersTasks", () =>
-		axios.get("http://localhost:9000/user/usertasks/", {
+		axios.get(process.env.REACT_APP_BASE_URL + "/user/usertasks/", {
 			headers: {
 				"auth-token": localStorage.getItem("auth-token"),
 			},
@@ -180,6 +188,23 @@ const Nav = ({
 							</IconButton>
 						</Tooltip>
 					) : null}
+					<Tooltip title='Project invitations'>
+						<IconButton
+							color='inherit'
+							onClick={hanleInvitationListOpen}
+						>
+							<Badge
+								badgeContent={
+									taggedComments
+										? taggedComments.length
+										: null
+								}
+								color='secondary'
+							>
+								<AddCircleIcon />
+							</Badge>
+						</IconButton>
+					</Tooltip>
 					<Tooltip title='Tagged comments'>
 						<IconButton
 							color='inherit'
@@ -273,6 +298,13 @@ const Nav = ({
 				handleClose={handleTaggedCommentsListClose}
 				data={taggedComments}
 			/> */}
+
+			<InvitationList
+				open={isInvitationMenuOpen}
+				anchorElement={invitationAnchor}
+				handleClose={handleInvitationListClose}
+				invitationData={invitationData}
+			/>
 
 			{/* Tasks List */}
 			{taskData.isSuccess ? (

@@ -43,4 +43,19 @@ const taskData = [
 	},
 ];
 
-export { commentsData, taskData };
+const invitationData = [
+	{
+		title: "GTA 6",
+		from: "David Cottrell",
+		role: "Team Leader",
+		projectId: "8fh83hfd3k3",
+	},
+	{
+		title: "Half Life 3",
+		from: "David Cottrell",
+		role: "Developer",
+		projectId: "389ry87h49k20",
+	},
+];
+
+export { commentsData, taskData, invitationData };

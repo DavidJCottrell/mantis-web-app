@@ -25,7 +25,8 @@ const TaskTableRow = ({ task, role, projectId, isMobile }) => {
 			const config = {
 				method: "patch",
 				url:
-					"http://localhost:9000/project/" +
+					process.env.REACT_APP_BASE_URL +
+					"/project/" +
 					String(projectId) +
 					"/" +
 					String(task._id),
@@ -127,13 +128,15 @@ const TaskTableRow = ({ task, role, projectId, isMobile }) => {
 							</Link>
 							<br />
 							<br />
-							<Button
-								variant='outlined'
-								color='warning'
-								onClick={handleDelete}
-							>
-								Delete task
-							</Button>
+							{role === "Team Leader" ? (
+								<Button
+									variant='outlined'
+									color='warning'
+									onClick={handleDelete}
+								>
+									Delete task
+								</Button>
+							) : null}
 						</Box>
 					</Collapse>
 				</TableCell>

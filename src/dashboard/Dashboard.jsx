@@ -20,7 +20,7 @@ import AddProjectDialog from "./AddProjectDialog";
 
 const Dashboard = () => {
 	const projects = useQuery("fetchProjects", () =>
-		axios.get("http://localhost:9000/user/projects/", {
+		axios.get(process.env.REACT_APP_BASE_URL + "/user/projects/", {
 			headers: {
 				"auth-token": localStorage.getItem("auth-token"),
 			},
@@ -59,15 +59,7 @@ const Dashboard = () => {
 					/>
 				</Box>
 
-				<Grid
-					container
-					spacing={3}
-					style={{
-						margin: 0,
-						width: "100%",
-					}}
-					id='project-grid'
-				>
+				<Grid container spacing={3} id='project-grid'>
 					{projects.isSuccess ? (
 						projects.data.data.map(({ project, role }) => (
 							<Grid item xs={12} sm={6} md={4} key={project._id}>

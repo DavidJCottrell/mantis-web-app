@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 import AddIcon from "@mui/icons-material/Add";
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
@@ -10,8 +11,10 @@ import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import GroupIcon from "@mui/icons-material/Group";
 import AssessmentIcon from "@mui/icons-material/Assessment";
 import SettingsIcon from "@mui/icons-material/Settings";
+import { useTheme } from "@mui/material/styles";
 
 const UserOptions = ({ userType, handleAddUserOpen, handleAddTaskOpen }) => {
+	const theme = useTheme();
 	switch (userType) {
 		case "Team Leader":
 			return (
@@ -68,12 +71,20 @@ const UserOptions = ({ userType, handleAddUserOpen, handleAddTaskOpen }) => {
 		case "All":
 			return (
 				<List>
-					<ListItem button>
-						<ListItemIcon>
-							<FormatListBulletedIcon />
-						</ListItemIcon>
-						<ListItemText primary='Requirements' />
-					</ListItem>
+					<Link
+						to={"/project/requirements"}
+						style={{
+							textDecoration: "none",
+							color: theme.palette.text.primary,
+						}}
+					>
+						<ListItem button>
+							<ListItemIcon>
+								<FormatListBulletedIcon />
+							</ListItemIcon>
+							<ListItemText primary='Requirements' />
+						</ListItem>
+					</Link>
 
 					<ListItem button>
 						<ListItemIcon>
