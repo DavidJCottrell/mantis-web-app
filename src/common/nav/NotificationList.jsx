@@ -22,7 +22,7 @@ const NotificationList = ({
 	type,
 }) => {
 	const classes = notificationListStyles();
-	// console.log(data)
+	console.log(data);
 	return (
 		<Menu
 			id='simple-menu'
@@ -36,7 +36,7 @@ const NotificationList = ({
 					<Typography variant='subtitle1'>{title}</Typography>
 					<Divider />
 				</Box>
-				{data
+				{/* {data
 					? data.map(({ task, comment, parentProjectTitle }, i) => {
 							// console.log(task);
 							return (
@@ -84,7 +84,7 @@ const NotificationList = ({
 								</MenuItem>
 							);
 					  })
-					: null}
+					: null} */}
 			</Container>
 		</Menu>
 	);

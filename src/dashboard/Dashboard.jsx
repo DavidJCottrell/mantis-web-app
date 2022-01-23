@@ -27,6 +27,7 @@ const Dashboard = () => {
 		})
 	);
 	if (projects.error) console.log(projects.error);
+	// if (projects.isSuccess) console.log(projects);
 
 	const [addProjectOpen, setAddProjectOpen] = useState(false);
 
@@ -47,7 +48,7 @@ const Dashboard = () => {
 			/>
 			<Container>
 				<Typography variant='h4'>
-					{localStorage.getItem("fullname")}
+					{localStorage.getItem("fullName")}
 				</Typography>
 				<br />
 				<Typography variant='h5'>Your Projects</Typography>

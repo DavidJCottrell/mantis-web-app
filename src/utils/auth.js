@@ -1,11 +1,11 @@
 function login(data) {
-	localStorage.setItem("logged-in", true);
+	localStorage.setItem("isLoggedIn", true);
 	localStorage.setItem("auth-token", data.token);
-	localStorage.setItem("user-id", data.user._id);
-	localStorage.setItem("firstname", data.user.firstName);
-	localStorage.setItem("lastname", data.user.lastName);
+	localStorage.setItem("userId", data.user._id);
+	localStorage.setItem("firstName", data.user.firstName);
+	localStorage.setItem("lastName", data.user.lastName);
 	localStorage.setItem(
-		"fullname",
+		"fullName",
 		data.user.firstName + " " + data.user.lastName
 	);
 	localStorage.setItem("username", data.user.username);
@@ -17,7 +17,7 @@ function logout() {
 }
 
 function isAuthenticated() {
-	return localStorage.getItem("logged-in") === "true";
+	return localStorage.getItem("isLoggedIn") === "true";
 }
 
 export default { login, logout, isAuthenticated };

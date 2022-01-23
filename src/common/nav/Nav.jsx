@@ -28,8 +28,9 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { NavStyles } from "./navStyles";
 import UserOptions from "./UserOptions";
 import ProfileMenu from "./ProfileMenu";
-import NotificationList from "./NotificationList";
+// import NotificationList from "./NotificationList";
 import InvitationList from "./InvitationList";
+import TaskList from "./TaskList";
 import { commentsData, invitationData } from "../../testData";
 
 const drawerWidth = 240;
@@ -105,6 +106,7 @@ const Nav = ({
 	handleAddProjectOpen,
 	handleAddUserOpen,
 	handleAddTaskOpen,
+	handleManageTeamOpen,
 	children,
 	showAddProject,
 }) => {
@@ -152,7 +154,14 @@ const Nav = ({
 	);
 	if (taskData.error) console.log(taskData.error);
 
-	// if (taskData.isSuccess) console.log(taskData.data.data.length);
+	const invitationData = useQuery("fetchUsersInvitations", () =>
+		axios.get(process.env.REACT_APP_BASE_URL + "/user/invitations/", {
+			headers: {
+				"auth-token": localStorage.getItem("auth-token"),
+			},
+		})
+	);
+	if (invitationData.error) console.log(invitationData.error);
 
 	//Get Task and Comment Data
 	const [taggedComments, setTaggedComments] = useState(false);
@@ -195,8 +204,9 @@ const Nav = ({
 						>
 							<Badge
 								badgeContent={
-									taggedComments
-										? taggedComments.length
+									invitationData.isSuccess
+										? invitationData.data.data.invitations
+												.length
 										: null
 								}
 								color='secondary'
@@ -267,12 +277,16 @@ const Nav = ({
 							</IconButton>
 						</DrawerHeader>
 						<Divider />
-						<UserOptions userType='All' />
-						<Divider />
+						{/* <UserOptions
+							userType='All'
+							handleManageTeamOpen={handleManageTeamOpen}
+						/>
+						<Divider /> */}
 						<UserOptions
 							userType={userType}
 							handleAddUserOpen={handleAddUserOpen}
 							handleAddTaskOpen={handleAddTaskOpen}
+							handleManageTeamOpen={handleManageTeamOpen}
 						/>
 					</Drawer>
 					{/* Main content of page */}
@@ -299,16 +313,18 @@ const Nav = ({
 				data={taggedComments}
 			/> */}
 
-			<InvitationList
-				open={isInvitationMenuOpen}
-				anchorElement={invitationAnchor}
-				handleClose={handleInvitationListClose}
-				invitationData={invitationData}
-			/>
+			{invitationData.isSuccess ? (
+				<InvitationList
+					open={isInvitationMenuOpen}
+					anchorElement={invitationAnchor}
+					handleClose={handleInvitationListClose}
+					invitationData={invitationData.data.data.invitations}
+				/>
+			) : null}
 
 			{/* Tasks List */}
 			{taskData.isSuccess ? (
-				<NotificationList
+				<TaskList
 					title={"Your tasks:"}
 					type={"tasks"}
 					open={isTaskMenuOpen}

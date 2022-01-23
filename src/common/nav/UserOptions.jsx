@@ -9,15 +9,55 @@ import ListItemText from "@mui/material/ListItemText";
 import List from "@mui/material/List";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import GroupIcon from "@mui/icons-material/Group";
+import Divider from "@mui/material/Divider";
 import AssessmentIcon from "@mui/icons-material/Assessment";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { useTheme } from "@mui/material/styles";
 
-const UserOptions = ({ userType, handleAddUserOpen, handleAddTaskOpen }) => {
+const UserOptions = ({
+	userType,
+	handleAddUserOpen,
+	handleAddTaskOpen,
+	handleManageTeamOpen,
+}) => {
 	const theme = useTheme();
-	switch (userType) {
-		case "Team Leader":
-			return (
+
+	return (
+		<React.Fragment>
+			<List>
+				<Link
+					to={"/project/requirements"}
+					style={{
+						textDecoration: "none",
+						color: theme.palette.text.primary,
+					}}
+				>
+					<ListItem button>
+						<ListItemIcon>
+							<FormatListBulletedIcon />
+						</ListItemIcon>
+						<ListItemText primary='Requirements' />
+					</ListItem>
+				</Link>
+
+				<ListItem button>
+					<ListItemIcon>
+						<AssessmentIcon />
+					</ListItemIcon>
+					<ListItemText primary='Release report' />
+				</ListItem>
+
+				<div onClick={handleManageTeamOpen}>
+					<ListItem button>
+						<ListItemIcon>
+							<GroupIcon />
+						</ListItemIcon>
+						<ListItemText primary='Team members' />
+					</ListItem>
+				</div>
+			</List>
+			<Divider />
+			{userType === "Team Leader" ? (
 				<List>
 					<div onClick={handleAddTaskOpen}>
 						<ListItem button>
@@ -45,9 +85,8 @@ const UserOptions = ({ userType, handleAddUserOpen, handleAddTaskOpen }) => {
 						<ListItemText primary='Project settings' />
 					</ListItem>
 				</List>
-			);
-		case "Developer":
-			return (
+			) : null}
+			{userType === "Developer" ? (
 				<List>
 					<ListItem button>
 						<ListItemIcon>
@@ -56,9 +95,8 @@ const UserOptions = ({ userType, handleAddUserOpen, handleAddTaskOpen }) => {
 						<ListItemText primary='Suggest task' />
 					</ListItem>
 				</List>
-			);
-		case "Client":
-			return (
+			) : null}
+			{userType === "Client" ? (
 				<List>
 					<ListItem button>
 						<ListItemIcon>
@@ -67,43 +105,9 @@ const UserOptions = ({ userType, handleAddUserOpen, handleAddTaskOpen }) => {
 						<ListItemText primary='Suggest task' />
 					</ListItem>
 				</List>
-			);
-		case "All":
-			return (
-				<List>
-					<Link
-						to={"/project/requirements"}
-						style={{
-							textDecoration: "none",
-							color: theme.palette.text.primary,
-						}}
-					>
-						<ListItem button>
-							<ListItemIcon>
-								<FormatListBulletedIcon />
-							</ListItemIcon>
-							<ListItemText primary='Requirements' />
-						</ListItem>
-					</Link>
-
-					<ListItem button>
-						<ListItemIcon>
-							<AssessmentIcon />
-						</ListItemIcon>
-						<ListItemText primary='Release report' />
-					</ListItem>
-
-					<ListItem button>
-						<ListItemIcon>
-							<GroupIcon />
-						</ListItemIcon>
-						<ListItemText primary='Team members' />
-					</ListItem>
-				</List>
-			);
-		default:
-			return <div></div>;
-	}
+			) : null}
+		</React.Fragment>
+	);
 };
 
 export default UserOptions;

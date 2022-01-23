@@ -1,11 +1,11 @@
 import React from "react";
+import axios from "axios";
 
 // Material-UI
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import Button from "@mui/material/Button";
-import axios from "axios";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -23,26 +23,7 @@ const AddUserDialog = ({ open, handleClose, projectId, title }) => {
 		const role = document.getElementById("role-select").innerText;
 		const username = document.getElementById("username-field").value;
 
-		// var config = {
-		// 	method: "post",
-		// 	url: process.env.REACT_APP_BASE_URL + "/project/adduser",
-		// 	headers: { "auth-token": localStorage.getItem("auth-token") },
-		// 	data: {
-		// 		projectId: String(projectId),
-		// 		username: String(username),
-		// 		role: String(role),
-		// 	},
-		// };
-
-		// axios(config)
-		// 	.then((res) => {
-		// 		toast.success(res.data.message);
-		// 		handleClose();
-		// 		window.location.reload();
-		// 	})
-		// 	.catch((e) => {
-		// 		toast.error(e.response.data);
-		// 	});
+		//JB950936
 
 		var config = {
 			method: "post",
@@ -52,9 +33,14 @@ const AddUserDialog = ({ open, handleClose, projectId, title }) => {
 				String(username),
 			headers: { "auth-token": localStorage.getItem("auth-token") },
 			data: {
-				inviter: localStorage.getItem("fullname"),
-				projectTitle: title,
-				projectId: projectId,
+				inviter: {
+					userId: localStorage.getItem("userId"),
+					name: localStorage.getItem("fullName"),
+				},
+				project: {
+					title: title,
+					projectId: projectId,
+				},
 				role: role,
 			},
 		};

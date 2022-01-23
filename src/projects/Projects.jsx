@@ -24,6 +24,7 @@ import Nav from "../common/nav/Nav";
 import TaskTableRow from "./TaskTableRow";
 import AddUserDialog from "./AddUserDialog";
 import AddTaskDialog from "./AddTaskDialog";
+import ManageTeamDialog from "./ManageTeamDialog";
 
 const Projects = () => {
 	const theme = useTheme();
@@ -41,6 +42,13 @@ const Projects = () => {
 	const handleAddTaskOpen = (event) => setAddTaskAnchor(event.currentTarget); //Handle open
 	const handleAddTaskClose = () => setAddTaskAnchor(null); //Handle close
 	const isAddTaskOpen = Boolean(addTaskAnchor); //Is open
+
+	// Manage Team Logic
+	const [manageTeamAnchor, setManageTeamAnchor] = useState(); //State
+	const handleManageTeamOpen = (event) =>
+		setManageTeamAnchor(event.currentTarget); //Handle open
+	const handleManageTeamClose = () => setManageTeamAnchor(null); //Handle close
+	const isManageTeamOpen = Boolean(manageTeamAnchor); //Is open
 
 	// Get params passed from dashboard
 	const { role, projectId } = (() => {
@@ -69,6 +77,21 @@ const Projects = () => {
 	if (error) console.log("Error loading project");
 	if (isSuccess) totalTasks = data.data.project.tasks.length;
 
+	const invitationData = useQuery("fetchInvitationData", () =>
+		axios.get(
+			process.env.REACT_APP_BASE_URL +
+				"/project/invitations/" +
+				String(projectId),
+			{
+				headers: {
+					"auth-token": localStorage.getItem("auth-token"),
+				},
+			}
+		)
+	);
+	if (invitationData.error) console.log("Error loading invitations");
+	// if (invitationData.isSuccess) console.log(invitationData.data);
+
 	return (
 		<React.Fragment>
 			<Nav
@@ -77,6 +100,7 @@ const Projects = () => {
 				showAddProject={false}
 				handleAddUserOpen={handleAddUserOpen}
 				handleAddTaskOpen={handleAddTaskOpen}
+				handleManageTeamOpen={handleManageTeamOpen}
 			>
 				<Grid
 					container
@@ -234,6 +258,14 @@ const Projects = () => {
 						handleClose={handleAddUserClose}
 						projectId={projectId}
 						title={data.data.project.title}
+					/>
+					<ManageTeamDialog
+						open={isManageTeamOpen}
+						anchorElement={manageTeamAnchor}
+						handleClose={handleManageTeamClose}
+						projectId={projectId}
+						title={data.data.project.title}
+						users={data.data.project.users}
 					/>
 				</React.Fragment>
 			) : null}
