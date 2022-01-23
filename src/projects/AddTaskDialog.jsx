@@ -60,8 +60,6 @@ const AddTaskDialog = ({ open, handleClose, projectId, totalTasks }) => {
 			});
 		});
 
-		console.log(assignees);
-
 		const config = {
 			method: "patch",
 			url:
@@ -80,18 +78,16 @@ const AddTaskDialog = ({ open, handleClose, projectId, totalTasks }) => {
 				dateDue: dateDue,
 				assignees: assignees,
 				reporter: {
-					userId: localStorage.getItem("user-id"),
-					name: localStorage.getItem("fullname"),
+					userId: localStorage.getItem("userId"),
+					name: localStorage.getItem("fullName"),
 				},
 			},
 		};
-
 		axios(config)
 			.then((res) => {
 				console.log(res.data);
 				toast.success(res.data.message);
 				handleClose();
-				// window.location.reload();
 			})
 			.catch((e) => {
 				toast.error(e.response.data);

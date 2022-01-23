@@ -47,7 +47,6 @@ const AddUserDialog = ({ open, handleClose, projectId, title }) => {
 			.then((res) => {
 				toast.success(res.data.message);
 				handleClose();
-				window.location.reload();
 			})
 			.catch((e) => {
 				toast.error(e.response.data);
@@ -67,7 +66,7 @@ const AddUserDialog = ({ open, handleClose, projectId, title }) => {
 					<DialogContent>
 						{/* Add user field */}
 						<Typography variant='subtitle1'>
-							Add a member
+							Invite a user
 						</Typography>
 						<Divider />
 						<TextField

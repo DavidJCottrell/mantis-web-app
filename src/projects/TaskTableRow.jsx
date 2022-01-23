@@ -26,7 +26,7 @@ const TaskTableRow = ({ task, role, projectId, isMobile }) => {
 				method: "patch",
 				url:
 					process.env.REACT_APP_BASE_URL +
-					"/project/" +
+					"/project/removetask/" +
 					String(projectId) +
 					"/" +
 					String(task._id),

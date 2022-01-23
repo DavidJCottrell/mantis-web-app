@@ -15,7 +15,9 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Hidden from "@mui/material/Hidden";
 
-const TaskTableRow = ({ projectData, isMobile }) => {
+import TaskTableRow from "./TaskTableRow";
+
+const TaskTable = ({ projectData, isMobile, role, projectId }) => {
 	return (
 		<Grid item xs={12} md={8}>
 			<Typography variant='h4'>{projectData.title}</Typography>
@@ -54,4 +56,4 @@ const TaskTableRow = ({ projectData, isMobile }) => {
 	);
 };
 
-export default TaskTableRow;
+export default TaskTable;

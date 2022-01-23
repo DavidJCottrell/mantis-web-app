@@ -21,7 +21,6 @@ import Hidden from "@mui/material/Hidden";
 
 // Custom components
 import Nav from "../common/nav/Nav";
-import TaskTableRow from "./TaskTableRow";
 import TaskTable from "./TaskTable";
 import AddUserDialog from "./AddUserDialog";
 import AddTaskDialog from "./AddTaskDialog";
@@ -118,6 +117,8 @@ const Projects = () => {
 							<TaskTable
 								isMobile={isMobile}
 								projectData={projectData.data.data.project}
+								role={role}
+								projectId={projectId}
 							/>
 
 							{/* Gap between tasks and members card */}
