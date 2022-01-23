@@ -22,6 +22,7 @@ import Hidden from "@mui/material/Hidden";
 // Custom components
 import Nav from "../common/nav/Nav";
 import TaskTableRow from "./TaskTableRow";
+import TaskTable from "./TaskTable";
 import AddUserDialog from "./AddUserDialog";
 import AddTaskDialog from "./AddTaskDialog";
 import ManageTeamDialog from "./ManageTeamDialog";
@@ -62,7 +63,7 @@ const Projects = () => {
 		}
 	})();
 
-	const { isSuccess, error, data } = useQuery("fetchProjectData", () =>
+	const projectData = useQuery("fetchProjectData", () =>
 		axios.get(
 			process.env.REACT_APP_BASE_URL + "/project/" + String(projectId),
 			{
@@ -74,8 +75,8 @@ const Projects = () => {
 	);
 
 	let totalTasks = 0;
-	if (error) console.log("Error loading project");
-	if (isSuccess) totalTasks = data.data.project.tasks.length;
+	if (projectData.isSuccess)
+		totalTasks = projectData.data.data.project.tasks.length;
 
 	const invitationData = useQuery("fetchInvitationData", () =>
 		axios.get(
@@ -90,7 +91,8 @@ const Projects = () => {
 		)
 	);
 	if (invitationData.error) console.log("Error loading invitations");
-	// if (invitationData.isSuccess) console.log(invitationData.data);
+
+	const fullyLoaded = projectData.isSuccess && invitationData.isSuccess;
 
 	return (
 		<React.Fragment>
@@ -111,139 +113,90 @@ const Projects = () => {
 					}}
 				>
 					{/* Tasks grid */}
-					{isSuccess ? (
-						<Grid item xs={12} md={8}>
-							<Typography variant='h4'>
-								{data.data.project.title}
-							</Typography>
-							<br />
-							<TableContainer component={Paper}>
-								<Table aria-label='collapsible table'>
-									<TableHead>
-										<TableRow>
-											<TableCell>Key</TableCell>
-											<TableCell align='left'>
-												Title
-											</TableCell>
-											{isMobile ? (
-												<React.Fragment>
-													<TableCell align='left'>
-														Status
-													</TableCell>
-													<TableCell align='left'>
-														Resolution
-													</TableCell>
-												</React.Fragment>
-											) : null}
-											<TableCell />
-										</TableRow>
-									</TableHead>
-									<TableBody>
-										{data.data.project.tasks.map((task) => (
-											<TaskTableRow
-												key={task.taskKey}
-												task={task}
-												role={role}
-												projectId={projectId}
-												isMobile={isMobile}
-											/>
-										))}
-									</TableBody>
-								</Table>
-							</TableContainer>
-						</Grid>
+					{fullyLoaded ? (
+						<React.Fragment>
+							<TaskTable
+								isMobile={isMobile}
+								projectData={projectData.data.data.project}
+							/>
+
+							{/* Gap between tasks and members card */}
+							<Hidden only={["xs", "sm"]}>
+								<Grid item md={1}></Grid>
+							</Hidden>
+
+							{/* Team Members Card (desktop only) */}
+							<Hidden only={["xs", "sm"]}>
+								<Grid item xs={12} md={3}>
+									<br />
+									<Card>
+										<CardContent>
+											<Typography
+												variant='h5'
+												component='h2'
+												gutterBottom
+											>
+												Team Members
+											</Typography>
+
+											{projectData.data.data.project.users.map(
+												(user, i) => (
+													<React.Fragment key={i}>
+														<Typography
+															variant='subtitle1'
+															component='h2'
+														>
+															{user.role + "s"}
+														</Typography>
+														<ul>
+															<li key={i}>
+																{user.name +
+																	" (" +
+																	user.username +
+																	")"}
+															</li>
+														</ul>
+													</React.Fragment>
+												)
+											)}
+
+											<Typography
+												variant='subtitle1'
+												component='h2'
+											>
+												Invited
+											</Typography>
+
+											<ul>
+												{invitationData.data.data.invitations.map(
+													(invitation, i) => (
+														<li key={i}>
+															{invitation.invitee
+																.name +
+																" (" +
+																invitation
+																	.invitee
+																	.username +
+																") - " +
+																invitation.role}
+														</li>
+													)
+												)}
+											</ul>
+										</CardContent>
+									</Card>
+								</Grid>
+							</Hidden>
+						</React.Fragment>
 					) : (
-						<h1>Loading Project Data...</h1>
+						<h1>Loading project...</h1>
 					)}
-					{/* Gap between tasks and members card */}
-					<Hidden only={["xs", "sm"]}>
-						<Grid item md={1}></Grid>
-					</Hidden>
-					{/* Team Members Card (desktop only) */}
-					{isSuccess ? (
-						<Hidden only={["xs", "sm"]}>
-							<Grid item xs={12} md={3}>
-								<br />
-								<Card>
-									<CardContent>
-										<Typography
-											variant='h5'
-											component='h2'
-											gutterBottom
-										>
-											Team Members
-										</Typography>
-
-										<Typography
-											variant='subtitle1'
-											component='h2'
-										>
-											Team Leaders
-										</Typography>
-										<ul>
-											{data.data.project.users.map(
-												(person, i) =>
-													person.role ===
-													"Team Leader" ? (
-														<li key={i}>
-															{person.name +
-																" (" +
-																person.username +
-																")"}
-														</li>
-													) : null
-											)}
-										</ul>
-										<Typography
-											variant='subtitle1'
-											component='h2'
-										>
-											Developers
-										</Typography>
-										<ul>
-											{data.data.project.users.map(
-												(person, i) =>
-													person.role ===
-													"Developer" ? (
-														<li key={i}>
-															{person.name +
-																" (" +
-																person.username +
-																")"}
-														</li>
-													) : null
-											)}
-										</ul>
-
-										<Typography
-											variant='subtitle1'
-											component='h2'
-										>
-											Clients
-										</Typography>
-
-										<ul>
-											{data.data.project.users.map(
-												(person, i) =>
-													person.role === "Client" ? (
-														<li key={i}>
-															{person.name +
-																" (" +
-																person.username +
-																")"}
-														</li>
-													) : null
-											)}
-										</ul>
-									</CardContent>
-								</Card>
-							</Grid>
-						</Hidden>
-					) : null}
 				</Grid>
 				{/* More Stuff */}
 			</Nav>
-			{isSuccess ? (
+
+			{/* Popup windows */}
+			{fullyLoaded ? (
 				<React.Fragment>
 					<AddTaskDialog
 						open={isAddTaskOpen}
@@ -257,15 +210,15 @@ const Projects = () => {
 						anchorElement={addUserAnchor}
 						handleClose={handleAddUserClose}
 						projectId={projectId}
-						title={data.data.project.title}
+						title={projectData.data.data.project.title}
 					/>
 					<ManageTeamDialog
 						open={isManageTeamOpen}
 						anchorElement={manageTeamAnchor}
 						handleClose={handleManageTeamClose}
 						projectId={projectId}
-						title={data.data.project.title}
-						users={data.data.project.users}
+						title={projectData.data.data.project.title}
+						users={projectData.data.data.project.users}
 					/>
 				</React.Fragment>
 			) : null}

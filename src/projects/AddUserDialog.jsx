@@ -23,8 +23,6 @@ const AddUserDialog = ({ open, handleClose, projectId, title }) => {
 		const role = document.getElementById("role-select").innerText;
 		const username = document.getElementById("username-field").value;
 
-		//JB950936
-
 		var config = {
 			method: "post",
 			url:
@@ -52,7 +50,7 @@ const AddUserDialog = ({ open, handleClose, projectId, title }) => {
 				window.location.reload();
 			})
 			.catch((e) => {
-				toast.error(e.response.data.message);
+				toast.error(e.response.data);
 			});
 	};
 

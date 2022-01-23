@@ -31,7 +31,7 @@ const InvitationList = ({
 
 		let config = {
 			method: "post",
-			url: process.env.REACT_APP_BASE_URL + "/project/adduser",
+			url: process.env.REACT_APP_BASE_URL + "/invitation/accept",
 			headers: { "auth-token": localStorage.getItem("auth-token") },
 			data: {
 				projectId: String(invitationData[index].project.projectId),
