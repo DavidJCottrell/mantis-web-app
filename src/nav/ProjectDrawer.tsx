@@ -11,16 +11,14 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
 import { DrawerHeader, AppBar, Drawer } from "./navStyles";
-import UserOptions from "./UserOptions";
+import UserOptions from "./DrawerUserOptions";
 
 const ProjectDrawer = ({
 	drawerOpen,
 	classes,
 	userType,
 	handleDrawerClose,
-	handleAddUserOpen,
-	handleAddTaskOpen,
-	handleManageTeamOpen,
+	projectCallbacks,
 	children,
 }) => {
 	const theme = useTheme();
@@ -47,9 +45,9 @@ const ProjectDrawer = ({
 				<Divider />
 				<UserOptions
 					userType={userType}
-					handleAddUserOpen={handleAddUserOpen}
-					handleAddTaskOpen={handleAddTaskOpen}
-					handleManageTeamOpen={handleManageTeamOpen}
+					handleAddUserOpen={projectCallbacks.handleAddUserOpen}
+					handleAddTaskOpen={projectCallbacks.handleAddTaskOpen}
+					handleManageTeamOpen={projectCallbacks.handleManageTeamOpen}
 				/>
 			</Drawer>
 			{/* Main content of page */}

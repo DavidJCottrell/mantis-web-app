@@ -15,8 +15,8 @@ import AssignmentIcon from "@mui/icons-material/Assignment";
 import AddIcon from "@mui/icons-material/Add";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 
-import TaskList from "./TaskList";
-import InvitationList from "./InvitationList";
+import TaskList from "./lists/TaskList";
+import InvitationList from "./lists/InvitationList";
 import ProfileMenu from "./ProfileMenu";
 import { AppBar } from "./navStyles";
 

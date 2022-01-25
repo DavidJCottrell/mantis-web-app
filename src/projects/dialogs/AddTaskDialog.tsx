@@ -22,15 +22,9 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 
-import * as projectApis from "../apis/project";
+import * as projectApis from "../../apis/project";
 
-const AddTaskDialog = ({
-	open,
-	handleClose,
-	totalTasks,
-	projectId,
-	addTaskComplete,
-}) => {
+const AddTaskDialog = ({ open, handleClose, totalTasks, projectId, addTaskComplete }) => {
 	const [selectedDate, setSelectedDate] = useState(new Date());
 
 	const handleDateChanged = (newDate) => {
@@ -71,8 +65,7 @@ const AddTaskDialog = ({
 
 		Array.from({ length: userInputFields }, (x, i) => {
 			assignees.push({
-				username: document.getElementById("assignee-field-" + String(i))
-					.value,
+				username: document.getElementById("assignee-field-" + String(i)).value,
 			});
 		});
 
@@ -200,15 +193,11 @@ const AddTaskDialog = ({
 								label='Type'
 								defaultValue={""}
 							>
-								<MenuItem value={"New Feature"}>
-									New Feature
-								</MenuItem>
+								<MenuItem value={"New Feature"}>New Feature</MenuItem>
 								<MenuItem value={"System Improvement"}>
 									System Improvement
 								</MenuItem>
-								<MenuItem value={"Bug"}>
-									Bug/system issue
-								</MenuItem>
+								<MenuItem value={"Bug"}>Bug/system issue</MenuItem>
 							</Select>
 						</FormControl>
 					</Box>

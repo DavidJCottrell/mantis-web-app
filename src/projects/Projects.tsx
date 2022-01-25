@@ -14,9 +14,9 @@ import Hidden from "@mui/material/Hidden";
 // Custom components
 import Nav from "../nav/Nav";
 import TaskTable from "./TaskTable";
-import InviteUserDialog from "./InviteUserDialog";
-import AddTaskDialog from "./AddTaskDialog";
-import ManageTeamDialog from "./ManageTeamDialog";
+import InviteUserDialog from "./dialogs/InviteUserDialog";
+import AddTaskDialog from "./dialogs/AddTaskDialog";
+import ManageTeamDialog from "./dialogs/ManageTeamDialog";
 
 import toast, { Toaster } from "react-hot-toast";
 
@@ -41,8 +41,7 @@ const Projects = () => {
 
 	// Manage Team Logic
 	const [manageTeamAnchor, setManageTeamAnchor] = useState(); //State
-	const handleManageTeamOpen = (event) =>
-		setManageTeamAnchor(event.currentTarget); //Handle open
+	const handleManageTeamOpen = (event) => setManageTeamAnchor(event.currentTarget); //Handle open
 	const handleManageTeamClose = () => setManageTeamAnchor(null); //Handle close
 	const isManageTeamOpen = Boolean(manageTeamAnchor); //Is open
 
@@ -73,17 +72,16 @@ const Projects = () => {
 
 	const fullyLoaded = projectQuery.isSuccess && invitationQuery.isSuccess;
 
+	const projectCallbacks = {
+		handleAddUserOpen: handleAddUserOpen,
+		handleAddTaskOpen: handleAddTaskOpen,
+		handleManageTeamOpen: handleManageTeamOpen,
+	};
+
 	return (
 		<React.Fragment>
 			<Toaster />
-			<Nav
-				userType={role}
-				showDrawer={true}
-				showAddProject={false}
-				handleAddUserOpen={handleAddUserOpen}
-				handleAddTaskOpen={handleAddTaskOpen}
-				handleManageTeamOpen={handleManageTeamOpen}
-			>
+			<Nav userType={role} showDrawer={true} projectCallbacks={projectCallbacks}>
 				<Grid
 					container
 					justifyContent='center'
@@ -154,11 +152,9 @@ const Projects = () => {
 												{invitationQuery.data.invitations.map(
 													(invitation, i) => (
 														<li key={i}>
-															{invitation.invitee
-																.name +
+															{invitation.invitee.name +
 																" (" +
-																invitation
-																	.invitee
+																invitation.invitee
 																	.username +
 																") - " +
 																invitation.role}

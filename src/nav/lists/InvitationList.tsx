@@ -15,16 +15,11 @@ import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
 
 // Styles
-import { invitationListStyles } from "./navStyles";
+import { invitationListStyles } from "../navStyles";
 
-import * as invitationApis from "../apis/invitation";
+import * as invitationApis from "../../apis/invitation";
 
-const InvitationList = ({
-	open,
-	anchorElement,
-	handleClose,
-	invitationData,
-}) => {
+const InvitationList = ({ open, anchorElement, handleClose, invitationData }) => {
 	const classes = invitationListStyles();
 
 	const queryClient = new useQueryClient();
@@ -76,9 +71,7 @@ const InvitationList = ({
 		>
 			<Container>
 				<Box component='div' whiteSpace='normal'>
-					<Typography variant='subtitle1'>
-						Your Invitations
-					</Typography>
+					<Typography variant='subtitle1'>Your Invitations</Typography>
 					<Divider />
 				</Box>
 				{invitationData?.map((invitation, i) => {

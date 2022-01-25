@@ -18,14 +18,13 @@ import TextField from "@mui/material/TextField";
 
 import toast, { Toaster } from "react-hot-toast";
 
-import * as invitationApis from "../apis/invitation";
+import * as invitationApis from "../../apis/invitation";
 
 const InviteUserDialog = ({ open, handleClose, projectId, title }) => {
 	const queryClient = new useQueryClient();
 
 	const invitationMutation = useMutation(
-		({ username, invitation }) =>
-			invitationApis.addInvitation(username, invitation),
+		({ username, invitation }) => invitationApis.addInvitation(username, invitation),
 		{
 			onSuccess: () => {
 				queryClient.invalidateQueries("fetchInvitationData");
@@ -69,9 +68,7 @@ const InviteUserDialog = ({ open, handleClose, projectId, title }) => {
 				<form onSubmit={inviteUser} autoComplete='off'>
 					<DialogContent>
 						{/* Add user field */}
-						<Typography variant='subtitle1'>
-							Invite a user
-						</Typography>
+						<Typography variant='subtitle1'>Invite a user</Typography>
 						<Divider />
 						<TextField
 							variant='outlined'
@@ -93,12 +90,8 @@ const InviteUserDialog = ({ open, handleClose, projectId, title }) => {
 									label='Role'
 									defaultValue={""}
 								>
-									<MenuItem value={"Team Leader"}>
-										Team Leader
-									</MenuItem>
-									<MenuItem value={"Developer"}>
-										Developer
-									</MenuItem>
+									<MenuItem value={"Team Leader"}>Team Leader</MenuItem>
+									<MenuItem value={"Developer"}>Developer</MenuItem>
 									<MenuItem value={"Client"}>Client</MenuItem>
 								</Select>
 							</FormControl>

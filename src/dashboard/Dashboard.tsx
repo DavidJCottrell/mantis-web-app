@@ -18,7 +18,7 @@ import AddProjectCard from "./AddProjectCard";
 import ProjectCard from "./ProjectCard";
 
 const Dashboard = () => {
-	const queryClient = new useQueryClient();
+	const queryClient = useQueryClient();
 
 	const projectQuery = useQuery("fetchProjects", userApis.getProjectsData);
 

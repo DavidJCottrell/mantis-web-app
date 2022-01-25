@@ -12,7 +12,7 @@ import Container from "@mui/material/Container";
 import Divider from "@mui/material/Divider";
 
 // Styles
-import { notificationListStyles } from "./navStyles";
+import { notificationListStyles } from "../navStyles";
 
 const TaskList = ({ open, anchorElement, handleClose, data, title }) => {
 	const classes = notificationListStyles();
@@ -33,10 +33,7 @@ const TaskList = ({ open, anchorElement, handleClose, data, title }) => {
 					? data.map(({ task, parentProjectTitle }, i) => {
 							let role;
 							for (const assignee of task.assignees) {
-								if (
-									assignee.userId ===
-									localStorage.getItem("userId")
-								)
+								if (assignee.userId === localStorage.getItem("userId"))
 									role = assignee.projectRole;
 							}
 							return (
@@ -55,10 +52,7 @@ const TaskList = ({ open, anchorElement, handleClose, data, title }) => {
 											textDecoration: "none",
 										}}
 									>
-										<Card
-											className={classes.card}
-											variant='outlined'
-										>
+										<Card className={classes.card} variant='outlined'>
 											<CardContent>
 												<Typography
 													className={classes.title}
@@ -77,8 +71,7 @@ const TaskList = ({ open, anchorElement, handleClose, data, title }) => {
 													className={classes.pos}
 													color='textSecondary'
 												>
-													{"Status: " +
-														String(task.status)}
+													{"Status: " + String(task.status)}
 												</Typography>
 												<Typography
 													className={classes.pos}

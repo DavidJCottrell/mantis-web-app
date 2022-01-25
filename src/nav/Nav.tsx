@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
 import { useQuery } from "react-query";
+
+// import PropTypes from "prop-types";
 
 //Material-UI Components
 import Toolbar from "@mui/material/Toolbar";
@@ -17,17 +18,7 @@ import * as userApis from "../apis/user";
 
 const drawerWidth = 240;
 
-const Nav = ({
-	userType,
-	showDrawer,
-	children,
-	showAddProject,
-	handleAddProjectOpen,
-	handleAddUserOpen,
-	handleAddTaskOpen,
-	handleManageTeamOpen,
-	// project settings callback
-}) => {
+const Nav = ({ userType, showDrawer, children, projectCallbacks }) => {
 	const classes = NavStyles();
 	const theme = useTheme();
 
@@ -65,9 +56,7 @@ const Nav = ({
 					classes={classes}
 					userType={userType}
 					handleDrawerClose={handleDrawerClose}
-					handleAddUserOpen={handleAddUserOpen}
-					handleAddTaskOpen={handleAddTaskOpen}
-					handleManageTeamOpen={handleManageTeamOpen}
+					projectCallbacks={projectCallbacks}
 					children={children}
 				/>
 			) : null}

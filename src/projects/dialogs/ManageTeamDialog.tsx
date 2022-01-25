@@ -19,8 +19,8 @@ import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import EditIcon from "@mui/icons-material/Edit";
 import Tooltip from "@mui/material/Tooltip";
 
-import * as invitationApis from "../apis/invitation";
-import * as projectApis from "../apis/project";
+import * as invitationApis from "../../apis/invitation";
+import * as projectApis from "../../apis/project";
 
 const ManageTeamDialog = ({
 	open,
@@ -31,7 +31,7 @@ const ManageTeamDialog = ({
 	removeUserComplete,
 	removeInvitationComplete,
 }) => {
-	const queryClient = new useQueryClient();
+	const queryClient = useQueryClient();
 
 	const userMutation = useMutation(
 		({ projectId, userId }) => projectApis.removeUser(projectId, userId),
@@ -66,9 +66,7 @@ const ManageTeamDialog = ({
 	};
 
 	const removeInvitation = (index) => {
-		if (
-			window.confirm("Are you sure you want to remove this invitation?")
-		) {
+		if (window.confirm("Are you sure you want to remove this invitation?")) {
 			invitationMutation.mutate(invitations[index]._id);
 			removeInvitationComplete();
 		}
@@ -84,11 +82,7 @@ const ManageTeamDialog = ({
 			>
 				<DialogContent>
 					{/* Add user field */}
-					<Typography
-						sx={{ mt: 4, mb: 2 }}
-						variant='h6'
-						component='div'
-					>
+					<Typography sx={{ mt: 4, mb: 2 }} variant='h6' component='div'>
 						Team Members
 					</Typography>
 
@@ -111,8 +105,7 @@ const ManageTeamDialog = ({
 															edge='end'
 															aria-label='delete'
 															style={{
-																marginRight:
-																	"1px",
+																marginRight: "1px",
 															}}
 															onClick={() => {
 																removeUser(i);
@@ -125,9 +118,7 @@ const ManageTeamDialog = ({
 														<IconButton
 															edge='end'
 															aria-label='delete'
-															onClick={
-																handleEditRole
-															}
+															onClick={handleEditRole}
 														>
 															<EditIcon />
 														</IconButton>
@@ -137,10 +128,7 @@ const ManageTeamDialog = ({
 										>
 											<ListItemText
 												primary={
-													user.name +
-													" (" +
-													user.role +
-													")"
+													user.name + " (" + user.role + ")"
 												}
 											/>
 										</ListItem>
