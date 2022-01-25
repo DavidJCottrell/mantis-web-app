@@ -30,12 +30,6 @@ const loginStyles = makeStyles((theme) => ({
 	submit: {
 		margin: theme.spacing(3, 0, 2),
 	},
-	logo: {
-		width: "200px",
-		height: "200px",
-		marginLeft: "auto",
-		marginRight: "auto",
-	},
 }));
 
 export { loginStyles };

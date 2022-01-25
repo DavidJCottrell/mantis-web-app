@@ -9,7 +9,6 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import axios from "axios";
 
 const AddProjectDialog = ({ open, handleClose, handleAddProject }) => {
 	return (

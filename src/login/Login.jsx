@@ -14,10 +14,10 @@ import Hidden from "@mui/material/Hidden";
 import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogTitle from "@mui/material/DialogTitle";
+
+import SignUpDialog from "./SignUpDialog.jsx";
+
+import * as userApis from "../apis/user";
 
 import auth from "../utils/auth.js";
 
@@ -28,17 +28,11 @@ const Login = () => {
 	const classes = loginStyles();
 
 	const login = (email, password) => {
-		axios
-			.post(process.env.REACT_APP_BASE_URL + "/user/login/", {
-				email: email,
-				password: password,
-			})
-			.then((res) => {
-				auth.login(res.data); // Front-end login, store auth-token, and user details
+		userApis
+			.login({ email: email, password: password })
+			.then((userData) => {
+				auth.login(userData); // Front-end login, store auth-token, and user details
 				window.location.href = "/";
-			})
-			.catch((e) => {
-				toast.error(e.response.data);
 			});
 	};
 
@@ -46,33 +40,23 @@ const Login = () => {
 		const form = document.getElementById("signUp-form");
 		const password = form.elements["password"].value;
 		const vpassword = form.elements["vpassword"].value;
-		const fname = form.elements["fname"].value;
-		const lname = form.elements["lname"].value;
 		const email = form.elements["email"].value.toLowerCase();
 
 		if (password === vpassword) {
-			axios
-				.post(process.env.REACT_APP_BASE_URL + "/user/register/", {
-					firstName: fname,
-					lastName: lname,
-					email: email,
-					password: password,
-				})
-				.then(() => {
-					login(email, password);
-				})
-				.catch((e) => {
-					toast.error(e.response.data);
-				});
+			const data = {
+				firstName: form.elements["fname"].value,
+				lastName: form.elements["lname"].value,
+				email: email,
+				password: password,
+			};
+			userApis.signUp(data).then(() => login(email, password));
 		} else {
 			toast.error("Passwords do not match, please try again.");
 		}
 	};
 
 	const [signUpOpen, setSignUpOpen] = useState(false);
-
 	const handleSignUpOpen = () => setSignUpOpen(true);
-
 	const handleSignUpClose = () => setSignUpOpen(false);
 
 	return (
@@ -91,7 +75,7 @@ const Login = () => {
 								<Avatar
 									alt='Logo'
 									src={require("../images/mantis.jpg")}
-									className={classes.logo}
+									sx={{ width: 200, height: 200 }}
 								/>
 							</div>
 						</div>
@@ -181,79 +165,12 @@ const Login = () => {
 					</div>
 				</Grid>
 			</Grid>
-			<Dialog
-				open={signUpOpen}
-				onClose={handleSignUpClose}
-				aria-labelledby='form-dialog-title'
-			>
-				<DialogTitle id='form-dialog-title'>Sign Up</DialogTitle>
-				<DialogContent>
-					<form className={classes.form} id='signUp-form'>
-						<TextField
-							variant='outlined'
-							margin='normal'
-							required
-							fullWidth
-							label='Email Address'
-							name='email'
-							autoComplete='email'
-							color='secondary'
-						/>
-						<TextField
-							variant='outlined'
-							margin='normal'
-							required
-							fullWidth
-							label='First Name'
-							name='fname'
-							autoComplete='given-name'
-							color='secondary'
-						/>
-						<TextField
-							variant='outlined'
-							margin='normal'
-							required
-							fullWidth
-							label='Last Name'
-							name='lname'
-							autoComplete='family-name'
-							color='secondary'
-						/>
-
-						<TextField
-							variant='outlined'
-							margin='normal'
-							required
-							fullWidth
-							label='Password'
-							name='password'
-							type='password'
-							color='secondary'
-						/>
-						<TextField
-							variant='outlined'
-							margin='normal'
-							required
-							fullWidth
-							label='Verify Password'
-							name='vpassword'
-							type='password'
-							color='secondary'
-						/>
-					</form>
-				</DialogContent>
-				<DialogActions>
-					<Button onClick={handleSignUpClose} color='inherit'>
-						Cancel
-					</Button>
-					<Button
-						onClick={(handleSignUpClose, signUp)}
-						color='inherit'
-					>
-						Sign up
-					</Button>
-				</DialogActions>
-			</Dialog>
+			<SignUpDialog
+				signUpOpen={signUpOpen}
+				handleSignUpClose={handleSignUpClose}
+				classes={classes}
+				signUp={signUp}
+			/>
 		</React.Fragment>
 	);
 };
