@@ -1,17 +1,9 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { useQuery } from "react-query";
 import { useLocation } from "react-router-dom";
 
 // Material-UI
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
-import Paper from "@mui/material/Paper";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Grid from "@mui/material/Grid";
@@ -22,9 +14,13 @@ import Hidden from "@mui/material/Hidden";
 // Custom components
 import Nav from "../common/nav/Nav";
 import TaskTable from "./TaskTable";
-import AddUserDialog from "./AddUserDialog";
+import InviteUserDialog from "./InviteUserDialog";
 import AddTaskDialog from "./AddTaskDialog";
 import ManageTeamDialog from "./ManageTeamDialog";
+
+import toast, { Toaster } from "react-hot-toast";
+
+import * as projectApis from "../apis/project";
 
 const Projects = () => {
 	const theme = useTheme();
@@ -50,6 +46,11 @@ const Projects = () => {
 	const handleManageTeamClose = () => setManageTeamAnchor(null); //Handle close
 	const isManageTeamOpen = Boolean(manageTeamAnchor); //Is open
 
+	const removeUserComplete = () => toast.success("User removed!");
+	const removeInvitationComplete = () => toast.success("Invitation removed!");
+	const removeTaskComplete = () => toast.success("Task removed!");
+	const addTaskComplete = () => toast.success("Added task!");
+
 	// Get params passed from dashboard
 	const { role, projectId } = (() => {
 		try {
@@ -62,39 +63,19 @@ const Projects = () => {
 		}
 	})();
 
-	const projectData = useQuery("fetchProjectData", () =>
-		axios.get(
-			process.env.REACT_APP_BASE_URL + "/project/" + String(projectId),
-			{
-				headers: {
-					"auth-token": localStorage.getItem("auth-token"),
-				},
-			}
-		)
+	const projectQuery = useQuery("fetchProjectData", () =>
+		projectApis.getProject(projectId)
 	);
 
-	let totalTasks = 0;
-	if (projectData.isSuccess)
-		totalTasks = projectData.data.data.project.tasks.length;
-
-	const invitationData = useQuery("fetchInvitationData", () =>
-		axios.get(
-			process.env.REACT_APP_BASE_URL +
-				"/project/invitations/" +
-				String(projectId),
-			{
-				headers: {
-					"auth-token": localStorage.getItem("auth-token"),
-				},
-			}
-		)
+	const invitationQuery = useQuery("fetchInvitationData", () =>
+		projectApis.getInvitations(projectId)
 	);
-	if (invitationData.error) console.log("Error loading invitations");
 
-	const fullyLoaded = projectData.isSuccess && invitationData.isSuccess;
+	const fullyLoaded = projectQuery.isSuccess && invitationQuery.isSuccess;
 
 	return (
 		<React.Fragment>
+			<Toaster />
 			<Nav
 				userType={role}
 				showDrawer={true}
@@ -116,9 +97,10 @@ const Projects = () => {
 						<React.Fragment>
 							<TaskTable
 								isMobile={isMobile}
-								projectData={projectData.data.data.project}
+								projectData={projectQuery.data.project}
 								role={role}
 								projectId={projectId}
+								removeTaskComplete={removeTaskComplete}
 							/>
 
 							{/* Gap between tasks and members card */}
@@ -140,7 +122,7 @@ const Projects = () => {
 												Team Members
 											</Typography>
 
-											{projectData.data.data.project.users.map(
+											{projectQuery.data.project.users.map(
 												(user, i) => (
 													<React.Fragment key={i}>
 														<Typography
@@ -169,7 +151,7 @@ const Projects = () => {
 											</Typography>
 
 											<ul>
-												{invitationData.data.data.invitations.map(
+												{invitationQuery.data.invitations.map(
 													(invitation, i) => (
 														<li key={i}>
 															{invitation.invitee
@@ -203,23 +185,26 @@ const Projects = () => {
 						open={isAddTaskOpen}
 						anchorElement={addTaskAnchor}
 						handleClose={handleAddTaskClose}
+						totalTasks={projectQuery.data.project.tasks.length}
 						projectId={projectId}
-						totalTasks={totalTasks}
+						addTaskComplete={addTaskComplete}
 					/>
-					<AddUserDialog
+					<InviteUserDialog
 						open={isAddUserOpen}
 						anchorElement={addUserAnchor}
 						handleClose={handleAddUserClose}
 						projectId={projectId}
-						title={projectData.data.data.project.title}
+						title={projectQuery.data.project.title}
 					/>
 					<ManageTeamDialog
 						open={isManageTeamOpen}
 						anchorElement={manageTeamAnchor}
 						handleClose={handleManageTeamClose}
 						projectId={projectId}
-						users={projectData.data.data.project.users}
-						invitations={invitationData.data.data.invitations}
+						users={projectQuery.data.project.users}
+						invitations={invitationQuery.data.invitations}
+						removeUserComplete={removeUserComplete}
+						removeInvitationComplete={removeInvitationComplete}
 					/>
 				</React.Fragment>
 			) : null}

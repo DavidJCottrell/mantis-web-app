@@ -1,5 +1,6 @@
 import React from "react";
-import axios from "axios";
+
+import { useMutation, useQueryClient } from "react-query";
 
 // Material-UI
 import Dialog from "@mui/material/Dialog";
@@ -17,40 +18,43 @@ import TextField from "@mui/material/TextField";
 
 import toast, { Toaster } from "react-hot-toast";
 
-const AddUserDialog = ({ open, handleClose, projectId, title }) => {
-	const handleSubmit = (e) => {
-		e.preventDefault();
-		const role = document.getElementById("role-select").innerText;
-		const username = document.getElementById("username-field").value;
+import * as invitationApis from "../apis/invitation";
 
-		var config = {
-			method: "post",
-			url:
-				process.env.REACT_APP_BASE_URL +
-				"/invitation/sendinvite/" +
-				String(username),
-			headers: { "auth-token": localStorage.getItem("auth-token") },
-			data: {
-				inviter: {
-					userId: localStorage.getItem("userId"),
-					name: localStorage.getItem("fullName"),
-				},
-				project: {
-					title: title,
-					projectId: projectId,
-				},
-				role: role,
+const InviteUserDialog = ({ open, handleClose, projectId, title }) => {
+	const queryClient = new useQueryClient();
+
+	const invitationMutation = useMutation(
+		({ username, invitation }) =>
+			invitationApis.addInvitation(username, invitation),
+		{
+			onSuccess: () => {
+				queryClient.invalidateQueries("fetchInvitationData");
 			},
+		}
+	);
+
+	const inviteUser = (e) => {
+		e.preventDefault();
+
+		const data = {
+			inviter: {
+				userId: localStorage.getItem("userId"),
+				name: localStorage.getItem("fullName"),
+			},
+			project: {
+				title: title,
+				projectId: projectId,
+			},
+			role: document.getElementById("role-select").innerText,
 		};
 
-		axios(config)
-			.then((res) => {
-				toast.success(res.data.message);
-				handleClose();
-			})
-			.catch((e) => {
-				toast.error(e.response.data);
-			});
+		invitationMutation.mutate({
+			username: document.getElementById("username-field").value,
+			invitation: data,
+		});
+
+		toast.success("Invited user!");
+		handleClose();
 	};
 
 	return (
@@ -62,7 +66,7 @@ const AddUserDialog = ({ open, handleClose, projectId, title }) => {
 				aria-labelledby='form-dialog-title'
 				fullWidth
 			>
-				<form onSubmit={handleSubmit} autoComplete='off'>
+				<form onSubmit={inviteUser} autoComplete='off'>
 					<DialogContent>
 						{/* Add user field */}
 						<Typography variant='subtitle1'>
@@ -105,7 +109,7 @@ const AddUserDialog = ({ open, handleClose, projectId, title }) => {
 							Cancel
 						</Button>
 						<Button type='submit' color='inherit'>
-							Create
+							Invite
 						</Button>
 					</DialogActions>
 				</form>
@@ -114,4 +118,4 @@ const AddUserDialog = ({ open, handleClose, projectId, title }) => {
 	);
 };
 
-export default AddUserDialog;
+export default InviteUserDialog;

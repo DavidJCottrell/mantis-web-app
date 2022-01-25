@@ -1,5 +1,7 @@
 import React from "react";
 
+import { useMutation, useQueryClient } from "react-query";
+
 // Material-UI styles
 import Box from "@mui/material/Box";
 import Collapse from "@mui/material/Collapse";
@@ -10,36 +12,38 @@ import Typography from "@mui/material/Typography";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import Button from "@mui/material/Button";
-import axios from "axios";
 import { Link } from "react-router-dom";
 
 // Custom Components
 import { taskTableRowStyles } from "./projectStyles";
 
-const TaskTableRow = ({ task, role, projectId, isMobile }) => {
+import * as projectApis from "../apis/project";
+
+const TaskTableRow = ({
+	task,
+	role,
+	isMobile,
+	projectId,
+	removeTaskComplete,
+}) => {
 	const [open, setOpen] = React.useState(false);
 	const classes = taskTableRowStyles();
 
-	const handleDelete = () => {
-		if (window.confirm("Are you sure you want to delete this task?")) {
-			const config = {
-				method: "patch",
-				url:
-					process.env.REACT_APP_BASE_URL +
-					"/project/removetask/" +
-					String(projectId) +
-					"/" +
-					String(task._id),
-				headers: { "auth-token": localStorage.getItem("auth-token") },
-			};
+	const queryClient = new useQueryClient();
 
-			axios(config)
-				.then((res) => {
-					window.location.reload();
-				})
-				.catch((err) => {
-					console.log(err);
-				});
+	const taskMutation = useMutation(
+		({ projectId, taskId }) => projectApis.removeTask(projectId, taskId),
+		{
+			onSuccess: () => {
+				queryClient.invalidateQueries("fetchProjectData");
+			},
+		}
+	);
+
+	const removeTask = () => {
+		if (window.confirm("Are you sure you want to delete this task?")) {
+			taskMutation.mutate({ projectId: projectId, taskId: task._id });
+			removeTaskComplete();
 		}
 	};
 
@@ -132,7 +136,7 @@ const TaskTableRow = ({ task, role, projectId, isMobile }) => {
 								<Button
 									variant='outlined'
 									color='warning'
-									onClick={handleDelete}
+									onClick={removeTask}
 								>
 									Delete task
 								</Button>

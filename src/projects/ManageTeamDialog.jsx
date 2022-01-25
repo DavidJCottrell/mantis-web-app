@@ -1,5 +1,6 @@
 import React from "react";
-import axios from "axios";
+
+import { useMutation, useQueryClient } from "react-query";
 
 // Material-UI
 import Dialog from "@mui/material/Dialog";
@@ -18,7 +19,8 @@ import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import EditIcon from "@mui/icons-material/Edit";
 import Tooltip from "@mui/material/Tooltip";
 
-import toast, { Toaster } from "react-hot-toast";
+import * as invitationApis from "../apis/invitation";
+import * as projectApis from "../apis/project";
 
 const ManageTeamDialog = ({
 	open,
@@ -26,31 +28,36 @@ const ManageTeamDialog = ({
 	projectId,
 	users,
 	invitations,
+	removeUserComplete,
+	removeInvitationComplete,
 }) => {
-	const handleSubmit = (e) => {
-		e.preventDefault();
-	};
+	const queryClient = new useQueryClient();
 
-	const handleRemoveUser = (index) => {
+	const userMutation = useMutation(
+		({ projectId, userId }) => projectApis.removeUser(projectId, userId),
+		{
+			onSuccess: () => {
+				queryClient.invalidateQueries("fetchProjectData");
+			},
+		}
+	);
+
+	const invitationMutation = useMutation(
+		(invitationId) => invitationApis.deleteInvitation(invitationId),
+		{
+			onSuccess: () => {
+				queryClient.invalidateQueries("fetchInvitationData");
+			},
+		}
+	);
+
+	const removeUser = (index) => {
 		if (window.confirm("Are you sure you want to remove this user?")) {
-			const config = {
-				method: "patch",
-				url:
-					process.env.REACT_APP_BASE_URL +
-					"/project/removeuser/" +
-					String(users[index].userId) +
-					"/" +
-					String(projectId),
-				headers: { "auth-token": localStorage.getItem("auth-token") },
-			};
-			axios(config)
-				.then((res) => {
-					console.log("Success");
-					// window.location.reload();
-				})
-				.catch((err) => {
-					console.log(err);
-				});
+			userMutation.mutate({
+				projectId: projectId,
+				userId: users[index].userId,
+			});
+			removeUserComplete();
 		}
 	};
 
@@ -58,113 +65,43 @@ const ManageTeamDialog = ({
 		console.log("Edit Role");
 	};
 
-	const handleRemoveInvitation = (index) => {
+	const removeInvitation = (index) => {
 		if (
 			window.confirm("Are you sure you want to remove this invitation?")
 		) {
-			const config = {
-				method: "delete",
-				url:
-					process.env.REACT_APP_BASE_URL +
-					"/invitation/delete/" +
-					String(invitations[index]._id),
-				headers: { "auth-token": localStorage.getItem("auth-token") },
-			};
-			axios(config)
-				.then((res) => {
-					toast.success("Removed invitation");
-				})
-				.catch((err) => {
-					console.log(err);
-				});
+			invitationMutation.mutate(invitations[index]._id);
+			removeInvitationComplete();
 		}
 	};
 
 	return (
 		<React.Fragment>
-			<Toaster />
 			<Dialog
 				open={open}
 				onClose={handleClose}
 				aria-labelledby='form-dialog-title'
 				fullWidth
 			>
-				<form onSubmit={handleSubmit} autoComplete='off'>
-					<DialogContent>
-						{/* Add user field */}
-						<Typography
-							sx={{ mt: 4, mb: 2 }}
-							variant='h6'
-							component='div'
-						>
-							Team Members
-						</Typography>
+				<DialogContent>
+					{/* Add user field */}
+					<Typography
+						sx={{ mt: 4, mb: 2 }}
+						variant='h6'
+						component='div'
+					>
+						Team Members
+					</Typography>
 
-						<Box sx={{ flexGrow: 1, maxWidth: 800 }}>
-							<Grid container>
-								<Grid
-									item
-									xs={12}
-									md={12}
-									// style={{ backgroundColor: "green" }}
-								>
-									<List>
-										{users.map((user, i) => (
-											<ListItem
-												key={i}
-												secondaryAction={
-													<React.Fragment>
-														<Tooltip title='Remove user'>
-															<IconButton
-																edge='end'
-																aria-label='delete'
-																style={{
-																	marginRight:
-																		"1px",
-																}}
-																onClick={() => {
-																	handleRemoveUser(
-																		i
-																	);
-																}}
-															>
-																<RemoveCircleIcon />
-															</IconButton>
-														</Tooltip>
-														<Tooltip title='Edit role'>
-															<IconButton
-																edge='end'
-																aria-label='delete'
-																onClick={
-																	handleEditRole
-																}
-															>
-																<EditIcon />
-															</IconButton>
-														</Tooltip>
-													</React.Fragment>
-												}
-											>
-												<ListItemText
-													primary={
-														user.name +
-														" (" +
-														user.role +
-														")"
-													}
-												/>
-											</ListItem>
-										))}
-									</List>
-									<Divider />
-									<Typography
-										sx={{ mt: 4, mb: 2 }}
-										variant='h6'
-										component='div'
-									>
-										Invited Users
-									</Typography>
-									{invitations.map((invitation, i) => (
+					<Box sx={{ flexGrow: 1, maxWidth: 800 }}>
+						<Grid container>
+							<Grid
+								item
+								xs={12}
+								md={12}
+								// style={{ backgroundColor: "green" }}
+							>
+								<List>
+									{users.map((user, i) => (
 										<ListItem
 											key={i}
 											secondaryAction={
@@ -178,12 +115,21 @@ const ManageTeamDialog = ({
 																	"1px",
 															}}
 															onClick={() => {
-																handleRemoveInvitation(
-																	i
-																);
+																removeUser(i);
 															}}
 														>
 															<RemoveCircleIcon />
+														</IconButton>
+													</Tooltip>
+													<Tooltip title='Edit role'>
+														<IconButton
+															edge='end'
+															aria-label='delete'
+															onClick={
+																handleEditRole
+															}
+														>
+															<EditIcon />
 														</IconButton>
 													</Tooltip>
 												</React.Fragment>
@@ -191,24 +137,64 @@ const ManageTeamDialog = ({
 										>
 											<ListItemText
 												primary={
-													invitation.invitee.name +
+													user.name +
 													" (" +
-													invitation.role +
+													user.role +
 													")"
 												}
 											/>
 										</ListItem>
 									))}
-								</Grid>
+								</List>
+								<Divider />
+								<Typography
+									sx={{ mt: 4, mb: 2 }}
+									variant='h6'
+									component='div'
+								>
+									Invited Users
+								</Typography>
+								{invitations.map((invitation, i) => (
+									<ListItem
+										key={i}
+										secondaryAction={
+											<React.Fragment>
+												<Tooltip title='Remove user'>
+													<IconButton
+														edge='end'
+														aria-label='delete'
+														style={{
+															marginRight: "1px",
+														}}
+														onClick={() => {
+															removeInvitation(i);
+														}}
+													>
+														<RemoveCircleIcon />
+													</IconButton>
+												</Tooltip>
+											</React.Fragment>
+										}
+									>
+										<ListItemText
+											primary={
+												invitation.invitee.name +
+												" (" +
+												invitation.role +
+												")"
+											}
+										/>
+									</ListItem>
+								))}
 							</Grid>
-						</Box>
-					</DialogContent>
-					<DialogActions>
-						<Button onClick={handleClose} color='inherit'>
-							Close
-						</Button>
-					</DialogActions>
-				</form>
+						</Grid>
+					</Box>
+				</DialogContent>
+				<DialogActions>
+					<Button onClick={handleClose} color='inherit'>
+						Close
+					</Button>
+				</DialogActions>
 			</Dialog>
 		</React.Fragment>
 	);

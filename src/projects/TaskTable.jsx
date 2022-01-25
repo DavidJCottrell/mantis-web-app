@@ -8,16 +8,17 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
-import { useTheme } from "@mui/material/styles";
-import useMediaQuery from "@mui/material/useMediaQuery";
 import Grid from "@mui/material/Grid";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import Hidden from "@mui/material/Hidden";
 
 import TaskTableRow from "./TaskTableRow";
 
-const TaskTable = ({ projectData, isMobile, role, projectId }) => {
+const TaskTable = ({
+	projectData,
+	isMobile,
+	role,
+	projectId,
+	removeTaskComplete,
+}) => {
 	return (
 		<Grid item xs={12} md={8}>
 			<Typography variant='h4'>{projectData.title}</Typography>
@@ -45,8 +46,9 @@ const TaskTable = ({ projectData, isMobile, role, projectId }) => {
 								key={task.taskKey}
 								task={task}
 								role={role}
-								projectId={projectId}
 								isMobile={isMobile}
+								projectId={projectId}
+								removeTaskComplete={removeTaskComplete}
 							/>
 						))}
 					</TableBody>
