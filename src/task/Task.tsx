@@ -7,7 +7,7 @@ import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 
 // Custom components
-import Nav from "../common/nav/Nav";
+import Nav from "../nav/Nav";
 
 const Task = () => {
 	const location = useLocation();

@@ -5,24 +5,14 @@ import { Link } from "react-router-dom";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 
-import auth from "../../utils/auth";
+import auth from "../utils/auth";
 
 import ProfileDialog from "./ProfileDialog";
 
 const ProfileMenu = (props) => {
-	const signOut = () => {
-		auth.logout();
-	};
-
 	const [profileOpen, setProfileOpen] = useState(false);
-
-	const handleProfileOpen = () => {
-		setProfileOpen(true);
-	};
-
-	const handleProfileClose = () => {
-		setProfileOpen(false);
-	};
+	const handleProfileOpen = () => setProfileOpen(true);
+	const handleProfileClose = () => setProfileOpen(false);
 
 	return (
 		<React.Fragment>
@@ -34,13 +24,8 @@ const ProfileMenu = (props) => {
 				open={props.open}
 				onClose={props.handleClose}
 			>
-				<Link
-					to='/'
-					style={{ textDecoration: "none", color: "inherit" }}
-				>
-					<MenuItem onClick={props.handleClose}>
-						My dashboard
-					</MenuItem>
+				<Link to='/' style={{ textDecoration: "none", color: "inherit" }}>
+					<MenuItem onClick={props.handleClose}>My dashboard</MenuItem>
 				</Link>
 				<MenuItem
 					onClick={() => {
@@ -50,17 +35,11 @@ const ProfileMenu = (props) => {
 				>
 					My account
 				</MenuItem>
-				<Link
-					to='/login'
-					style={{ textDecoration: "none", color: "inherit" }}
-				>
-					<MenuItem onClick={signOut}>Sign Out</MenuItem>
+				<Link to='/login' style={{ textDecoration: "none", color: "inherit" }}>
+					<MenuItem onClick={auth.logout}>Sign Out</MenuItem>
 				</Link>
 			</Menu>
-			<ProfileDialog
-				handleClose={handleProfileClose}
-				open={profileOpen}
-			/>
+			<ProfileDialog handleClose={handleProfileClose} open={profileOpen} />
 		</React.Fragment>
 	);
 };

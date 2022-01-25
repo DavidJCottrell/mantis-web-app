@@ -8,10 +8,10 @@ import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 
-const ProjectCard = ({ project, role }) => {
+const ProjectCard = ({ project, role, cardStyle }) => {
 	return (
 		<Grid item xs={12} sm={6} md={4} key={project._id}>
-			<Card>
+			<Card style={cardStyle}>
 				<CardContent>
 					<Typography variant='h5' component='h2'>
 						{project.title}

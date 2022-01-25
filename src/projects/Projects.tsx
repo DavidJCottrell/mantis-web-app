@@ -12,7 +12,7 @@ import CardContent from "@mui/material/CardContent";
 import Hidden from "@mui/material/Hidden";
 
 // Custom components
-import Nav from "../common/nav/Nav";
+import Nav from "../nav/Nav";
 import TaskTable from "./TaskTable";
 import InviteUserDialog from "./InviteUserDialog";
 import AddTaskDialog from "./AddTaskDialog";

@@ -2,7 +2,7 @@ import React from "react";
 import { Routes, Route } from "react-router-dom";
 
 //Pages
-import ProtectedRoute from "./common/ProtectedRoute";
+import ProtectedRoute from "./ProtectedRoute";
 import Login from "./login/Login";
 import Dashboard from "./dashboard/Dashboard";
 import Projects from "./projects/Projects";
@@ -52,14 +52,8 @@ const App = () => {
 					<Route path='/project' element={<Projects />} />
 				</Route>
 
-				<Route
-					path='/project/requirements'
-					element={<ProtectedRoute />}
-				>
-					<Route
-						path='/project/requirements'
-						element={<Requirements />}
-					/>
+				<Route path='/project/requirements' element={<ProtectedRoute />}>
+					<Route path='/project/requirements' element={<Requirements />} />
 				</Route>
 
 				<Route path='/project/task' element={<ProtectedRoute />}>
