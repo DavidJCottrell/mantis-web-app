@@ -21,7 +21,7 @@ import toast, { Toaster } from "react-hot-toast";
 import * as invitationApis from "../../apis/invitation";
 
 const InviteUserDialog = ({ open, handleClose, projectId, title }) => {
-	const queryClient = new useQueryClient();
+	const queryClient = useQueryClient();
 
 	const invitationMutation = useMutation(
 		({ username, invitation }) => invitationApis.addInvitation(username, invitation),
@@ -68,8 +68,9 @@ const InviteUserDialog = ({ open, handleClose, projectId, title }) => {
 				<form onSubmit={inviteUser} autoComplete='off'>
 					<DialogContent>
 						{/* Add user field */}
-						<Typography variant='subtitle1'>Invite a user</Typography>
-						<Divider />
+						<Typography sx={{ mt: 1, mb: 1 }} variant='h6' component='div'>
+							Invite a user
+						</Typography>
 						<TextField
 							variant='outlined'
 							margin='normal'

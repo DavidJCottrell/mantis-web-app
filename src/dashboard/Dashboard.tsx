@@ -81,6 +81,8 @@ const Dashboard = () => {
 					<h2>Loading projects...</h2>
 				)}
 
+				{projectMutation.isLoading ? <h2>Loading new project...</h2> : null}
+
 				{projectQuery.isSuccess && projectQuery.data.length === 0 ? (
 					<h2>You currently have no projects</h2>
 				) : null}

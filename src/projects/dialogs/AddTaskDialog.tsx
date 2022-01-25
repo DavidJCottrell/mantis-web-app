@@ -98,8 +98,9 @@ const AddTaskDialog = ({ open, handleClose, totalTasks, projectId, addTaskComple
 			<form onSubmit={handleSubmit} autoComplete='off'>
 				<DialogContent>
 					{/* Add user field */}
-					<Typography variant='subtitle1'>Add a task</Typography>
-					<Divider />
+					<Typography sx={{ mt: 1, mb: 1 }} variant='h6' component='div'>
+						Add task
+					</Typography>
 					<TextField
 						variant='outlined'
 						margin='normal'

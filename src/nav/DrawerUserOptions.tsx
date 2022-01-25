@@ -19,6 +19,7 @@ const UserOptions = ({
 	handleAddUserOpen,
 	handleAddTaskOpen,
 	handleManageTeamOpen,
+	handleSettingsOpen,
 }) => {
 	const theme = useTheme();
 
@@ -77,13 +78,14 @@ const UserOptions = ({
 							<ListItemText primary='Invite user' />
 						</ListItem>
 					</div>
-
-					<ListItem button>
-						<ListItemIcon>
-							<SettingsIcon />
-						</ListItemIcon>
-						<ListItemText primary='Project settings' />
-					</ListItem>
+					<div onClick={handleSettingsOpen}>
+						<ListItem button>
+							<ListItemIcon>
+								<SettingsIcon />
+							</ListItemIcon>
+							<ListItemText primary='Project settings' />
+						</ListItem>
+					</div>
 				</List>
 			) : null}
 			{userType === "Developer" ? (

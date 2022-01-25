@@ -17,6 +17,7 @@ import TaskTable from "./TaskTable";
 import InviteUserDialog from "./dialogs/InviteUserDialog";
 import AddTaskDialog from "./dialogs/AddTaskDialog";
 import ManageTeamDialog from "./dialogs/ManageTeamDialog";
+import SettingsDialog from "./dialogs/SettingsDialog";
 
 import toast, { Toaster } from "react-hot-toast";
 
@@ -27,23 +28,29 @@ const Projects = () => {
 	const isMobile = useMediaQuery(theme.breakpoints.up("sm"));
 	const location = useLocation();
 
-	// Add User Logic
+	// Add user dialog logic
 	const [addUserAnchor, setAddUserAnchor] = useState(); //State
 	const handleAddUserOpen = (event) => setAddUserAnchor(event.currentTarget); //Handle open
 	const handleAddUserClose = () => setAddUserAnchor(null); //Handle close
 	const isAddUserOpen = Boolean(addUserAnchor); //Is open
 
-	// Add Task Logic
+	// Add task dialog logic
 	const [addTaskAnchor, setAddTaskAnchor] = useState(); //State
 	const handleAddTaskOpen = (event) => setAddTaskAnchor(event.currentTarget); //Handle open
 	const handleAddTaskClose = () => setAddTaskAnchor(null); //Handle close
 	const isAddTaskOpen = Boolean(addTaskAnchor); //Is open
 
-	// Manage Team Logic
+	// Manage team dialog logic
 	const [manageTeamAnchor, setManageTeamAnchor] = useState(); //State
 	const handleManageTeamOpen = (event) => setManageTeamAnchor(event.currentTarget); //Handle open
 	const handleManageTeamClose = () => setManageTeamAnchor(null); //Handle close
 	const isManageTeamOpen = Boolean(manageTeamAnchor); //Is open
+
+	// Settings dialog logic
+	const [settingsAnchor, setSettingsAnchor] = useState(); //State
+	const handleSettingsOpen = (event) => setSettingsAnchor(event.currentTarget); //Handle open
+	const handleSettingsClose = () => setSettingsAnchor(null); //Handle close
+	const isSettingsOpen = Boolean(settingsAnchor); //Is open
 
 	const removeUserComplete = () => toast.success("User removed!");
 	const removeInvitationComplete = () => toast.success("Invitation removed!");
@@ -76,6 +83,7 @@ const Projects = () => {
 		handleAddUserOpen: handleAddUserOpen,
 		handleAddTaskOpen: handleAddTaskOpen,
 		handleManageTeamOpen: handleManageTeamOpen,
+		handleSettingsOpen: handleSettingsOpen,
 	};
 
 	return (
@@ -179,7 +187,6 @@ const Projects = () => {
 				<React.Fragment>
 					<AddTaskDialog
 						open={isAddTaskOpen}
-						anchorElement={addTaskAnchor}
 						handleClose={handleAddTaskClose}
 						totalTasks={projectQuery.data.project.tasks.length}
 						projectId={projectId}
@@ -187,20 +194,23 @@ const Projects = () => {
 					/>
 					<InviteUserDialog
 						open={isAddUserOpen}
-						anchorElement={addUserAnchor}
 						handleClose={handleAddUserClose}
 						projectId={projectId}
 						title={projectQuery.data.project.title}
 					/>
 					<ManageTeamDialog
 						open={isManageTeamOpen}
-						anchorElement={manageTeamAnchor}
 						handleClose={handleManageTeamClose}
 						projectId={projectId}
 						users={projectQuery.data.project.users}
 						invitations={invitationQuery.data.invitations}
 						removeUserComplete={removeUserComplete}
 						removeInvitationComplete={removeInvitationComplete}
+					/>
+					<SettingsDialog
+						open={isSettingsOpen}
+						handleClose={handleSettingsClose}
+						projectId={projectId}
 					/>
 				</React.Fragment>
 			) : null}

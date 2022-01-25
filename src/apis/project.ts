@@ -31,3 +31,9 @@ export const removeUser = (projectId, userId) =>
 		.patch(`/project/removeuser/${projectId}/${userId}`)
 		.then((res) => res.data)
 		.catch((e) => e.response);
+
+export const deleteProject = (projectId) =>
+	api
+		.delete(`/project/${projectId}`)
+		.then((res) => res.data)
+		.catch((e) => e.response);

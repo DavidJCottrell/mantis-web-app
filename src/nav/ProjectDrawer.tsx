@@ -48,6 +48,7 @@ const ProjectDrawer = ({
 					handleAddUserOpen={projectCallbacks.handleAddUserOpen}
 					handleAddTaskOpen={projectCallbacks.handleAddTaskOpen}
 					handleManageTeamOpen={projectCallbacks.handleManageTeamOpen}
+					handleSettingsOpen={projectCallbacks.handleSettingsOpen}
 				/>
 			</Drawer>
 			{/* Main content of page */}
