@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 
-import axios from "axios";
-
 // Material-UI
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -15,37 +13,38 @@ import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 
-import SignUpDialog from "./SignUpDialog.jsx";
-
-import * as userApis from "../apis/user";
-
-import auth from "../utils/auth.js";
-
 // Styles
 import { loginStyles } from "./loginStyles";
+
+import SignUpDialog from "./SignUpDialog";
+import logo from "../images/mantis.jpg";
+import auth from "../utils/auth";
+import * as userApis from "../apis/user";
 
 const Login = () => {
 	const classes = loginStyles();
 
 	const login = (email, password) => {
-		userApis
-			.login({ email: email, password: password })
-			.then((userData) => {
-				auth.login(userData); // Front-end login, store auth-token, and user details
-				window.location.href = "/";
-			});
+		userApis.login({ email: email, password: password }).then((userData) => {
+			auth.login(userData); // Front-end login, store auth-token, and user details
+			window.location.href = "/";
+		});
 	};
 
 	const signUp = () => {
-		const form = document.getElementById("signUp-form");
-		const password = form.elements["password"].value;
-		const vpassword = form.elements["vpassword"].value;
-		const email = form.elements["email"].value.toLowerCase();
+		const form: HTMLFormElement = document.getElementById(
+			"signUp-form"
+		) as HTMLFormElement;
+		const password: String = form.password.value;
+		const vpassword: String = form.vpassword.value;
+		const email: String = form.email.value.toLowerCase();
+		const firstName: String = form.fname.value;
+		const lastName: String = form.lname.value;
 
 		if (password === vpassword) {
 			const data = {
-				firstName: form.elements["fname"].value,
-				lastName: form.elements["lname"].value,
+				firstName: firstName,
+				lastName: lastName,
 				email: email,
 				password: password,
 			};
@@ -69,26 +68,16 @@ const Login = () => {
 					<Hidden only={["xs", "sm"]}>
 						<div className={classes.center}>
 							<div>
-								{/* <Typography component='h1' variant='h2'>
-									Mantis
-								</Typography> */}
 								<Avatar
 									alt='Logo'
-									src={require("../images/mantis.jpg")}
+									src={logo}
 									sx={{ width: 200, height: 200 }}
 								/>
 							</div>
 						</div>
 					</Hidden>
 				</Grid>
-				<Grid
-					item
-					xs={12}
-					md={5}
-					elevation={6}
-					component={Paper}
-					square
-				>
+				<Grid item xs={12} md={5} elevation={6} component={Paper} square>
 					<div className={classes.paper}>
 						<Avatar className={classes.avatar}>
 							<LockOutlinedIcon />
@@ -96,11 +85,7 @@ const Login = () => {
 						<Typography component='h1' variant='h5'>
 							Sign in
 						</Typography>
-						<form
-							className={classes.form}
-							id='login-form'
-							noValidate
-						>
+						<form className={classes.form} id='login-form' noValidate>
 							<TextField
 								variant='outlined'
 								margin='normal'
@@ -129,12 +114,12 @@ const Login = () => {
 								color='secondary'
 								className={classes.submit}
 								onClick={() => {
-									login(
-										document.getElementById("login-form")
-											.elements["email"].value,
-										document.getElementById("login-form")
-											.elements["password"].value
-									);
+									const form: HTMLFormElement = document.getElementById(
+										"login-form"
+									) as HTMLFormElement;
+									const email: String = form.email.value;
+									const password: String = form.password.value;
+									login(email, password);
 								}}
 							>
 								Sign In
@@ -142,11 +127,7 @@ const Login = () => {
 							{/* </RouterLink> */}
 							<Grid container>
 								<Grid item xs>
-									<Link
-										href='#'
-										variant='body2'
-										color='inherit'
-									>
+									<Link href='#' variant='body2' color='inherit'>
 										Forgot password?
 									</Link>
 								</Grid>

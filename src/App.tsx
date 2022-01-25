@@ -40,32 +40,30 @@ const App = () => {
 		<ThemeProvider theme={theme}>
 			<CssBaseline />
 			<Routes>
-				<Route exact path='/login' element={<Login />}></Route>
-				<Route exact path='/' element={<ProtectedRoute />}>
-					<Route exact path='/' element={<Dashboard />} />
+				<Route path='/login' element={<Login />}></Route>
+				<Route path='/' element={<ProtectedRoute />}>
+					<Route path='/' element={<Dashboard />} />
 				</Route>
-				<Route exact path='/projects' element={<ProtectedRoute />}>
-					<Route exact path='/projects' element={<Projects />} />
+				<Route path='/projects' element={<ProtectedRoute />}>
+					<Route path='/projects' element={<Projects />} />
 				</Route>
 
-				<Route exact path='/project' element={<ProtectedRoute />}>
-					<Route exact path='/project' element={<Projects />} />
+				<Route path='/project' element={<ProtectedRoute />}>
+					<Route path='/project' element={<Projects />} />
 				</Route>
 
 				<Route
-					exact
 					path='/project/requirements'
 					element={<ProtectedRoute />}
 				>
 					<Route
-						exact
 						path='/project/requirements'
 						element={<Requirements />}
 					/>
 				</Route>
 
-				<Route exact path='/project/task' element={<ProtectedRoute />}>
-					<Route exact path='/project/task' element={<Task />} />
+				<Route path='/project/task' element={<ProtectedRoute />}>
+					<Route path='/project/task' element={<Task />} />
 				</Route>
 
 				<Route path='*' element={<PageNotFound />} />

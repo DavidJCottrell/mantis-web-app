@@ -1,17 +1,14 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import axios from "axios";
 import { useQuery } from "react-query";
 
 //Material-UI Components
-import MuiAppBar from "@mui/material/AppBar";
-import MuiDrawer from "@mui/material/Drawer";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import Badge from "@mui/material/Badge";
 import Tooltip from "@mui/material/Tooltip";
-import { styled, useTheme } from "@mui/material/styles";
+import { useTheme } from "@mui/material/styles";
 import Divider from "@mui/material/Divider";
 import Box from "@mui/material/Box";
 
@@ -25,80 +22,16 @@ import AssignmentIcon from "@mui/icons-material/Assignment";
 import AddIcon from "@mui/icons-material/Add";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 
-import { NavStyles } from "./navStyles";
+import { NavStyles, DrawerHeader, AppBar, Drawer } from "./navStyles";
 import UserOptions from "./UserOptions";
 import ProfileMenu from "./ProfileMenu";
-// import NotificationList from "./NotificationList";
 import InvitationList from "./InvitationList";
 import TaskList from "./TaskList";
-import { commentsData, invitationData } from "../../testData";
+import { commentsData } from "../../testData";
+
+import * as userApis from "../../apis/user";
 
 const drawerWidth = 240;
-
-const openedMixin = (theme) => ({
-	width: drawerWidth,
-	transition: theme.transitions.create("width", {
-		easing: theme.transitions.easing.sharp,
-		duration: theme.transitions.duration.enteringScreen,
-	}),
-	overflowX: "hidden",
-});
-
-const closedMixin = (theme) => ({
-	transition: theme.transitions.create("width", {
-		easing: theme.transitions.easing.sharp,
-		duration: theme.transitions.duration.leavingScreen,
-	}),
-	overflowX: "hidden",
-	width: `calc(${theme.spacing(7)} + 1px)`,
-	[theme.breakpoints.up("sm")]: {
-		width: `calc(${theme.spacing(7)} + 1px)`, // prev 9
-	},
-});
-
-const DrawerHeader = styled("div")(({ theme }) => ({
-	display: "flex",
-	alignItems: "center",
-	justifyContent: "flex-end",
-	padding: theme.spacing(0, 1),
-	// necessary for content to be below app bar
-	...theme.mixins.toolbar,
-}));
-
-const AppBar = styled(MuiAppBar, {
-	shouldForwardProp: (prop) => prop !== "drawerOpen",
-})(({ theme, drawerOpen }) => ({
-	zIndex: theme.zIndex.drawer + 1,
-	transition: theme.transitions.create(["width", "margin"], {
-		easing: theme.transitions.easing.sharp,
-		duration: theme.transitions.duration.leavingScreen,
-	}),
-	...(drawerOpen && {
-		marginLeft: drawerWidth,
-		width: `calc(100% - ${drawerWidth}px)`,
-		transition: theme.transitions.create(["width", "margin"], {
-			easing: theme.transitions.easing.sharp,
-			duration: theme.transitions.duration.enteringScreen,
-		}),
-	}),
-}));
-
-const Drawer = styled(MuiDrawer, {
-	shouldForwardProp: (prop) => prop !== "drawerOpen",
-})(({ theme, drawerOpen }) => ({
-	width: drawerWidth,
-	flexShrink: 0,
-	whiteSpace: "nowrap",
-	boxSizing: "border-box",
-	...(drawerOpen && {
-		...openedMixin(theme),
-		"& .MuiDrawer-paper": openedMixin(theme),
-	}),
-	...(!drawerOpen && {
-		...closedMixin(theme),
-		"& .MuiDrawer-paper": closedMixin(theme),
-	}),
-}));
 
 const Nav = ({
 	userType,
@@ -145,23 +78,12 @@ const Nav = ({
 	const handleTaggedCommentsListClose = () => setTaggedCommentsAnchor(null); //Handle close
 	const isTaggedCommentsListOpen = Boolean(taggedCommentsAnchor); //Is open
 
-	const taskData = useQuery("fetchUsersTasks", () =>
-		axios.get(process.env.REACT_APP_BASE_URL + "/user/usertasks/", {
-			headers: {
-				"auth-token": localStorage.getItem("auth-token"),
-			},
-		})
-	);
-	if (taskData.error) console.log(taskData.error);
+	const taskQuery = useQuery("fetchUsersTasks", userApis.getTasks);
 
-	const invitationData = useQuery("fetchUsersInvitations", () =>
-		axios.get(process.env.REACT_APP_BASE_URL + "/user/invitations/", {
-			headers: {
-				"auth-token": localStorage.getItem("auth-token"),
-			},
-		})
+	const invitationQuery = useQuery(
+		"fetchUsersInvitations",
+		userApis.getInvitations
 	);
-	if (invitationData.error) console.log(invitationData.error);
 
 	//Get Task and Comment Data
 	const [taggedComments, setTaggedComments] = useState(false);
@@ -204,9 +126,8 @@ const Nav = ({
 						>
 							<Badge
 								badgeContent={
-									invitationData.isSuccess
-										? invitationData.data.data.invitations
-												.length
+									invitationQuery.isSuccess
+										? invitationQuery.data.length
 										: null
 								}
 								color='secondary'
@@ -236,8 +157,8 @@ const Nav = ({
 						<IconButton color='inherit' onClick={hanleTaskListOpen}>
 							<Badge
 								badgeContent={
-									taskData.data
-										? taskData.data.data.length
+									taskQuery.data
+										? taskQuery.data.length
 										: null
 								}
 								color='secondary'
@@ -277,11 +198,6 @@ const Nav = ({
 							</IconButton>
 						</DrawerHeader>
 						<Divider />
-						{/* <UserOptions
-							userType='All'
-							handleManageTeamOpen={handleManageTeamOpen}
-						/>
-						<Divider /> */}
 						<UserOptions
 							userType={userType}
 							handleAddUserOpen={handleAddUserOpen}
@@ -303,34 +219,24 @@ const Nav = ({
 				handleClose={handleProfileMenuClose}
 			/>
 
-			{/* Tagged Comments List */}
-			{/* <NotificationList
-				title={"Your tagged comments:"}
-				type={"comments"}
-				open={isTaggedCommentsListOpen}
-				anchorElement={taggedCommentsAnchor}
-				handleClose={handleTaggedCommentsListClose}
-				data={taggedComments}
-			/> */}
-
-			{invitationData.isSuccess ? (
+			{invitationQuery.isSuccess ? (
 				<InvitationList
 					open={isInvitationMenuOpen}
 					anchorElement={invitationAnchor}
 					handleClose={handleInvitationListClose}
-					invitationData={invitationData.data.data.invitations}
+					invitationData={invitationQuery.data}
 				/>
 			) : null}
 
 			{/* Tasks List */}
-			{taskData.isSuccess ? (
+			{taskQuery.isSuccess ? (
 				<TaskList
 					title={"Your tasks:"}
 					type={"tasks"}
 					open={isTaskMenuOpen}
 					anchorElement={tasksAnchor}
 					handleClose={handleTaskListClose}
-					data={taskData.data.data}
+					data={taskQuery.data}
 				/>
 			) : null}
 

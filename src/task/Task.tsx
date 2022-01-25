@@ -1,10 +1,10 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 // Material-UI
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
 
 // Custom components
 import Nav from "../common/nav/Nav";
@@ -30,15 +30,18 @@ const Task = () => {
 					{task.taskKey} - {task.title}
 				</Typography>
 				<br />
-				<Button
-					variant='contained'
-					color='secondary'
-					onClick={() => {
-						history.back();
+				<Link
+					to={"/project"}
+					state={{
+						projectId: task,
+						role: role,
+					}}
+					style={{
+						textDecoration: "none",
 					}}
 				>
 					Back to project
-				</Button>
+				</Link>
 			</Container>
 		</React.Fragment>
 	);

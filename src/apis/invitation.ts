@@ -11,3 +11,9 @@ export const deleteInvitation = (invitationId) =>
 		.delete(`/invitation/delete/${invitationId}`)
 		.then((res) => res.data)
 		.catch((e) => e.response);
+
+export const acceptInvitation = (data) =>
+	api
+		.post("/invitation/accept/", data)
+		.then((res) => res.data)
+		.catch((e) => e.response);
