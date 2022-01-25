@@ -5,7 +5,7 @@ import { Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./ProtectedRoute";
 import Login from "./login/Login";
 import Dashboard from "./dashboard/Dashboard";
-import Projects from "./projects/Projects";
+import Project from "./projects/Project";
 import Requirements from "./requirements/Requirements";
 import Task from "./task/Task";
 import PageNotFound from "./PageNotFound";
@@ -44,12 +44,9 @@ const App = () => {
 				<Route path='/' element={<ProtectedRoute />}>
 					<Route path='/' element={<Dashboard />} />
 				</Route>
-				<Route path='/projects' element={<ProtectedRoute />}>
-					<Route path='/projects' element={<Projects />} />
-				</Route>
 
 				<Route path='/project' element={<ProtectedRoute />}>
-					<Route path='/project' element={<Projects />} />
+					<Route path='/project' element={<Project />} />
 				</Route>
 
 				<Route path='/project/requirements' element={<ProtectedRoute />}>

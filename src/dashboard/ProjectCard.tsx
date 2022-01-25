@@ -35,7 +35,6 @@ const ProjectCard = ({ project, role, cardStyle }) => {
 						to={"/project"}
 						state={{
 							projectId: project._id,
-							role: role,
 						}}
 						style={{
 							textDecoration: "none",

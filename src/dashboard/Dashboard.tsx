@@ -28,18 +28,9 @@ const Dashboard = () => {
 		},
 	});
 
-	const handleAddProject = (e) => {
-		e.preventDefault();
-		const data = {
-			title: document.getElementsByName("title")[0].value,
-			users: [],
-			tasks: [],
-			githubURL: document.getElementsByName("githubURL")[0].value,
-			description: document.getElementsByName("description")[0].value,
-		};
+	const handleAddProject = (data) => {
 		projectMutation.mutate(data);
 		toast.success("Project added!");
-		handleAddProjectClose();
 	};
 
 	// Add project dialog logic

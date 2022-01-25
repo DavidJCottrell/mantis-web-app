@@ -82,7 +82,7 @@ const ManageTeamDialog = ({
 			>
 				<DialogContent>
 					{/* Add user field */}
-					<Typography sx={{ mt: 4, mb: 2 }} variant='h6' component='div'>
+					<Typography sx={{ mt: 1, mb: 1 }} variant='h6' component='div'>
 						Team Members
 					</Typography>
 

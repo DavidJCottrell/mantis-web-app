@@ -19,10 +19,15 @@ import { invitationListStyles } from "../navStyles";
 
 import * as invitationApis from "../../apis/invitation";
 
+interface acceptInvitationData {
+	projectId: string;
+	userId: string;
+	role: string;
+}
+
 const InvitationList = ({ open, anchorElement, handleClose, invitationData }) => {
 	const classes = invitationListStyles();
-
-	const queryClient = new useQueryClient();
+	const queryClient = useQueryClient();
 
 	const deleteInvitationMutation = useMutation(
 		(invitationId) => invitationApis.deleteInvitation(invitationId),
@@ -34,7 +39,7 @@ const InvitationList = ({ open, anchorElement, handleClose, invitationData }) =>
 	);
 
 	const acceptInvitationMutation = useMutation(
-		(data) => invitationApis.acceptInvitation(data),
+		(data: acceptInvitationData) => invitationApis.acceptInvitation(data),
 		{
 			onSuccess: () => {
 				queryClient.invalidateQueries("fetchProjects");
@@ -46,9 +51,9 @@ const InvitationList = ({ open, anchorElement, handleClose, invitationData }) =>
 		const index = e.target.dataset.index;
 
 		acceptInvitationMutation.mutate({
-			projectId: String(invitationData[index].project.projectId),
-			userId: String(invitationData[index].invitee.userId),
-			role: String(invitationData[index].role),
+			projectId: invitationData[index].project.projectId,
+			userId: invitationData[index].invitee.userId,
+			role: invitationData[index].role,
 		});
 
 		deleteInvitationMutation.mutate(invitationData[index]._id);

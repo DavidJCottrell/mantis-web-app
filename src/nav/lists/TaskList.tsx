@@ -16,6 +16,7 @@ import { notificationListStyles } from "../navStyles";
 
 const TaskList = ({ open, anchorElement, handleClose, data, title }) => {
 	const classes = notificationListStyles();
+
 	return (
 		<Menu
 			id='simple-menu'
@@ -30,12 +31,7 @@ const TaskList = ({ open, anchorElement, handleClose, data, title }) => {
 					<Divider />
 				</Box>
 				{data
-					? data.map(({ task, parentProjectTitle }, i) => {
-							let role;
-							for (const assignee of task.assignees) {
-								if (assignee.userId === localStorage.getItem("userId"))
-									role = assignee.projectRole;
-							}
+					? data.map(({ task, parentProjectTitle, parentProjectId }, i) => {
 							return (
 								<MenuItem
 									onClick={handleClose}
@@ -46,7 +42,7 @@ const TaskList = ({ open, anchorElement, handleClose, data, title }) => {
 										to={"/project/task"}
 										state={{
 											task: task,
-											role: role,
+											projectId: parentProjectId,
 										}}
 										style={{
 											textDecoration: "none",

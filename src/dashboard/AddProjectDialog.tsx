@@ -11,6 +11,19 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 
 const AddProjectDialog = ({ open, handleClose, handleAddProject }) => {
+	const handleSubmit = (e: React.FormEvent) => {
+		e.preventDefault();
+		const form = document.getElementById("addProject-form") as HTMLFormElement;
+		const data = {
+			title: form.projectTitle.value as String,
+			users: [],
+			tasks: [],
+			githubURL: form.githubURL.value as String,
+			description: form.description.value as String,
+		};
+		handleAddProject(data);
+		handleClose();
+	};
 	return (
 		<Dialog
 			open={open}
@@ -19,7 +32,7 @@ const AddProjectDialog = ({ open, handleClose, handleAddProject }) => {
 			fullWidth
 		>
 			<DialogTitle id='form-dialog-title'>Create project</DialogTitle>
-			<form onSubmit={handleAddProject} autoComplete='off'>
+			<form onSubmit={handleSubmit} autoComplete='off' id='addProject-form'>
 				<DialogContent>
 					<Typography variant='subtitle1'>Project details</Typography>
 					<Divider />
@@ -31,7 +44,7 @@ const AddProjectDialog = ({ open, handleClose, handleAddProject }) => {
 						required
 						fullWidth
 						label='Title'
-						name='title'
+						name='projectTitle'
 						autoComplete='off'
 						color='secondary'
 					/>

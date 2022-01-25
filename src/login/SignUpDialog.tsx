@@ -8,6 +8,19 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 
 const SignUpDialog = ({ signUpOpen, handleSignUpClose, classes, signUp }) => {
+	const handleSubmit = (e: React.FormEvent) => {
+		e.preventDefault();
+		const form = document.getElementById("signUp-form") as HTMLFormElement;
+		handleSignUpClose();
+		signUp({
+			password: form.password.value as String,
+			vpassword: form.vpassword.value as String,
+			email: form.email.value.toLowerCase() as String,
+			firstName: form.fname.value as String,
+			lastName: form.lname.value as String,
+		});
+	};
+
 	return (
 		<Dialog
 			open={signUpOpen}
@@ -15,8 +28,13 @@ const SignUpDialog = ({ signUpOpen, handleSignUpClose, classes, signUp }) => {
 			aria-labelledby='form-dialog-title'
 		>
 			<DialogTitle id='form-dialog-title'>Sign Up</DialogTitle>
-			<DialogContent>
-				<form className={classes.form} id='signUp-form'>
+			<form
+				className={classes.form}
+				onSubmit={handleSubmit}
+				id='signUp-form'
+				autoComplete='off'
+			>
+				<DialogContent>
 					<TextField
 						variant='outlined'
 						margin='normal'
@@ -24,8 +42,8 @@ const SignUpDialog = ({ signUpOpen, handleSignUpClose, classes, signUp }) => {
 						fullWidth
 						label='Email Address'
 						name='email'
-						autoComplete='email'
 						color='secondary'
+						autoComplete='off'
 					/>
 					<TextField
 						variant='outlined'
@@ -57,6 +75,7 @@ const SignUpDialog = ({ signUpOpen, handleSignUpClose, classes, signUp }) => {
 						name='password'
 						type='password'
 						color='secondary'
+						autoComplete='off'
 					/>
 					<TextField
 						variant='outlined'
@@ -68,16 +87,16 @@ const SignUpDialog = ({ signUpOpen, handleSignUpClose, classes, signUp }) => {
 						type='password'
 						color='secondary'
 					/>
-				</form>
-			</DialogContent>
-			<DialogActions>
-				<Button onClick={handleSignUpClose} color='inherit'>
-					Cancel
-				</Button>
-				<Button onClick={(handleSignUpClose, signUp)} color='inherit'>
-					Sign up
-				</Button>
-			</DialogActions>
+				</DialogContent>
+				<DialogActions>
+					<Button onClick={handleSignUpClose} color='inherit'>
+						Cancel
+					</Button>
+					<Button type='submit' color='inherit'>
+						Sign up
+					</Button>
+				</DialogActions>
+			</form>
 		</Dialog>
 	);
 };

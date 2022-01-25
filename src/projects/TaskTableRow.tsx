@@ -19,13 +19,7 @@ import { taskTableRowStyles } from "./projectStyles";
 
 import * as projectApis from "../apis/project";
 
-const TaskTableRow = ({
-	task,
-	role,
-	isMobile,
-	projectId,
-	removeTaskComplete,
-}) => {
+const TaskTableRow = ({ task, role, isMobile, projectId, removeTaskComplete }) => {
 	const [open, setOpen] = React.useState(false);
 	const classes = taskTableRowStyles();
 
@@ -66,19 +60,12 @@ const TaskTableRow = ({
 						size='small'
 						onClick={() => setOpen(!open)}
 					>
-						{open ? (
-							<KeyboardArrowUpIcon />
-						) : (
-							<KeyboardArrowDownIcon />
-						)}
+						{open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
 					</IconButton>
 				</TableCell>
 			</TableRow>
 			<TableRow>
-				<TableCell
-					style={{ paddingBottom: 0, paddingTop: 0 }}
-					colSpan={6}
-				>
+				<TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
 					<Collapse in={open} timeout='auto' unmountOnExit>
 						<br />
 						<Typography variant='body1'>Task Details</Typography>
@@ -100,8 +87,7 @@ const TaskTableRow = ({
 							</Typography>
 							{task.assignees.map((user, i) => (
 								<Typography variant='body1' key={i}>
-									{"Assignee " + (i + 1) + ": "}{" "}
-									<b>{user.name}</b>
+									{"Assignee " + (i + 1) + ": "} <b>{user.name}</b>
 								</Typography>
 							))}
 
@@ -120,7 +106,7 @@ const TaskTableRow = ({
 								to={"/project/task"}
 								state={{
 									task: task,
-									role: role,
+									projectId: projectId,
 								}}
 								style={{
 									textDecoration: "none",

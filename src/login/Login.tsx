@@ -24,31 +24,25 @@ import * as userApis from "../apis/user";
 const Login = () => {
 	const classes = loginStyles();
 
-	const login = (email, password) => {
+	const login = (email: String, password: String) => {
 		userApis.login({ email: email, password: password }).then((userData) => {
 			auth.login(userData); // Front-end login, store auth-token, and user details
 			window.location.href = "/";
 		});
 	};
 
-	const signUp = () => {
-		const form: HTMLFormElement = document.getElementById(
-			"signUp-form"
-		) as HTMLFormElement;
-		const password: String = form.password.value;
-		const vpassword: String = form.vpassword.value;
-		const email: String = form.email.value.toLowerCase();
-		const firstName: String = form.fname.value;
-		const lastName: String = form.lname.value;
-
-		if (password === vpassword) {
+	const signUp = (signUpData) => {
+		console.log(signUpData);
+		if (signUpData.password === signUpData.vpassword) {
 			const data = {
-				firstName: firstName,
-				lastName: lastName,
-				email: email,
-				password: password,
+				firstName: signUpData.firstName,
+				lastName: signUpData.lastName,
+				email: signUpData.email,
+				password: signUpData.password,
 			};
-			userApis.signUp(data).then(() => login(email, password));
+			userApis
+				.signUp(data)
+				.then(() => login(signUpData.email, signUpData.password));
 		} else {
 			toast.error("Passwords do not match, please try again.");
 		}
