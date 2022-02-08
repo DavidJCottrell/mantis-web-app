@@ -20,18 +20,13 @@ import TeamMembersCard from "./TeamMembersCard";
 import toast, { Toaster } from "react-hot-toast";
 
 import * as projectApis from "../apis/project";
-import { ProjectType } from "../interfaces";
 
-interface StateType {
-	projectId: string;
-}
-
-const Project: React.FC = () => {
+const Project = () => {
 	const theme = useTheme();
 	const isMobile = useMediaQuery(theme.breakpoints.up("sm"));
 
 	const location = useLocation();
-	const state = location.state as StateType;
+	const state = location.state;
 
 	// Add user dialog logic
 	const [addUserAnchor, setAddUserAnchor] = useState(); //State

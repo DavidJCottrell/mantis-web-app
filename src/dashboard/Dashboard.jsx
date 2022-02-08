@@ -17,9 +17,6 @@ import AddProjectDialog from "./AddProjectDialog";
 import AddProjectCard from "./AddProjectCard";
 import ProjectCard from "./ProjectCard";
 
-// Types
-import { ProjectType, UserOptions } from "../interfaces";
-
 // Toaster
 import toast, { Toaster } from "react-hot-toast";
 
@@ -66,7 +63,7 @@ const Dashboard = () => {
 								{
 									project,
 									role,
-								}: { project: ProjectType; role: UserOptions },
+								}: { project: ProjectType, role: UserOptions },
 								i: number
 							) => (
 								<ProjectCard

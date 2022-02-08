@@ -8,15 +8,7 @@ import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 
-import { ProjectType } from "../interfaces";
-
-interface Props {
-	project: ProjectType;
-	role: string;
-	cardStyle: object;
-}
-
-const ProjectCard: React.FC<Props> = ({ project, role, cardStyle }) => {
+const ProjectCard = ({ project, role, cardStyle }) => {
 	return (
 		<Grid item xs={12} sm={6} md={4} key={project._id}>
 			<Card style={cardStyle}>

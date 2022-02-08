@@ -11,18 +11,10 @@ import TopBar from "./TopBar";
 import ProjectDrawer from "./ProjectDrawer";
 
 import * as userApis from "../apis/user";
-import { UserOptions } from "../interfaces";
 
 const drawerWidth = 240;
 
-interface Props {
-	userType?: UserOptions;
-	showDrawer?: boolean;
-	children?: object;
-	projectCallbacks?: object;
-}
-
-const Nav: React.FC<Props> = ({ userType, showDrawer, children, projectCallbacks }) => {
+const Nav = ({ userType, showDrawer, children, projectCallbacks }) => {
 	const classes = NavStyles();
 
 	//Drawer Logic

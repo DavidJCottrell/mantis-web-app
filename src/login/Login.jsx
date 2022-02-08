@@ -24,8 +24,8 @@ import * as userApis from "../apis/user";
 const Login = () => {
 	const classes = loginStyles();
 
-	const login = (email: String, password: String) => {
-		userApis.login({ email: email, password: password }).then((userData) => {
+	const login = (email, password) => {
+		userApis.login({ email, password }).then((userData) => {
 			auth.login(userData); // Front-end login, store auth-token, and user details
 			window.location.href = "/";
 		});
@@ -108,11 +108,9 @@ const Login = () => {
 								color='secondary'
 								className={classes.submit}
 								onClick={() => {
-									const form: HTMLFormElement = document.getElementById(
-										"login-form"
-									) as HTMLFormElement;
-									const email: String = form.email.value;
-									const password: String = form.password.value;
+									const form = document.getElementById("login-form");
+									const email = form.email.value;
+									const password = form.password.value;
 									login(email, password);
 								}}
 							>

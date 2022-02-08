@@ -8,16 +8,16 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 
 const SignUpDialog = ({ signUpOpen, handleSignUpClose, classes, signUp }) => {
-	const handleSubmit = (e: React.FormEvent) => {
+	const handleSubmit = (e) => {
 		e.preventDefault();
-		const form = document.getElementById("signUp-form") as HTMLFormElement;
+		const form = document.getElementById("signUp-form");
 		handleSignUpClose();
 		signUp({
-			password: form.password.value as String,
-			vpassword: form.vpassword.value as String,
-			email: form.email.value.toLowerCase() as String,
-			firstName: form.fname.value as String,
-			lastName: form.lname.value as String,
+			password: form.password.value,
+			vpassword: form.vpassword.value,
+			email: form.email.value.toLowerCase(),
+			firstName: form.fname.value,
+			lastName: form.lname.value,
 		});
 	};
 

@@ -19,12 +19,6 @@ import { invitationListStyles } from "../navStyles";
 
 import * as invitationApis from "../../apis/invitation";
 
-interface acceptInvitationData {
-	projectId: string;
-	userId: string;
-	role: string;
-}
-
 const InvitationList = ({ open, anchorElement, handleClose, invitationData }) => {
 	const classes = invitationListStyles();
 	const queryClient = useQueryClient();
@@ -39,7 +33,7 @@ const InvitationList = ({ open, anchorElement, handleClose, invitationData }) =>
 	);
 
 	const acceptInvitationMutation = useMutation(
-		(data: acceptInvitationData) => invitationApis.acceptInvitation(data),
+		(data) => invitationApis.acceptInvitation(data),
 		{
 			onSuccess: () => {
 				queryClient.invalidateQueries("fetchProjects");

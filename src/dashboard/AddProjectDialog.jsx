@@ -11,15 +11,15 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 
 const AddProjectDialog = ({ open, handleClose, handleAddProject }) => {
-	const handleSubmit = (e: React.FormEvent) => {
+	const handleSubmit = (e) => {
 		e.preventDefault();
-		const form = document.getElementById("addProject-form") as HTMLFormElement;
+		const form = document.getElementById("addProject-form");
 		const data = {
-			title: form.projectTitle.value as String,
+			title: form.projectTitle.value,
 			users: [],
 			tasks: [],
-			githubURL: form.githubURL.value as String,
-			description: form.description.value as String,
+			githubURL: form.githubURL.value,
+			description: form.description.value,
 		};
 		handleAddProject(data);
 		handleClose();
