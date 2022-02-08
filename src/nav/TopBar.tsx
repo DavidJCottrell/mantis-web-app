@@ -27,7 +27,7 @@ const TopBar = ({
 	classes,
 	invitationQuery,
 	taskQuery,
-	taggedComments,
+	// taggedComments,
 }) => {
 	// Task List Logic
 	const [tasksAnchor, setTasksAnchor] = useState(); //State
@@ -91,12 +91,7 @@ const TopBar = ({
 							color='inherit'
 							onClick={handleTaggedCommentsListOpen}
 						>
-							<Badge
-								badgeContent={
-									taggedComments ? taggedComments.length : null
-								}
-								color='secondary'
-							>
+							<Badge badgeContent={0} color='secondary'>
 								<MailIcon />
 							</Badge>
 						</IconButton>

@@ -9,6 +9,7 @@ import Typography from "@mui/material/Typography";
 
 // Custom components
 import Nav from "../nav/Nav";
+import LifecycleBar from "./LifecycleBar";
 
 import * as projectApis from "../apis/project";
 
@@ -39,7 +40,7 @@ const Task = () => {
 							{task.taskKey} - {task.title}
 						</Typography>
 						<br />
-						<Typography variant='h4'>{roleQuery.data.role}</Typography>
+						<LifecycleBar />
 						<Link
 							to={"/project"}
 							state={{

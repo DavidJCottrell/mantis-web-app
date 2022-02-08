@@ -20,11 +20,18 @@ import TeamMembersCard from "./TeamMembersCard";
 import toast, { Toaster } from "react-hot-toast";
 
 import * as projectApis from "../apis/project";
+import { ProjectType } from "../interfaces";
 
-const Project = () => {
+interface StateType {
+	projectId: string;
+}
+
+const Project: React.FC = () => {
 	const theme = useTheme();
 	const isMobile = useMediaQuery(theme.breakpoints.up("sm"));
+
 	const location = useLocation();
+	const state = location.state as StateType;
 
 	// Add user dialog logic
 	const [addUserAnchor, setAddUserAnchor] = useState(); //State
@@ -59,7 +66,7 @@ const Project = () => {
 	const { projectId } = (() => {
 		try {
 			return {
-				projectId: location.state.projectId,
+				projectId: state.projectId,
 			};
 		} catch (error) {
 			window.location.replace("/");
@@ -106,7 +113,6 @@ const Project = () => {
 								width: "100%",
 							}}
 						>
-							{/* Tasks grid */}
 							<React.Fragment>
 								<TaskTable
 									isMobile={isMobile}
@@ -116,12 +122,10 @@ const Project = () => {
 									removeTaskComplete={removeTaskComplete}
 								/>
 
-								{/* Gap between tasks and members card */}
 								<Hidden only={["xs", "sm"]}>
 									<Grid item md={1}></Grid>
 								</Hidden>
 
-								{/* Team Members Card (desktop only) */}
 								<TeamMembersCard
 									projectQuery={projectQuery}
 									invitationQuery={invitationQuery}

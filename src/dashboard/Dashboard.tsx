@@ -1,3 +1,4 @@
+// System
 import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 
@@ -6,8 +7,7 @@ import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 
-import toast, { Toaster } from "react-hot-toast";
-
+// APIs
 import * as userApis from "../apis/user";
 import * as projectApis from "../apis/project";
 
@@ -16,6 +16,12 @@ import Nav from "../nav/Nav";
 import AddProjectDialog from "./AddProjectDialog";
 import AddProjectCard from "./AddProjectCard";
 import ProjectCard from "./ProjectCard";
+
+// Types
+import { ProjectType, UserOptions } from "../interfaces";
+
+// Toaster
+import toast, { Toaster } from "react-hot-toast";
 
 const Dashboard = () => {
 	const queryClient = useQueryClient();
@@ -28,7 +34,7 @@ const Dashboard = () => {
 		},
 	});
 
-	const handleAddProject = (data) => {
+	const handleAddProject = (data: ProjectType) => {
 		projectMutation.mutate(data);
 		toast.success("Project added!");
 	};
@@ -45,7 +51,7 @@ const Dashboard = () => {
 	return (
 		<React.Fragment>
 			<Toaster />
-			<Nav commentData={null} />
+			<Nav />
 			<Container>
 				<Typography variant='h4'>{localStorage.getItem("fullName")}</Typography>
 
@@ -55,14 +61,22 @@ const Dashboard = () => {
 
 				{projectQuery.isSuccess ? (
 					<Grid container spacing={3} id='project-grid'>
-						{projectQuery.data?.map(({ project, role }, i) => (
-							<ProjectCard
-								project={project}
-								role={role}
-								key={i}
-								cardStyle={cardStyle}
-							/>
-						))}
+						{projectQuery.data?.map(
+							(
+								{
+									project,
+									role,
+								}: { project: ProjectType; role: UserOptions },
+								i: number
+							) => (
+								<ProjectCard
+									project={project}
+									role={role}
+									key={i}
+									cardStyle={cardStyle}
+								/>
+							)
+						)}
 						<AddProjectCard
 							cardStyle={cardStyle}
 							handleAddProjectOpen={handleAddProjectOpen}

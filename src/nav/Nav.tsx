@@ -1,26 +1,29 @@
 import React, { useState, useEffect } from "react";
 import { useQuery } from "react-query";
 
-// import PropTypes from "prop-types";
-
 //Material-UI Components
 import Toolbar from "@mui/material/Toolbar";
-import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 
 import { NavStyles } from "./navStyles";
-import { commentsData } from "../testData";
 
 import TopBar from "./TopBar";
 import ProjectDrawer from "./ProjectDrawer";
 
 import * as userApis from "../apis/user";
+import { UserOptions } from "../interfaces";
 
 const drawerWidth = 240;
 
-const Nav = ({ userType, showDrawer, children, projectCallbacks }) => {
+interface Props {
+	userType?: UserOptions;
+	showDrawer?: boolean;
+	children?: object;
+	projectCallbacks?: object;
+}
+
+const Nav: React.FC<Props> = ({ userType, showDrawer, children, projectCallbacks }) => {
 	const classes = NavStyles();
-	const theme = useTheme();
 
 	//Drawer Logic
 	const [drawerOpen, setDrawerOpen] = useState(false); //State
@@ -31,12 +34,6 @@ const Nav = ({ userType, showDrawer, children, projectCallbacks }) => {
 
 	const invitationQuery = useQuery("fetchUsersInvitations", userApis.getInvitations);
 
-	//Get Task and Comment Data
-	const [taggedComments, setTaggedComments] = useState(false);
-	useEffect(() => {
-		setTaggedComments(commentsData);
-	}, []);
-
 	return (
 		<Box sx={{ display: "flex" }}>
 			{/* Standard top bar */}
@@ -46,7 +43,7 @@ const Nav = ({ userType, showDrawer, children, projectCallbacks }) => {
 				handleDrawerOpen={handleDrawerOpen}
 				classes={classes}
 				invitationQuery={invitationQuery}
-				taggedComments={taggedComments}
+				// taggedComments={taggedComments}
 				taskQuery={taskQuery}
 			/>
 			{/* Drawer and content for project */}
@@ -65,21 +62,5 @@ const Nav = ({ userType, showDrawer, children, projectCallbacks }) => {
 		</Box>
 	);
 };
-
-enum UserTypes {
-	"Team Leader",
-	"Client",
-	"Developer",
-}
-
-interface Props {
-	showDrawer: Boolean;
-	userType: UserTypes;
-}
-
-// Nav.propTypes = {
-// 	showDrawer: PropTypes.bool,
-// 	userType: PropTypes.oneOf(["Team Leader", "Client", "Developer"]),
-// };
 
 export default Nav;
