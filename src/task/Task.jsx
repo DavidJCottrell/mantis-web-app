@@ -1,4 +1,4 @@
-import React from "react";
+import React, { StrictMode } from "react";
 import { useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useQuery } from "react-query";
@@ -6,10 +6,26 @@ import { useQuery } from "react-query";
 // Material-UI
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
+import Grid from "@mui/material/Grid";
+import FormLabel from "@mui/material/FormLabel";
+import FormControl from "@mui/material/FormControl";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import RadioGroup from "@mui/material/RadioGroup";
+import Radio from "@mui/material/Radio";
+import Paper from "@mui/material/Paper";
+import Box from "@mui/material/Box";
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
+import Button from "@mui/material/Button";
 
 // Custom components
 import Nav from "../nav/Nav";
 import LifecycleBar from "./LifecycleBar";
+import TaskInfoCard from "./TaskInfoCard";
+import CommentsCard from "./CommentsCard";
+import GitInfoCard from "./GitInfoCard";
+import Subtasks from "./subtasks/Subtasks";
 
 import * as projectApis from "../apis/project";
 
@@ -30,6 +46,16 @@ const Task = () => {
 		projectApis.getRole(projectId, localStorage.getItem("userId"))
 	);
 
+	const tasks = {
+		toDo: [
+			"Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda laudantium incidunt eius ",
+			"Task 2",
+			"Task 3",
+		],
+		inProgress: ["Task 4", "Task 5", "Task 6"],
+		complete: ["Task 7", "Task 8", "Task 9"],
+	};
+
 	return (
 		<React.Fragment>
 			{roleQuery.isSuccess ? (
@@ -40,7 +66,6 @@ const Task = () => {
 							{task.taskKey} - {task.title}
 						</Typography>
 						<br />
-						<LifecycleBar />
 						<Link
 							to={"/project"}
 							state={{
@@ -51,9 +76,43 @@ const Task = () => {
 								textDecoration: "none",
 							}}
 						>
-							Back to project
+							<Button variant='contained'>Back to project</Button>
 						</Link>
-					</Container>{" "}
+						<br />
+						<h2>Task Lifecycle</h2>
+						<LifecycleBar status='In Development' />
+						<br />
+						<Grid container spacing={5}>
+							{/* Git Log */}
+							<Grid item xs={12} md={6}>
+								<GitInfoCard />
+							</Grid>
+
+							{/* Task Information */}
+							<Grid item xs={12} md={6}>
+								<TaskInfoCard task={task} />
+							</Grid>
+						</Grid>
+
+						<br />
+						<h2>Subtasks</h2>
+
+						<StrictMode>
+							<Subtasks tasks={tasks} />
+						</StrictMode>
+
+						<br />
+
+						<br />
+
+						<Grid container>
+							<Grid item xs={12}>
+								<CommentsCard />
+							</Grid>
+						</Grid>
+						<br />
+						<br />
+					</Container>
 				</React.Fragment>
 			) : null}
 		</React.Fragment>

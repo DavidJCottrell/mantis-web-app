@@ -31,7 +31,7 @@ const Dashboard = () => {
 		},
 	});
 
-	const handleAddProject = (data: ProjectType) => {
+	const handleAddProject = (data) => {
 		projectMutation.mutate(data);
 		toast.success("Project added!");
 	};
@@ -58,22 +58,14 @@ const Dashboard = () => {
 
 				{projectQuery.isSuccess ? (
 					<Grid container spacing={3} id='project-grid'>
-						{projectQuery.data?.map(
-							(
-								{
-									project,
-									role,
-								}: { project: ProjectType, role: UserOptions },
-								i: number
-							) => (
-								<ProjectCard
-									project={project}
-									role={role}
-									key={i}
-									cardStyle={cardStyle}
-								/>
-							)
-						)}
+						{projectQuery.data?.map(({ project, role }, i) => (
+							<ProjectCard
+								project={project}
+								role={role}
+								key={i}
+								cardStyle={cardStyle}
+							/>
+						))}
 						<AddProjectCard
 							cardStyle={cardStyle}
 							handleAddProjectOpen={handleAddProjectOpen}

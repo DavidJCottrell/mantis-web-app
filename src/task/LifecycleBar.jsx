@@ -23,35 +23,35 @@ import BugReportIcon from "@mui/icons-material/BugReport";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import MergeIcon from "@mui/icons-material/Merge";
 
-const LifecycleBar = () => {
-	const listItemStyle = { textAlign: "center", justifyContent: "center" };
+import * as styles from "./taskStyles";
 
+const LifecycleBar = ({ status }) => {
 	return (
 		<Box>
-			<List component={Stack} direction='row'>
-				<ListItem disablePadding style={listItemStyle}>
-					<div>
+			<List component={Stack} direction='row' style={styles.listStyle}>
+				<ListItem disablePadding style={styles.listItemStyle}>
+					<div style={status == "In Development" ? styles.activeStyle : null}>
 						<CodeIcon />
 						<br />
 						In Development
 					</div>
 				</ListItem>
-				<ListItem disablePadding style={listItemStyle}>
-					<div>
+				<ListItem disablePadding style={styles.listItemStyle}>
+					<div style={status == "Testing" ? styles.activeStyle : null}>
 						<BugReportIcon />
 						<br />
 						Testing
 					</div>
 				</ListItem>
-				<ListItem disablePadding style={listItemStyle}>
-					<div>
+				<ListItem disablePadding style={styles.listItemStyle}>
+					<div style={status == "In Review" ? styles.activeStyle : null}>
 						<VisibilityIcon />
 						<br />
 						In Review
 					</div>
 				</ListItem>
-				<ListItem disablePadding style={listItemStyle}>
-					<div>
+				<ListItem disablePadding style={styles.listItemStyle}>
+					<div style={status == "Ready to Merge" ? styles.activeStyle : null}>
 						<MergeIcon />
 						<br />
 						Ready to Merge
