@@ -58,4 +58,15 @@ const invitationData = [
 	},
 ];
 
+const requirements = [
+	{
+		type: "Ubiquitous",
+		content: "The <systemName> shall <systemResponse>",
+		preconditions: ["precondition"], // Zero or many preconditions
+		trigger: "", // Zero or one
+		systemName: "name", // One
+		responses: ["action 1", "action 2"], // One or many
+	},
+];
+
 export { commentsData, taskData, invitationData };

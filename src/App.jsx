@@ -29,7 +29,7 @@ const App = () => {
 						main: "#43a047",
 					},
 					background: {
-						default: prefersDarkMode ? "#212121" : "#fafafa",
+						default: prefersDarkMode ? "#323131" : "#fafafa",
 					},
 				},
 			}),

@@ -96,6 +96,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 const AppBar = styled(MuiAppBar, {
 	shouldForwardProp: (prop) => prop !== "drawerOpen",
 })(({ theme, drawerOpen }) => ({
+	backgroundColor: "#3A9922",
 	zIndex: theme.zIndex.drawer + 1,
 	transition: theme.transitions.create(["width", "margin"], {
 		easing: theme.transitions.easing.sharp,
