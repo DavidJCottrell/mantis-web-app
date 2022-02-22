@@ -14,7 +14,7 @@ import * as userApis from "../apis/user";
 
 const drawerWidth = 240;
 
-const Nav = ({ userType, showDrawer, children, projectCallbacks }) => {
+const Nav = ({ userType, showDrawer, children, projectCallbacks, projectId }) => {
 	const classes = NavStyles();
 
 	//Drawer Logic
@@ -47,6 +47,7 @@ const Nav = ({ userType, showDrawer, children, projectCallbacks }) => {
 					handleDrawerClose={handleDrawerClose}
 					projectCallbacks={projectCallbacks}
 					children={children}
+					projectId={projectId}
 				/>
 			) : null}
 

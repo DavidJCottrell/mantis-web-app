@@ -20,6 +20,7 @@ const ProjectDrawer = ({
 	handleDrawerClose,
 	projectCallbacks,
 	children,
+	projectId,
 }) => {
 	const theme = useTheme();
 
@@ -45,6 +46,7 @@ const ProjectDrawer = ({
 				<Divider />
 				<UserOptions
 					userType={userType}
+					projectId={projectId}
 					handleAddUserOpen={projectCallbacks.handleAddUserOpen}
 					handleAddTaskOpen={projectCallbacks.handleAddTaskOpen}
 					handleManageTeamOpen={projectCallbacks.handleManageTeamOpen}

@@ -20,6 +20,7 @@ const UserOptions = ({
 	handleAddTaskOpen,
 	handleManageTeamOpen,
 	handleSettingsOpen,
+	projectId,
 }) => {
 	const theme = useTheme();
 
@@ -28,6 +29,9 @@ const UserOptions = ({
 			<List>
 				<Link
 					to={"/project/requirements"}
+					state={{
+						projectId: projectId,
+					}}
 					style={{
 						textDecoration: "none",
 						color: theme.palette.text.primary,

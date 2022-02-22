@@ -99,6 +99,7 @@ const Project = () => {
 						userType={roleQuery.data.role}
 						showDrawer={true}
 						projectCallbacks={projectCallbacks}
+						projectId={projectId}
 					>
 						<Grid
 							container

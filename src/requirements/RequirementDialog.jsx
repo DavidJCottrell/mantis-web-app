@@ -1,5 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
+import { useMutation, useQueryClient } from "react-query";
+
+// MUI
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -12,8 +15,10 @@ import Select from "@mui/material/Select";
 import Box from "@mui/material/Box";
 
 import RequirementForm from "./RequirementForm";
-
 import * as Collectors from "./Collectors";
+import * as projectApis from "../apis/project";
+
+import toast, { Toaster } from "react-hot-toast";
 
 // Ubiquitous - The <system name> shall <system response(s)>
 // State driven - While the <precondition(s)>, the <system name> shall <system response(s)> (WHILE)
@@ -23,143 +28,202 @@ import * as Collectors from "./Collectors";
 
 // Complex <- Allows customization of keywords
 
-const RequirementDialog = ({ open, handleClose, requirement }) => {
-	const [reqType, setReqType] = useState(null);
+const RequirementDialog = ({
+	open,
+	handleClose,
+	requirement,
+	projectId,
+	totalRequirements,
+}) => {
+	const [reqType, setReqType] = useState("");
+
+	useEffect(() => {
+		setReqType(requirement ? requirement.type : "");
+	}, [requirement]);
+
+	const projectMutation = useMutation(
+		({ projectId, requirement }) =>
+			projectApis.addRequirement(projectId, requirement),
+		{
+			onSuccess: () => {
+				queryClient.invalidateQueries("fetchProjectRequirements");
+			},
+		}
+	);
+
+	const [complexComponents, setComplexComponents] = useState([]);
+
+	const queryClient = new useQueryClient();
+
+	const close = () => {
+		setComplexComponents([]);
+		handleClose();
+	};
 
 	const handleTypeChange = (event) => {
 		setReqType(event.target.value);
 	};
 
-	const close = () => {
-		setReqType(null);
-		handleClose();
+	const handleSelectClick = (type) => {
+		setReqType(type);
+		setComplexComponents([]);
 	};
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		const form = document.getElementById("req-form");
 
-		let requirement;
+		let requirementData;
 
 		if (
-			form.elements["System Name"] !== undefined &&
-			form.elements["System Responses"] !== undefined
+			form.elements["System Name"].value !== "" &&
+			form.elements["System Responses"].value !== ""
 		) {
 			switch (reqType) {
 				case "Ubiquitous":
-					requirement = Collectors.collectUbiquitous(form.elements, reqType);
+					requirementData = Collectors.collectUbiquitous(
+						form.elements,
+						reqType
+					);
 					break;
 				case "State Driven":
-					requirement = Collectors.collectStateDriven(form.elements, reqType);
+					requirementData = Collectors.collectStateDriven(
+						form.elements,
+						reqType
+					);
 					break;
 				case "Event Driven":
-					requirement = Collectors.collectEventDrivenOrUnwanted(
+					requirementData = Collectors.collectEventDrivenOrUnwanted(
 						form.elements,
 						reqType
 					);
 					break;
 				case "Optional Feature":
-					requirement = Collectors.collectOptionalFeature(
+					requirementData = Collectors.collectOptionalFeature(
 						form.elements,
 						reqType
 					);
 					break;
 				case "Unwanted Behaviour":
-					requirement = Collectors.collectEventDrivenOrUnwanted(
+					requirementData = Collectors.collectEventDrivenOrUnwanted(
 						form.elements,
 						reqType
 					);
 					break;
 				case "Complex":
-					requirement = Collectors.collectComplex(form.elements, reqType);
+					requirementData = Collectors.collectComplex(
+						form.elements,
+						complexComponents,
+						reqType
+					);
 					break;
 			}
-			console.log(requirement);
+			requirementData["index"] = "REQ-" + String(totalRequirements + 1);
+			projectMutation.mutate({
+				projectId: projectId,
+				requirement: requirementData,
+			});
+			handleClose();
+			toast.success("Requirement Added");
 		} else {
-			console.log("Missing essential elements");
+			toast.error("Missing essential keywords");
 		}
 	};
 
 	return (
-		<Dialog open={open} onClose={close} aria-labelledby='form-dialog-title' fullWidth>
-			<DialogContent>
-				<Typography sx={{ mt: 1, mb: 1 }} variant='h6' component='div'>
-					Requirement
-				</Typography>
-				<Box sx={{ minWidth: 120, p: 2 }}>
-					<FormControl fullWidth>
-						<InputLabel>Type</InputLabel>
-						<Select
-							id='type-select'
-							required
-							label='Type'
-							defaultValue={""}
-							onChange={handleTypeChange}
-						>
-							<MenuItem
-								value={"Ubiquitous"}
-								onClick={() => {
-									setReqType("Ubiquitous");
-								}}
+		<React.Fragment>
+			<Toaster />
+			<Dialog
+				open={open}
+				onClose={close}
+				aria-labelledby='form-dialog-title'
+				fullWidth
+			>
+				<DialogContent>
+					<Typography sx={{ mt: 1, mb: 1 }} variant='h6' component='div'>
+						Requirement
+					</Typography>
+					<Box sx={{ minWidth: 120, p: 2 }}>
+						<FormControl fullWidth>
+							<InputLabel>Type</InputLabel>
+							<Select
+								id='type-select'
+								required
+								label='Type'
+								defaultValue={""}
+								value={reqType}
+								onChange={handleTypeChange}
 							>
-								Ubiquitous
-							</MenuItem>
-							<MenuItem
-								value={"State Driven"}
-								onClick={() => {
-									setReqType("State Driven");
-								}}
-							>
-								State Driven
-							</MenuItem>
-							<MenuItem
-								value={"Event Driven"}
-								onClick={() => {
-									setReqType("Event Driven");
-								}}
-							>
-								Event Driven
-							</MenuItem>
-							<MenuItem
-								value={"Optional Feature"}
-								onClick={() => {
-									setReqType("Optional Feature");
-								}}
-							>
-								Optional Feature
-							</MenuItem>
-							<MenuItem
-								value={"Unwanted Behaviour"}
-								onClick={() => {
-									setReqType("Unwanted Behaviour");
-								}}
-							>
-								Unwanted Behaviour
-							</MenuItem>
-							<MenuItem
-								value={"Complex"}
-								onClick={() => {
-									setReqType("Complex");
-								}}
-							>
-								Complex
-							</MenuItem>
-						</Select>
-					</FormControl>
-					<br />
-					<br />
-					<RequirementForm reqType={reqType} />
-				</Box>
-			</DialogContent>
-			<DialogActions>
-				<Button variant='outlined' onClick={handleSubmit}>
-					Submit
-				</Button>
-				<Button onClick={close} color='inherit'>
-					Close
-				</Button>
-			</DialogActions>
-		</Dialog>
+								<MenuItem
+									value={"Ubiquitous"}
+									onClick={() => {
+										handleSelectClick("Ubiquitous");
+									}}
+								>
+									Ubiquitous
+								</MenuItem>
+								<MenuItem
+									value={"State Driven"}
+									onClick={() => {
+										handleSelectClick("State Driven");
+									}}
+								>
+									State Driven
+								</MenuItem>
+								<MenuItem
+									value={"Event Driven"}
+									onClick={() => {
+										handleSelectClick("Event Driven");
+									}}
+								>
+									Event Driven
+								</MenuItem>
+								<MenuItem
+									value={"Optional Feature"}
+									onClick={() => {
+										handleSelectClick("Optional Feature");
+									}}
+								>
+									Optional Feature
+								</MenuItem>
+								<MenuItem
+									value={"Unwanted Behaviour"}
+									onClick={() => {
+										handleSelectClick("Unwanted Behaviour");
+									}}
+								>
+									Unwanted Behaviour
+								</MenuItem>
+								<MenuItem
+									value={"Complex"}
+									onClick={() => {
+										handleSelectClick("Complex");
+									}}
+								>
+									Complex
+								</MenuItem>
+							</Select>
+						</FormControl>
+						<br />
+						<br />
+						<RequirementForm
+							reqType={reqType}
+							complexComponents={complexComponents}
+							setComplexComponents={setComplexComponents}
+							requirement={requirement}
+						/>
+					</Box>
+				</DialogContent>
+				<DialogActions>
+					<Button onClick={close} color='inherit'>
+						Close
+					</Button>
+					<Button variant='outlined' onClick={handleSubmit}>
+						{requirement ? "Update" : "Submit"}
+					</Button>
+				</DialogActions>
+			</Dialog>
+		</React.Fragment>
 	);
 };
 

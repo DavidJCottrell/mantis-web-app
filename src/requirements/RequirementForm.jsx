@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 // MUI
 import TextField from "@mui/material/TextField";
@@ -7,13 +7,12 @@ import ResponseInput from "./ResponseInput";
 import PreconditionInput from "./PreconditionInput";
 import ComplexBuilder from "./ComplexBuilder";
 
-const RequirementForm = ({ reqType }) => {
-	const [complexComponents, setComplexComponents] = useState([]);
-
-	const setComponents = (newComponents) => {
-		setComplexComponents(newComponents);
-	};
-
+const RequirementForm = ({
+	reqType,
+	complexComponents,
+	setComplexComponents,
+	requirement,
+}) => {
 	let form = null;
 	switch (reqType) {
 		case "Ubiquitous":
@@ -25,10 +24,13 @@ const RequirementForm = ({ reqType }) => {
 						label='System Name'
 						variant='outlined'
 						name='System Name'
+						defaultValue={requirement ? requirement.systemName : ""}
 					/>
 
 					<p>shall</p>
-					<ResponseInput />
+					<ResponseInput
+						responses={requirement ? requirement.systemResponses : undefined}
+					/>
 				</React.Fragment>
 			);
 			break;
@@ -36,7 +38,11 @@ const RequirementForm = ({ reqType }) => {
 			form = (
 				<React.Fragment>
 					<p>While the</p>
-					<PreconditionInput />
+					<PreconditionInput
+						preconditions={
+							requirement ? requirement.preconditions : undefined
+						}
+					/>
 
 					<p>, the</p>
 					<TextField
@@ -44,10 +50,13 @@ const RequirementForm = ({ reqType }) => {
 						label='system name'
 						variant='outlined'
 						name='System Name'
+						defaultValue={requirement ? requirement.systemName : ""}
 					/>
 
 					<p>shall</p>
-					<ResponseInput />
+					<ResponseInput
+						responses={requirement ? requirement.systemResponses : undefined}
+					/>
 				</React.Fragment>
 			);
 			break;
@@ -60,6 +69,7 @@ const RequirementForm = ({ reqType }) => {
 						label='Trigger'
 						variant='outlined'
 						name='Trigger'
+						defaultValue={requirement ? requirement.trigger : ""}
 					/>
 					<p>, the</p>
 					<TextField
@@ -67,9 +77,12 @@ const RequirementForm = ({ reqType }) => {
 						label='System Name'
 						variant='outlined'
 						name='System Name'
+						defaultValue={requirement ? requirement.systemName : ""}
 					/>
 					<p>shall</p>
-					<ResponseInput />
+					<ResponseInput
+						responses={requirement ? requirement.systemResponses : undefined}
+					/>
 				</React.Fragment>
 			);
 			break;
@@ -82,6 +95,7 @@ const RequirementForm = ({ reqType }) => {
 						label='Feature is Included'
 						variant='outlined'
 						name='Feature'
+						defaultValue={requirement ? requirement.feature : ""}
 					/>
 					<p>, the</p>
 					<TextField
@@ -89,9 +103,12 @@ const RequirementForm = ({ reqType }) => {
 						label='System Name'
 						variant='outlined'
 						name='System Name'
+						defaultValue={requirement ? requirement.systemName : ""}
 					/>
 					<p>shall</p>
-					<ResponseInput />
+					<ResponseInput
+						responses={requirement ? requirement.systemResponses : undefined}
+					/>
 				</React.Fragment>
 			);
 			break;
@@ -104,6 +121,7 @@ const RequirementForm = ({ reqType }) => {
 						label='Trigger'
 						variant='outlined'
 						name='Trigger'
+						defaultValue={requirement ? requirement.trigger : ""}
 					/>
 					<p>then the</p>
 					<TextField
@@ -111,9 +129,12 @@ const RequirementForm = ({ reqType }) => {
 						label='System Name'
 						variant='outlined'
 						name='System Name'
+						defaultValue={requirement ? requirement.systemName : ""}
 					/>
 					<p>shall</p>
-					<ResponseInput />
+					<ResponseInput
+						responses={requirement ? requirement.systemResponses : undefined}
+					/>
 				</React.Fragment>
 			);
 			break;
@@ -121,11 +142,12 @@ const RequirementForm = ({ reqType }) => {
 			form = (
 				<React.Fragment>
 					<ComplexBuilder
-						setComponents={setComponents}
+						setComponents={setComplexComponents}
 						components={complexComponents}
+						requirement={requirement}
 					/>
-					{complexComponents.map((el, i) => (
-						<React.Fragment key={i}>{el}</React.Fragment>
+					{complexComponents.map((comp, i) => (
+						<React.Fragment key={i}>{comp.element}</React.Fragment>
 					))}
 				</React.Fragment>
 			);
