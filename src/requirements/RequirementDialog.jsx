@@ -28,13 +28,7 @@ import toast, { Toaster } from "react-hot-toast";
 
 // Complex <- Allows customization of keywords
 
-const RequirementDialog = ({
-	open,
-	handleClose,
-	requirement,
-	projectId,
-	totalRequirements,
-}) => {
+const RequirementDialog = ({ open, handleClose, requirement, projectId, totalRequirements }) => {
 	const [reqType, setReqType] = useState("");
 
 	useEffect(() => {
@@ -42,8 +36,7 @@ const RequirementDialog = ({
 	}, [requirement]);
 
 	const addRequirementMutation = useMutation(
-		({ projectId, requirement }) =>
-			projectApis.addRequirement(projectId, requirement),
+		({ projectId, requirement }) => projectApis.addRequirement(projectId, requirement),
 		{
 			onSuccess: () => {
 				queryClient.invalidateQueries("fetchProjectRequirements");
@@ -92,7 +85,7 @@ const RequirementDialog = ({
 		requirementData["index"] = requirement.index;
 		updateRequirementMutation.mutate({
 			projectId: projectId,
-			requiremenIndext: requirementData.index,
+			requirementIndex: requirementData.index,
 			requirement: requirementData,
 		});
 		toast.success("Requirement Updated");
@@ -111,22 +104,13 @@ const RequirementDialog = ({
 				requirementData = Collectors.collectStateDriven(form.elements, reqType);
 				break;
 			case "Event Driven":
-				requirementData = Collectors.collectEventDrivenOrUnwanted(
-					form.elements,
-					reqType
-				);
+				requirementData = Collectors.collectEventDrivenOrUnwanted(form.elements, reqType);
 				break;
 			case "Optional Feature":
-				requirementData = Collectors.collectOptionalFeature(
-					form.elements,
-					reqType
-				);
+				requirementData = Collectors.collectOptionalFeature(form.elements, reqType);
 				break;
 			case "Unwanted Behaviour":
-				requirementData = Collectors.collectEventDrivenOrUnwanted(
-					form.elements,
-					reqType
-				);
+				requirementData = Collectors.collectEventDrivenOrUnwanted(form.elements, reqType);
 				break;
 			case "Complex":
 				requirementData = Collectors.collectComplex(
@@ -146,21 +130,14 @@ const RequirementDialog = ({
 	return (
 		<React.Fragment>
 			<Toaster />
-			<Dialog
-				open={open}
-				onClose={close}
-				aria-labelledby='form-dialog-title'
-				fullWidth
-			>
+			<Dialog open={open} onClose={close} aria-labelledby='form-dialog-title' fullWidth>
 				<DialogContent>
 					<Typography sx={{ mt: 1, mb: 1 }} variant='h6' component='div'>
 						Requirement
 					</Typography>
 					<Box sx={{ minWidth: 120, p: 2 }}>
 						<Typography sx={{ mt: 1, mb: 1 }} variant='p' component='div'>
-							{requirement
-								? requirement.index + " - " + requirement.type
-								: null}
+							{requirement ? requirement.index + " - " + requirement.type : null}
 						</Typography>
 						{!requirement ? (
 							<FormControl fullWidth>
