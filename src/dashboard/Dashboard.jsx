@@ -1,4 +1,3 @@
-// System
 import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 
@@ -17,7 +16,7 @@ import AddProjectDialog from "./AddProjectDialog";
 import AddProjectCard from "./AddProjectCard";
 import ProjectCard from "./ProjectCard";
 
-// Toaster
+// Toast Notifications
 import toast, { Toaster } from "react-hot-toast";
 
 const Dashboard = () => {

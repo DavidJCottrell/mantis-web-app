@@ -32,15 +32,21 @@ export const addRequirement = (id, data) =>
 		.then((res) => res.data)
 		.catch((e) => e.response);
 
-export const removeTask = (projectId, taskId) =>
+export const updateRequirement = (projectId, requirementIndex, data) =>
 	api
-		.patch(`/project/removetask/${projectId}/${taskId}`)
+		.patch(`/project/updaterequirement/${projectId}/${requirementIndex}`, data)
 		.then((res) => res.data)
 		.catch((e) => e.response);
 
 export const removeRequirement = (projectId, requirementIndex) =>
 	api
 		.patch(`/project/removerequirement/${projectId}/${requirementIndex}`)
+		.then((res) => res.data)
+		.catch((e) => e.response);
+
+export const removeTask = (projectId, taskId) =>
+	api
+		.patch(`/project/removetask/${projectId}/${taskId}`)
 		.then((res) => res.data)
 		.catch((e) => e.response);
 

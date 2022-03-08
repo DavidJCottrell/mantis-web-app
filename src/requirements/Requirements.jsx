@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import { useQuery } from "react-query";
 import { useMutation, useQueryClient } from "react-query";
 
@@ -13,7 +13,6 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
-import { Link } from "react-router-dom";
 
 import Nav from "../nav/Nav";
 import RequirementDialog from "./RequirementDialog";
@@ -110,7 +109,7 @@ const Requirements = () => {
 									{requirementsQuery.data.requirements.map(
 										(requirement, i) => (
 											<TableRow
-												key={requirement.index}
+												key={requirement.index + "-" + i}
 												sx={{
 													"&:last-child td, &:last-child th": {
 														border: 0,

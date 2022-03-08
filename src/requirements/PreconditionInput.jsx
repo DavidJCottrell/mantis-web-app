@@ -19,6 +19,7 @@ const PreconditionInput = ({ preconditions }) => {
 					label='precondition'
 					variant='outlined'
 					name='Preconditions'
+					required
 					defaultValue={preconditions ? preconditions[i] : ""}
 				/>
 			))}

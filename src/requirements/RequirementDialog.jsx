@@ -41,9 +41,19 @@ const RequirementDialog = ({
 		setReqType(requirement ? requirement.type : "");
 	}, [requirement]);
 
-	const projectMutation = useMutation(
+	const addRequirementMutation = useMutation(
 		({ projectId, requirement }) =>
 			projectApis.addRequirement(projectId, requirement),
+		{
+			onSuccess: () => {
+				queryClient.invalidateQueries("fetchProjectRequirements");
+			},
+		}
+	);
+
+	const updateRequirementMutation = useMutation(
+		({ projectId, requirementIndex, requirement }) =>
+			projectApis.updateRequirement(projectId, requirementIndex, requirement),
 		{
 			onSuccess: () => {
 				queryClient.invalidateQueries("fetchProjectRequirements");
@@ -69,65 +79,68 @@ const RequirementDialog = ({
 		setComplexComponents([]);
 	};
 
+	const saveNewRequirement = (requirementData) => {
+		requirementData["index"] = "REQ-" + String(totalRequirements + 1);
+		addRequirementMutation.mutate({
+			projectId: projectId,
+			requirement: requirementData,
+		});
+		toast.success("Requirement Added");
+	};
+
+	const updateRequirement = (requirementData) => {
+		requirementData["index"] = requirement.index;
+		updateRequirementMutation.mutate({
+			projectId: projectId,
+			requiremenIndext: requirementData.index,
+			requirement: requirementData,
+		});
+		toast.success("Requirement Updated");
+	};
+
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		const form = document.getElementById("req-form");
 
 		let requirementData;
-
-		if (
-			form.elements["System Name"].value !== "" &&
-			form.elements["System Responses"].value !== ""
-		) {
-			switch (reqType) {
-				case "Ubiquitous":
-					requirementData = Collectors.collectUbiquitous(
-						form.elements,
-						reqType
-					);
-					break;
-				case "State Driven":
-					requirementData = Collectors.collectStateDriven(
-						form.elements,
-						reqType
-					);
-					break;
-				case "Event Driven":
-					requirementData = Collectors.collectEventDrivenOrUnwanted(
-						form.elements,
-						reqType
-					);
-					break;
-				case "Optional Feature":
-					requirementData = Collectors.collectOptionalFeature(
-						form.elements,
-						reqType
-					);
-					break;
-				case "Unwanted Behaviour":
-					requirementData = Collectors.collectEventDrivenOrUnwanted(
-						form.elements,
-						reqType
-					);
-					break;
-				case "Complex":
-					requirementData = Collectors.collectComplex(
-						form.elements,
-						complexComponents,
-						reqType
-					);
-					break;
-			}
-			requirementData["index"] = "REQ-" + String(totalRequirements + 1);
-			projectMutation.mutate({
-				projectId: projectId,
-				requirement: requirementData,
-			});
-			handleClose();
-			toast.success("Requirement Added");
-		} else {
-			toast.error("Missing essential keywords");
+		switch (reqType) {
+			case "Ubiquitous":
+				requirementData = Collectors.collectUbiquitous(form.elements, reqType);
+				break;
+			case "State Driven":
+				requirementData = Collectors.collectStateDriven(form.elements, reqType);
+				break;
+			case "Event Driven":
+				requirementData = Collectors.collectEventDrivenOrUnwanted(
+					form.elements,
+					reqType
+				);
+				break;
+			case "Optional Feature":
+				requirementData = Collectors.collectOptionalFeature(
+					form.elements,
+					reqType
+				);
+				break;
+			case "Unwanted Behaviour":
+				requirementData = Collectors.collectEventDrivenOrUnwanted(
+					form.elements,
+					reqType
+				);
+				break;
+			case "Complex":
+				requirementData = Collectors.collectComplex(
+					form.elements,
+					complexComponents,
+					reqType
+				);
+				break;
 		}
+
+		if (requirement) updateRequirement(requirementData);
+		else saveNewRequirement(requirementData);
+
+		handleClose();
 	};
 
 	return (
@@ -144,73 +157,87 @@ const RequirementDialog = ({
 						Requirement
 					</Typography>
 					<Box sx={{ minWidth: 120, p: 2 }}>
-						<FormControl fullWidth>
-							<InputLabel>Type</InputLabel>
-							<Select
-								id='type-select'
-								required
-								label='Type'
-								defaultValue={""}
-								value={reqType}
-								onChange={handleTypeChange}
-							>
-								<MenuItem
-									value={"Ubiquitous"}
-									onClick={() => {
-										handleSelectClick("Ubiquitous");
-									}}
+						<Typography sx={{ mt: 1, mb: 1 }} variant='p' component='div'>
+							{requirement
+								? requirement.index + " - " + requirement.type
+								: null}
+						</Typography>
+						{!requirement ? (
+							<FormControl fullWidth>
+								<InputLabel>Type</InputLabel>
+								<Select
+									id='type-select'
+									required
+									label='Type'
+									defaultValue={""}
+									value={reqType}
+									onChange={handleTypeChange}
 								>
-									Ubiquitous
-								</MenuItem>
-								<MenuItem
-									value={"State Driven"}
-									onClick={() => {
-										handleSelectClick("State Driven");
-									}}
-								>
-									State Driven
-								</MenuItem>
-								<MenuItem
-									value={"Event Driven"}
-									onClick={() => {
-										handleSelectClick("Event Driven");
-									}}
-								>
-									Event Driven
-								</MenuItem>
-								<MenuItem
-									value={"Optional Feature"}
-									onClick={() => {
-										handleSelectClick("Optional Feature");
-									}}
-								>
-									Optional Feature
-								</MenuItem>
-								<MenuItem
-									value={"Unwanted Behaviour"}
-									onClick={() => {
-										handleSelectClick("Unwanted Behaviour");
-									}}
-								>
-									Unwanted Behaviour
-								</MenuItem>
-								<MenuItem
-									value={"Complex"}
-									onClick={() => {
-										handleSelectClick("Complex");
-									}}
-								>
-									Complex
-								</MenuItem>
-							</Select>
-						</FormControl>
-						<br />
-						<br />
+									<MenuItem
+										value={"Ubiquitous"}
+										onClick={() => {
+											handleSelectClick("Ubiquitous");
+										}}
+									>
+										Ubiquitous
+									</MenuItem>
+									<MenuItem
+										value={"State Driven"}
+										onClick={() => {
+											handleSelectClick("State Driven");
+										}}
+									>
+										State Driven
+									</MenuItem>
+									<MenuItem
+										value={"Event Driven"}
+										onClick={() => {
+											handleSelectClick("Event Driven");
+										}}
+									>
+										Event Driven
+									</MenuItem>
+									<MenuItem
+										value={"Optional Feature"}
+										onClick={() => {
+											handleSelectClick("Optional Feature");
+										}}
+									>
+										Optional Feature
+									</MenuItem>
+									<MenuItem
+										value={"Unwanted Behaviour"}
+										onClick={() => {
+											handleSelectClick("Unwanted Behaviour");
+										}}
+									>
+										Unwanted Behaviour
+									</MenuItem>
+									<MenuItem
+										value={"Complex"}
+										onClick={() => {
+											handleSelectClick("Complex");
+										}}
+									>
+										Complex
+									</MenuItem>
+								</Select>
+							</FormControl>
+						) : null}
+
+						{!requirement ? (
+							<div>
+								<br />
+								<br />
+							</div>
+						) : null}
+
 						<RequirementForm
 							reqType={reqType}
 							complexComponents={complexComponents}
 							setComplexComponents={setComplexComponents}
 							requirement={requirement}
+							handleSubmit={handleSubmit}
 						/>
 					</Box>
 				</DialogContent>
@@ -218,7 +245,7 @@ const RequirementDialog = ({
 					<Button onClick={close} color='inherit'>
 						Close
 					</Button>
-					<Button variant='outlined' onClick={handleSubmit}>
+					<Button variant='outlined' form='req-form' type='submit'>
 						{requirement ? "Update" : "Submit"}
 					</Button>
 				</DialogActions>

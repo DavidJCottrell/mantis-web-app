@@ -12,6 +12,7 @@ const RequirementForm = ({
 	complexComponents,
 	setComplexComponents,
 	requirement,
+	handleSubmit,
 }) => {
 	let form = null;
 	switch (reqType) {
@@ -24,6 +25,7 @@ const RequirementForm = ({
 						label='System Name'
 						variant='outlined'
 						name='System Name'
+						required
 						defaultValue={requirement ? requirement.systemName : ""}
 					/>
 
@@ -50,6 +52,7 @@ const RequirementForm = ({
 						label='system name'
 						variant='outlined'
 						name='System Name'
+						required
 						defaultValue={requirement ? requirement.systemName : ""}
 					/>
 
@@ -69,6 +72,7 @@ const RequirementForm = ({
 						label='Trigger'
 						variant='outlined'
 						name='Trigger'
+						required
 						defaultValue={requirement ? requirement.trigger : ""}
 					/>
 					<p>, the</p>
@@ -77,6 +81,7 @@ const RequirementForm = ({
 						label='System Name'
 						variant='outlined'
 						name='System Name'
+						required
 						defaultValue={requirement ? requirement.systemName : ""}
 					/>
 					<p>shall</p>
@@ -95,6 +100,7 @@ const RequirementForm = ({
 						label='Feature is Included'
 						variant='outlined'
 						name='Feature'
+						required
 						defaultValue={requirement ? requirement.feature : ""}
 					/>
 					<p>, the</p>
@@ -103,6 +109,7 @@ const RequirementForm = ({
 						label='System Name'
 						variant='outlined'
 						name='System Name'
+						required
 						defaultValue={requirement ? requirement.systemName : ""}
 					/>
 					<p>shall</p>
@@ -121,6 +128,7 @@ const RequirementForm = ({
 						label='Trigger'
 						variant='outlined'
 						name='Trigger'
+						required
 						defaultValue={requirement ? requirement.trigger : ""}
 					/>
 					<p>then the</p>
@@ -129,6 +137,7 @@ const RequirementForm = ({
 						label='System Name'
 						variant='outlined'
 						name='System Name'
+						required
 						defaultValue={requirement ? requirement.systemName : ""}
 					/>
 					<p>shall</p>
@@ -154,7 +163,11 @@ const RequirementForm = ({
 			break;
 	}
 
-	return reqType ? <form id='req-form'>{form}</form> : null;
+	return reqType ? (
+		<form id='req-form' onSubmit={handleSubmit}>
+			{form}
+		</form>
+	) : null;
 };
 
 export default RequirementForm;

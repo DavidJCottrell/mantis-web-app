@@ -165,8 +165,6 @@ const collectComplex = (elements, complexComponents, reqType) => {
 		}
 	}
 
-	console.log(fullText);
-
 	let requirement = {
 		type: reqType,
 		systemResponses: responseValues,

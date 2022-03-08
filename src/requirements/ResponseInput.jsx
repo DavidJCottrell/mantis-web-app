@@ -19,6 +19,7 @@ const ResponseInput = ({ responses }) => {
 					label='System Response'
 					variant='outlined'
 					name='System Responses'
+					required
 					defaultValue={responses ? responses[i] : ""}
 					sx={{ marginTop: "10px" }}
 				/>

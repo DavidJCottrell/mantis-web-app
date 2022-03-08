@@ -61,6 +61,7 @@ const ComplexBuilder = ({ setComponents, components, requirement }) => {
 								label='Trigger'
 								variant='outlined'
 								name='Trigger'
+								required
 								defaultValue={requirement ? requirement.trigger : ""}
 							/>
 						</React.Fragment>
@@ -78,6 +79,7 @@ const ComplexBuilder = ({ setComponents, components, requirement }) => {
 								label='Feature is Included'
 								variant='outlined'
 								name='Feature'
+								required
 								defaultValue={requirement ? requirement.feature : ""}
 							/>
 						</React.Fragment>
@@ -95,6 +97,7 @@ const ComplexBuilder = ({ setComponents, components, requirement }) => {
 								label='Unwanted Trigger'
 								variant='outlined'
 								name='Unwanted Trigger'
+								required
 								defaultValue={requirement ? requirement.trigger : ""}
 							/>
 							<p>then the</p>
@@ -103,6 +106,7 @@ const ComplexBuilder = ({ setComponents, components, requirement }) => {
 								label='System Name'
 								variant='outlined'
 								name='System Name'
+								required
 								defaultValue={requirement ? requirement.systemName : ""}
 								required
 							/>
@@ -121,6 +125,7 @@ const ComplexBuilder = ({ setComponents, components, requirement }) => {
 								label='system name'
 								variant='outlined'
 								name='System Name'
+								required
 								defaultValue={requirement ? requirement.systemName : ""}
 							/>
 						</React.Fragment>
