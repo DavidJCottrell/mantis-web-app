@@ -68,9 +68,7 @@ const Project = () => {
 		}
 	})();
 
-	const projectQuery = useQuery("fetchProjectData", () =>
-		projectApis.getProject(projectId)
-	);
+	const projectQuery = useQuery("fetchProjectData", () => projectApis.getProject(projectId));
 
 	const invitationQuery = useQuery("fetchInvitationData", () =>
 		projectApis.getInvitations(projectId)
@@ -80,8 +78,7 @@ const Project = () => {
 		projectApis.getRole(projectId, localStorage.getItem("userId"))
 	);
 
-	const fullyLoaded =
-		projectQuery.isSuccess && invitationQuery.isSuccess && roleQuery.isSuccess;
+	const fullyLoaded = projectQuery.isSuccess && invitationQuery.isSuccess && roleQuery.isSuccess;
 
 	const projectCallbacks = {
 		handleAddUserOpen: handleAddUserOpen,
@@ -138,6 +135,7 @@ const Project = () => {
 							totalTasks={projectQuery.data.project.tasks.length}
 							projectId={projectId}
 							addTaskComplete={addTaskComplete}
+							projectUsers={projectQuery.data.project.users}
 						/>
 						<InviteUserDialog
 							open={isAddUserOpen}

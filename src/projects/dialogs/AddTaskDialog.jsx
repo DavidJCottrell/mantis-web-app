@@ -24,7 +24,14 @@ import Tooltip from "@mui/material/Tooltip";
 
 import * as projectApis from "../../apis/project";
 
-const AddTaskDialog = ({ open, handleClose, totalTasks, projectId, addTaskComplete }) => {
+const AddTaskDialog = ({
+	open,
+	handleClose,
+	totalTasks,
+	projectId,
+	addTaskComplete,
+	projectUsers,
+}) => {
 	const [selectedDate, setSelectedDate] = useState(new Date());
 
 	const handleDateChanged = (newDate) => {
@@ -61,11 +68,13 @@ const AddTaskDialog = ({ open, handleClose, totalTasks, projectId, addTaskComple
 	const handleSubmit = (e) => {
 		e.preventDefault();
 
-		let assignees = [];
+		let assigneeUsernames = [];
 
 		Array.from({ length: userInputFields }, (x, i) => {
-			assignees.push({
-				username: document.getElementById("assignee-field-" + String(i)).value,
+			assigneeUsernames.push({
+				username: document
+					.getElementById("assignee-select-" + String(i))
+					.innerText.split(" - ")[1],
 			});
 		});
 
@@ -78,7 +87,7 @@ const AddTaskDialog = ({ open, handleClose, totalTasks, projectId, addTaskComple
 			type: document.getElementById("type-select").innerText,
 			dateCreated: formatDate(new Date()),
 			dateDue: dueDateEnabled ? formatDate(selectedDate) : "",
-			assignees: assignees,
+			assignees: assigneeUsernames,
 			reporter: {
 				userId: localStorage.getItem("userId"),
 				name: localStorage.getItem("fullName"),
@@ -89,18 +98,14 @@ const AddTaskDialog = ({ open, handleClose, totalTasks, projectId, addTaskComple
 	};
 
 	return (
-		<Dialog
-			open={open}
-			onClose={handleClose}
-			aria-labelledby='form-dialog-title'
-			fullWidth
-		>
+		<Dialog open={open} onClose={handleClose} aria-labelledby='form-dialog-title' fullWidth>
 			<form onSubmit={handleSubmit} autoComplete='off'>
 				<DialogContent>
 					{/* Add user field */}
 					<Typography sx={{ mt: 1, mb: 1 }} variant='h6' component='div'>
 						Add task
 					</Typography>
+
 					<TextField
 						variant='outlined'
 						margin='normal'
@@ -112,19 +117,28 @@ const AddTaskDialog = ({ open, handleClose, totalTasks, projectId, addTaskComple
 						color='secondary'
 						fullWidth
 					/>
+
+					<br />
+
 					{[...Array(userInputFields)].map((e, i) => (
-						<TextField
-							key={i}
-							variant='outlined'
-							margin='normal'
-							label='Assignee Username'
-							id={"assignee-field-" + String(i)}
-							name='assignee'
-							required
-							autoComplete='off'
-							color='secondary'
-							fullWidth
-						/>
+						<Box sx={{ minWidth: 120 }} key={i}>
+							<br />
+							<FormControl fullWidth>
+								<InputLabel>Assignees</InputLabel>
+								<Select
+									required
+									label='Type'
+									defaultValue={""}
+									id={"assignee-select-" + String(i)}
+								>
+									{projectUsers.map((user, i) => (
+										<MenuItem key={i} value={user.username}>
+											{user.name} - {user.username}
+										</MenuItem>
+									))}
+								</Select>
+							</FormControl>
+						</Box>
 					))}
 
 					<Tooltip title='Add another member'>
@@ -137,6 +151,7 @@ const AddTaskDialog = ({ open, handleClose, totalTasks, projectId, addTaskComple
 							<AddIcon />
 						</IconButton>
 					</Tooltip>
+
 					<Tooltip title='Remove member'>
 						<IconButton
 							color='inherit'
@@ -163,6 +178,7 @@ const AddTaskDialog = ({ open, handleClose, totalTasks, projectId, addTaskComple
 
 					<br />
 					<br />
+
 					<LocalizationProvider dateAdapter={AdapterDateFns}>
 						<MobileDatePicker
 							disabled={!dueDateEnabled}
@@ -188,16 +204,9 @@ const AddTaskDialog = ({ open, handleClose, totalTasks, projectId, addTaskComple
 					<Box sx={{ minWidth: 120 }}>
 						<FormControl fullWidth>
 							<InputLabel>Task Type</InputLabel>
-							<Select
-								id='type-select'
-								required
-								label='Type'
-								defaultValue={""}
-							>
+							<Select id='type-select' required label='Type' defaultValue={""}>
 								<MenuItem value={"New Feature"}>New Feature</MenuItem>
-								<MenuItem value={"System Improvement"}>
-									System Improvement
-								</MenuItem>
+								<MenuItem value={"System Improvement"}>System Improvement</MenuItem>
 								<MenuItem value={"Bug"}>Bug/system issue</MenuItem>
 							</Select>
 						</FormControl>

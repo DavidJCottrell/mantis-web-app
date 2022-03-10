@@ -16,7 +16,6 @@ import SubtaskContainer from "./SubtaskContainer";
 import { Item } from "./SubtaskItem";
 
 import * as projectApis from "../../apis/project";
-import { useQuery } from "react-query";
 import { useMutation, useQueryClient } from "react-query";
 
 import toast, { Toaster } from "react-hot-toast";
