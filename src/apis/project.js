@@ -44,6 +44,18 @@ export const removeRequirement = (projectId, requirementIndex) =>
 		.then((res) => res.data)
 		.catch((e) => e.response);
 
+export const getSubTasks = (projectId, taskId) =>
+	api
+		.get(`/project/subtasks/${projectId}/${taskId}`)
+		.then((res) => res.data)
+		.catch((e) => e.response);
+
+export const updateSubtasks = (projectId, taskId, data) =>
+	api
+		.patch(`/project/updatesubtasks/${projectId}/${taskId}`, data)
+		.then((res) => res.data)
+		.catch((e) => e.response);
+
 export const removeTask = (projectId, taskId) =>
 	api
 		.patch(`/project/removetask/${projectId}/${taskId}`)

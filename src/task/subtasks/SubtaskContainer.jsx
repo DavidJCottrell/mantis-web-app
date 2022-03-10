@@ -20,9 +20,7 @@ import Button from "@mui/material/Button";
 
 import SubtaskItem from "./SubtaskItem";
 
-export default function SubtaskContainer(props) {
-	const { id, items, columnName, handlers } = props;
-
+export default function SubtaskContainer({ id, items, columnName, handlers }) {
 	const { setNodeRef } = useDroppable({
 		id,
 	});
@@ -34,11 +32,23 @@ export default function SubtaskContainer(props) {
 					<Typography variant='h5' component='div'>
 						{columnName}
 					</Typography>
-					{items.map((id) => (
-						<SubtaskItem key={id} id={id} handlers={handlers} />
+					{items.map((id, i) => (
+						<SubtaskItem
+							key={String(id) + String(i)}
+							id={id}
+							index={i}
+							handlers={handlers}
+							columnName={columnName}
+						/>
 					))}
 					<br />
-					<Button variant='contained' color='secondary'>
+					<Button
+						variant='contained'
+						color='secondary'
+						onClick={() => {
+							handlers.handleAdd(columnName);
+						}}
+					>
 						Add Task
 					</Button>
 				</CardContent>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
 	DndContext,
 	DragOverlay,
@@ -15,41 +15,18 @@ import Grid from "@mui/material/Grid";
 import SubtaskContainer from "./SubtaskContainer";
 import { Item } from "./SubtaskItem";
 
-// const wrapperStyle = {
-// 	display: "flex",
-// 	flexDirection: "row",
-// };
+import * as projectApis from "../../apis/project";
+import { useQuery } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
+
+import toast, { Toaster } from "react-hot-toast";
 
 // Credit - https://codesandbox.io/s/lknfe
 
-const defaultAnnouncements = {
-	onDragStart(id) {
-		// console.log(`Picked up draggable item ${id}.`);
-	},
-	onDragOver(id, overId) {
-		if (overId) {
-			// console.log(`Draggable item ${id} was moved over droppable area ${overId}.`);
-			return;
-		}
-
-		// console.log(`Draggable item ${id} is no longer over a droppable area.`);
-	},
-	onDragEnd(id, overId) {
-		if (overId) {
-			// console.log(`Draggable item ${id} was dropped over droppable area ${overId}`);
-			return;
-		}
-
-		// console.log(`Draggable item ${id} was dropped.`);
-	},
-	onDragCancel(id) {
-		// console.log(`Dragging was cancelled. Draggable item ${id} was dropped.`);
-	},
-};
-
-const Subtasks = ({ tasks }) => {
-	const [items, setItems] = useState(tasks);
+const Subtasks = ({ subTasks, projectId, taskId }) => {
+	const [items, setItems] = useState(subTasks);
 	const [activeId, setActiveId] = useState();
+	const [columnToAddTo, setColumnToAddTo] = useState("");
 
 	const sensors = useSensors(
 		useSensor(PointerSensor),
@@ -58,19 +35,113 @@ const Subtasks = ({ tasks }) => {
 		})
 	);
 
-	const handleEditTask = () => {
-		prompt("Enter task details:");
+	const [addSubTaskAnchor, setAddSubTaskAnchor] = useState(); //State
+	const handleAddSubTaskOpen = (event) => setAddSubTaskAnchor(event.currentTarget); //Handle open
+	const handleAddSubTaskClose = () => setAddSubTaskAnchor(null); //Handle close
+	const isAddSubTaskOpen = Boolean(addSubTaskAnchor); //Is open
+
+	const queryClient = new useQueryClient();
+
+	const updateSubtasksMutation = useMutation(
+		({ projectId, taskId, subTasks }) =>
+			projectApis.updateSubtasks(projectId, taskId, subTasks),
+		{
+			onSuccess: () => {
+				queryClient.invalidateQueries("fetchSubTasks");
+			},
+		}
+	);
+
+	const handleAdd = (columnName) => {
+		const newText = prompt("Subtask:");
+
+		if (newText !== null) {
+			switch (columnName) {
+				case "To Do":
+					let newToDoTasks = items["toDo"].slice();
+					newToDoTasks.push(newText);
+					setItems({ ...items, ["toDo"]: newToDoTasks });
+					break;
+				case "In Progress":
+					let newInProgressTasks = items["inProgress"].slice();
+					newInProgressTasks.push(newText);
+					setItems({ ...items, ["inProgress"]: newInProgressTasks });
+					break;
+				case "Complete":
+					let newCompleteTasks = items["complete"].slice();
+					newCompleteTasks.push(newText);
+					setItems({ ...items, ["complete"]: newCompleteTasks });
+					break;
+			}
+			toast.success("Subtask Added");
+		}
 	};
 
-	const handleRemoveTask = () => {
-		console.log("Remove");
+	const handleEditTask = (index, columnName) => {
+		let newText = "";
+		switch (columnName) {
+			case "To Do":
+				let newToDoTasks = items["toDo"].slice();
+				newText = prompt("Subtask:", items["toDo"][index]);
+				if (newText !== null) {
+					newToDoTasks[index] = newText;
+					setItems({ ...items, ["toDo"]: newToDoTasks });
+				}
+				break;
+			case "In Progress":
+				let newInProgressTasks = items["inProgress"].slice();
+				newText = prompt("Subtask:", items["toDo"][index]);
+				if (newText !== null) {
+					newInProgressTasks[index] = newText;
+					setItems({ ...items, ["inProgress"]: newInProgressTasks });
+				}
+				break;
+			case "Complete":
+				let newCompleteTasks = items["complete"].slice();
+				newText = prompt("Subtask:", items["complete"][index]);
+				if (newText !== null) {
+					newCompleteTasks[index] = newText;
+					setItems({ ...items, ["complete"]: newCompleteTasks });
+				}
+				break;
+		}
 	};
+
+	const handleRemoveSubtask = (index, columnName) => {
+		if (confirm("Are you sure you want to delete this subtask?")) {
+			switch (columnName) {
+				case "To Do":
+					let newToDoTasks = items["toDo"].slice();
+					newToDoTasks.splice(index, 1);
+					setItems({ ...items, ["toDo"]: newToDoTasks });
+					break;
+				case "In Progress":
+					let newInProgressTasks = items["inProgress"].slice();
+					newInProgressTasks.splice(index, 1);
+					setItems({ ...items, ["inProgress"]: newInProgressTasks });
+					break;
+				case "Complete":
+					let newCompleteTasks = items["complete"].slice();
+					newCompleteTasks.splice(index, 1);
+					setItems({ ...items, ["complete"]: newCompleteTasks });
+					break;
+			}
+			toast.success("Subtask Removed");
+		}
+	};
+
+	useEffect(() => {
+		updateSubtasksMutation.mutate({
+			projectId: projectId,
+			taskId: taskId,
+			subTasks: items,
+		});
+	}, [items]);
 
 	return (
-		// style={wrapperStyle}
 		<div>
+			<Toaster />
 			<DndContext
-				announcements={defaultAnnouncements}
 				sensors={sensors}
 				collisionDetection={closestCorners}
 				onDragStart={handleDragStart}
@@ -83,7 +154,11 @@ const Subtasks = ({ tasks }) => {
 							id='toDo'
 							items={items.toDo}
 							columnName={"To Do"}
-							handlers={{ handleEditTask, handleRemoveTask }}
+							handlers={{
+								handleEditTask,
+								handleRemoveSubtask,
+								handleAdd,
+							}}
 						/>
 					</Grid>
 					<Grid item xs={12} md={4}>
@@ -91,7 +166,11 @@ const Subtasks = ({ tasks }) => {
 							id='inProgress'
 							items={items.inProgress}
 							columnName={"In Progress"}
-							handlers={{ handleEditTask, handleRemoveTask }}
+							handlers={{
+								handleEditTask,
+								handleRemoveSubtask,
+								handleAdd,
+							}}
 						/>
 					</Grid>
 					<Grid item xs={12} md={4}>
@@ -99,7 +178,11 @@ const Subtasks = ({ tasks }) => {
 							id='complete'
 							items={items.complete}
 							columnName={"Complete"}
-							handlers={{ handleEditTask, handleRemoveTask }}
+							handlers={{
+								handleEditTask,
+								handleRemoveSubtask,
+								handleAdd,
+							}}
 						/>
 					</Grid>
 				</Grid>
@@ -161,9 +244,7 @@ const Subtasks = ({ tasks }) => {
 
 			return {
 				...prev,
-				[activeContainer]: [
-					...prev[activeContainer].filter((item) => item !== active.id),
-				],
+				[activeContainer]: [...prev[activeContainer].filter((item) => item !== active.id)],
 				[overContainer]: [
 					...prev[overContainer].slice(0, newIndex),
 					items[activeContainer][activeIndex],

@@ -21,7 +21,6 @@ const RequirementForm = ({
 				<React.Fragment>
 					<p>The</p>
 					<TextField
-						id='outlined-basic'
 						label='System Name'
 						variant='outlined'
 						name='System Name'
@@ -41,14 +40,11 @@ const RequirementForm = ({
 				<React.Fragment>
 					<p>While the</p>
 					<PreconditionInput
-						preconditions={
-							requirement ? requirement.preconditions : undefined
-						}
+						preconditions={requirement ? requirement.preconditions : undefined}
 					/>
 
 					<p>, the</p>
 					<TextField
-						id='outlined-basic'
 						label='system name'
 						variant='outlined'
 						name='System Name'
@@ -68,7 +64,6 @@ const RequirementForm = ({
 				<React.Fragment>
 					<p>When</p>
 					<TextField
-						id='outlined-basic'
 						label='Trigger'
 						variant='outlined'
 						name='Trigger'
@@ -77,7 +72,6 @@ const RequirementForm = ({
 					/>
 					<p>, the</p>
 					<TextField
-						id='outlined-basic'
 						label='System Name'
 						variant='outlined'
 						name='System Name'
@@ -96,7 +90,6 @@ const RequirementForm = ({
 				<React.Fragment>
 					<p>Where</p>
 					<TextField
-						id='outlined-basic'
 						label='Feature is Included'
 						variant='outlined'
 						name='Feature'
@@ -105,7 +98,6 @@ const RequirementForm = ({
 					/>
 					<p>, the</p>
 					<TextField
-						id='outlined-basic'
 						label='System Name'
 						variant='outlined'
 						name='System Name'
@@ -124,7 +116,6 @@ const RequirementForm = ({
 				<React.Fragment>
 					<p>If</p>
 					<TextField
-						id='outlined-basic'
 						label='Trigger'
 						variant='outlined'
 						name='Trigger'
@@ -133,7 +124,6 @@ const RequirementForm = ({
 					/>
 					<p>then the</p>
 					<TextField
-						id='outlined-basic'
 						label='System Name'
 						variant='outlined'
 						name='System Name'

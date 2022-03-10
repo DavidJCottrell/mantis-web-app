@@ -1,4 +1,4 @@
-import React, { StrictMode } from "react";
+import React, { StrictMode, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useQuery } from "react-query";
@@ -36,6 +36,10 @@ const Task = () => {
 		projectApis.getRole(projectId, localStorage.getItem("userId"))
 	);
 
+	const subTasksQuery = useQuery("fetchSubTasks", () =>
+		projectApis.getSubTasks(projectId, task._id)
+	);
+
 	const tasks = {
 		toDo: [
 			"Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda laudantium incidunt eius ",
@@ -45,6 +49,8 @@ const Task = () => {
 		inProgress: ["Task 4", "Task 5", "Task 6"],
 		complete: ["Task 7", "Task 8", "Task 9"],
 	};
+
+	// if (subTasksQuery.isSuccess) console.log(subTasksQuery.data.subtasks);
 
 	return (
 		<React.Fragment>
@@ -87,9 +93,16 @@ const Task = () => {
 						<br />
 						<h2>Subtasks</h2>
 
-						<StrictMode>
-							<Subtasks tasks={tasks} />
-						</StrictMode>
+						{subTasksQuery.isSuccess ? (
+							<StrictMode>
+								<Subtasks
+									subTasks={subTasksQuery.data.subtasks}
+									// subTasks={tasks}
+									projectId={projectId}
+									taskId={task._id}
+								/>
+							</StrictMode>
+						) : null}
 
 						<br />
 

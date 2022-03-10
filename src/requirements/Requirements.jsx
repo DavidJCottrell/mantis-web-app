@@ -90,67 +90,54 @@ const Requirements = () => {
 						<br />
 						<br />
 						<TableContainer component={Paper}>
-							<Table
-								sx={{ minWidth: 450 }}
-								size='small'
-								aria-label='a dense table'
-							>
+							<Table sx={{ minWidth: 450 }} size='small' aria-label='a dense table'>
 								<TableHead>
 									<TableRow>
 										<TableCell>Requirement Index</TableCell>
-										<TableCell align='left'>
-											Requirement Type
-										</TableCell>
+										<TableCell align='left'>Requirement Type</TableCell>
 										<TableCell align='left'>Requirement</TableCell>
 										<TableCell align='center'>Actions</TableCell>
 									</TableRow>
 								</TableHead>
 								<TableBody>
-									{requirementsQuery.data.requirements.map(
-										(requirement, i) => (
-											<TableRow
-												key={requirement.index + "-" + i}
-												sx={{
-													"&:last-child td, &:last-child th": {
-														border: 0,
-													},
-												}}
-											>
-												<TableCell component='th' scope='row'>
-													{requirement.index}
-												</TableCell>
-												<TableCell align='left'>
-													{requirement.type}
-												</TableCell>
-												<TableCell align='left'>
-													{requirement.fullText}
-												</TableCell>
-												<TableCell align='center'>
-													<Button
-														onClick={(event) => {
-															setCurrentRequirement(
-																requirementsQuery.data
-																	.requirements[i]
-															);
-															handleRequirementOpen(event);
-														}}
-													>
-														Edit
-													</Button>
-													<Button
-														onClick={() => {
-															handleRemove(
-																requirement.index
-															);
-														}}
-														color='warning'
-													>
-														Remove
-													</Button>
-												</TableCell>
-											</TableRow>
-										)
-									)}
+									{requirementsQuery.data.requirements.map((requirement, i) => (
+										<TableRow
+											key={requirement.index + "-" + i}
+											sx={{
+												"&:last-child td, &:last-child th": {
+													border: 0,
+												},
+											}}
+										>
+											<TableCell component='th' scope='row'>
+												{requirement.index}
+											</TableCell>
+											<TableCell align='left'>{requirement.type}</TableCell>
+											<TableCell align='left'>
+												{requirement.fullText}
+											</TableCell>
+											<TableCell align='center'>
+												<Button
+													onClick={(event) => {
+														setCurrentRequirement(
+															requirementsQuery.data.requirements[i]
+														);
+														handleRequirementOpen(event);
+													}}
+												>
+													Edit
+												</Button>
+												<Button
+													onClick={() => {
+														handleRemove(requirement.index);
+													}}
+													color='warning'
+												>
+													Remove
+												</Button>
+											</TableCell>
+										</TableRow>
+									))}
 								</TableBody>
 							</Table>
 						</TableContainer>
