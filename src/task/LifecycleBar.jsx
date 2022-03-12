@@ -25,36 +25,40 @@ import MergeIcon from "@mui/icons-material/Merge";
 
 import * as styles from "./taskStyles";
 
-const LifecycleBar = ({ status }) => {
+const LifecycleBar = ({ status, isMobile }) => {
 	return (
 		<Box>
 			<List component={Stack} direction='row' style={styles.listStyle}>
 				<ListItem disablePadding style={styles.listItemStyle}>
-					<div style={status == "In Development" ? styles.activeStyle : null}>
+					<div style={status !== "In Development" ? styles.inactiveStyle : null}>
 						<CodeIcon />
-						<br />
-						In Development
+						{!isMobile ? (
+							<React.Fragment>
+								<br />
+								In Development
+							</React.Fragment>
+						) : null}
 					</div>
 				</ListItem>
 				<ListItem disablePadding style={styles.listItemStyle}>
-					<div style={status == "Testing" ? styles.activeStyle : null}>
+					<div style={status !== "Testing" ? styles.inactiveStyle : null}>
 						<BugReportIcon />
 						<br />
-						Testing
+						{!isMobile ? "Testing" : null}
 					</div>
 				</ListItem>
 				<ListItem disablePadding style={styles.listItemStyle}>
-					<div style={status == "In Review" ? styles.activeStyle : null}>
+					<div style={status !== "In Review" ? styles.inactiveStyle : null}>
 						<VisibilityIcon />
 						<br />
-						In Review
+						{!isMobile ? "In Review" : null}
 					</div>
 				</ListItem>
 				<ListItem disablePadding style={styles.listItemStyle}>
-					<div style={status == "Ready to Merge" ? styles.activeStyle : null}>
+					<div style={status !== "Ready to Merge" ? styles.inactiveStyle : null}>
 						<MergeIcon />
 						<br />
-						Ready to Merge
+						{!isMobile ? "Ready to Merge" : null}
 					</div>
 				</ListItem>
 			</List>

@@ -4,10 +4,12 @@ const listStyle = {
 };
 const listItemStyle = { textAlign: "center", justifyContent: "center" };
 
-const activeStyle = {
-	backgroundColor: "rgba(0, 255, 0, 0.3)",
-	padding: "10px",
-	borderRadius: "20px",
+const inactiveStyle = {
+	opacity: "0.25",
 };
 
-export { listStyle, listItemStyle, activeStyle };
+// backgroundColor: "rgba(0, 255, 0, 0.2)",
+// padding: "15px",
+// borderRadius: "30px",
+
+export { listStyle, listItemStyle, inactiveStyle };

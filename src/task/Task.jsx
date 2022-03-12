@@ -20,9 +20,26 @@ import Subtasks from "./subtasks/Subtasks";
 import * as projectApis from "../apis/project";
 
 const Task = () => {
+	const mobileViewSize = 760;
 	const location = useLocation();
+	const [items, setItems] = useState(null);
+
+	const [isMobile, _setIsMobile] = useState(window.innerWidth <= mobileViewSize ? true : false);
+	const isMobileRef = React.useRef(isMobile);
+	const setIsMobile = (data) => {
+		isMobileRef.current = data;
+		_setIsMobile(data);
+	};
+
 	const { task, projectId } = (() => {
 		try {
+			const { data, isSuccess } = useQuery(
+				"fetchSubTasks",
+				() => projectApis.getSubTasks(projectId, task._id),
+				{
+					onSuccess: (data) => setItems(data.subtasks),
+				}
+			);
 			return {
 				task: location.state.task,
 				projectId: location.state.projectId,
@@ -36,21 +53,14 @@ const Task = () => {
 		projectApis.getRole(projectId, localStorage.getItem("userId"))
 	);
 
-	const subTasksQuery = useQuery("fetchSubTasks", () =>
-		projectApis.getSubTasks(projectId, task._id)
-	);
-
-	const tasks = {
-		toDo: [
-			"Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda laudantium incidunt eius ",
-			"Task 2",
-			"Task 3",
-		],
-		inProgress: ["Task 4", "Task 5", "Task 6"],
-		complete: ["Task 7", "Task 8", "Task 9"],
-	};
-
-	// if (subTasksQuery.isSuccess) console.log(subTasksQuery.data.subtasks);
+	useEffect(() => {
+		const handleResize = () => {
+			if (window.innerWidth <= mobileViewSize) setIsMobile(true);
+			else setIsMobile(false);
+		};
+		window.addEventListener("resize", handleResize);
+		return () => window.removeEventListener("resize", handleResize);
+	}, []);
 
 	return (
 		<React.Fragment>
@@ -75,29 +85,17 @@ const Task = () => {
 							<Button variant='contained'>Back to project</Button>
 						</Link>
 						<br />
-						<h2>Task Lifecycle</h2>
-						<LifecycleBar status='In Development' />
-						<br />
-						<Grid container spacing={5}>
-							{/* Git Log */}
-							<Grid item xs={12} md={6}>
-								<GitInfoCard />
-							</Grid>
 
-							{/* Task Information */}
-							<Grid item xs={12} md={6}>
-								<TaskInfoCard task={task} />
-							</Grid>
-						</Grid>
+						<h2>Task Lifecycle</h2>
+						<LifecycleBar status='In Development' isMobile={isMobile} />
 
 						<br />
 						<h2>Subtasks</h2>
 
-						{subTasksQuery.isSuccess ? (
+						{items ? (
 							<StrictMode>
 								<Subtasks
-									subTasks={subTasksQuery.data.subtasks}
-									// subTasks={tasks}
+									subTasks={items}
 									projectId={projectId}
 									taskId={task._id}
 								/>
@@ -111,6 +109,19 @@ const Task = () => {
 						<Grid container>
 							<Grid item xs={12}>
 								<CommentsCard />
+							</Grid>
+						</Grid>
+						<br />
+						<br />
+						<Grid container spacing={5}>
+							{/* Git Log */}
+							<Grid item xs={12} md={6}>
+								<GitInfoCard />
+							</Grid>
+
+							{/* Task Information */}
+							<Grid item xs={12} md={6}>
+								<TaskInfoCard task={task} />
 							</Grid>
 						</Grid>
 						<br />
