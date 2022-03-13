@@ -1,4 +1,11 @@
 import React, { useState } from "react";
+import Grid from "@mui/material/Grid";
+import { useMutation, useQueryClient } from "react-query";
+import toast, { Toaster } from "react-hot-toast";
+import SubtaskContainer from "./SubtaskContainer";
+import { Item } from "./SubtaskItem";
+import * as taskApis from "../../apis/task";
+import { arrayMove, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 import {
 	DndContext,
 	DragOverlay,
@@ -8,22 +15,11 @@ import {
 	useSensor,
 	useSensors,
 } from "@dnd-kit/core";
-import { arrayMove, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
-
-import Grid from "@mui/material/Grid";
-
-import SubtaskContainer from "./SubtaskContainer";
-import { Item } from "./SubtaskItem";
-
-import * as projectApis from "../../apis/project";
-import { useMutation, useQueryClient } from "react-query";
-
-import toast, { Toaster } from "react-hot-toast";
 
 // Credit - https://codesandbox.io/s/lknfe
 
-const Subtasks = ({ projectId, taskId, subTasks }) => {
-	const [items, setItems] = useState(subTasks);
+const Subtasks = ({ projectId, taskId, subtaskData }) => {
+	const [subtasks, setSubtasks] = useState(subtaskData);
 	const [activeId, setActiveId] = useState();
 
 	const sensors = useSensors(
@@ -36,8 +32,7 @@ const Subtasks = ({ projectId, taskId, subTasks }) => {
 	const queryClient = new useQueryClient();
 
 	const updateSubtasksMutation = useMutation(
-		({ projectId, taskId, subTasks }) =>
-			projectApis.updateSubtasks(projectId, taskId, subTasks),
+		({ projectId, taskId, subTasks }) => taskApis.updateSubtasks(projectId, taskId, subTasks),
 		{
 			onSuccess: () => {
 				queryClient.invalidateQueries("fetchSubTasks");
@@ -46,7 +41,7 @@ const Subtasks = ({ projectId, taskId, subTasks }) => {
 	);
 
 	const update = (newTasks) => {
-		setItems(newTasks);
+		setSubtasks(newTasks);
 		updateSubtasksMutation.mutate({
 			projectId: projectId,
 			taskId: taskId,
@@ -62,21 +57,21 @@ const Subtasks = ({ projectId, taskId, subTasks }) => {
 		if (newText.length != 0) {
 			switch (columnName) {
 				case "To Do":
-					let newToDoTasks = items["toDo"].slice();
+					let newToDoTasks = subtasks["toDo"].slice();
 					newToDoTasks.push(newText);
-					newTasks = { ...items, ["toDo"]: newToDoTasks };
+					newTasks = { ...subtasks, ["toDo"]: newToDoTasks };
 					update(newTasks);
 					break;
 				case "In Progress":
-					let newInProgressTasks = items["inProgress"].slice();
+					let newInProgressTasks = subtasks["inProgress"].slice();
 					newInProgressTasks.push(newText);
-					newTasks = { ...items, ["inProgress"]: newInProgressTasks };
+					newTasks = { ...subtasks, ["inProgress"]: newInProgressTasks };
 					update(newTasks);
 					break;
 				case "Complete":
-					let newCompleteTasks = items["complete"].slice();
+					let newCompleteTasks = subtasks["complete"].slice();
 					newCompleteTasks.push(newText);
-					newTasks = { ...items, ["complete"]: newCompleteTasks };
+					newTasks = { ...subtasks, ["complete"]: newCompleteTasks };
 					update(newTasks);
 					break;
 			}
@@ -89,29 +84,29 @@ const Subtasks = ({ projectId, taskId, subTasks }) => {
 		let newTasks = null;
 		switch (columnName) {
 			case "To Do":
-				let newToDoTasks = items["toDo"].slice();
-				newText = prompt("Subtask:", items["toDo"][index]);
+				let newToDoTasks = subtasks["toDo"].slice();
+				newText = prompt("Subtask:", subtasks["toDo"][index]);
 				if (newText.length !== 0) {
 					newToDoTasks[index] = newText;
-					newTasks = { ...items, ["toDo"]: newToDoTasks };
+					newTasks = { ...subtasks, ["toDo"]: newToDoTasks };
 					update(newTasks);
 				}
 				break;
 			case "In Progress":
-				let newInProgressTasks = items["inProgress"].slice();
-				newText = prompt("Subtask:", items["inProgress"][index]);
+				let newInProgressTasks = subtasks["inProgress"].slice();
+				newText = prompt("Subtask:", subtasks["inProgress"][index]);
 				if (newText.length !== 0) {
 					newInProgressTasks[index] = newText;
-					newTasks = { ...items, ["inProgress"]: newInProgressTasks };
-					setItems(newTasks);
+					newTasks = { ...subtasks, ["inProgress"]: newInProgressTasks };
+					update(newTasks);
 				}
 				break;
 			case "Complete":
-				let newCompleteTasks = items["complete"].slice();
-				newText = prompt("Subtask:", items["complete"][index]);
+				let newCompleteTasks = subtasks["complete"].slice();
+				newText = prompt("Subtask:", subtasks["complete"][index]);
 				if (newText.length !== 0) {
 					newCompleteTasks[index] = newText;
-					newTasks = { ...items, ["complete"]: newCompleteTasks };
+					newTasks = { ...subtasks, ["complete"]: newCompleteTasks };
 					update(newTasks);
 				}
 				break;
@@ -123,21 +118,21 @@ const Subtasks = ({ projectId, taskId, subTasks }) => {
 			let newTasks = null;
 			switch (columnName) {
 				case "To Do":
-					let newToDoTasks = items["toDo"].slice();
+					let newToDoTasks = subtasks["toDo"].slice();
 					newToDoTasks.splice(index, 1);
-					newTasks = { ...items, ["toDo"]: newToDoTasks };
+					newTasks = { ...subtasks, ["toDo"]: newToDoTasks };
 					update(newTasks);
 					break;
 				case "In Progress":
-					let newInProgressTasks = items["inProgress"].slice();
+					let newInProgressTasks = subtasks["inProgress"].slice();
 					newInProgressTasks.splice(index, 1);
-					newTasks = { ...items, ["inProgress"]: newInProgressTasks };
+					newTasks = { ...subtasks, ["inProgress"]: newInProgressTasks };
 					update(newTasks);
 					break;
 				case "Complete":
-					let newCompleteTasks = items["complete"].slice();
+					let newCompleteTasks = subtasks["complete"].slice();
 					newCompleteTasks.splice(index, 1);
-					newTasks = { ...items, ["complete"]: newCompleteTasks };
+					newTasks = { ...subtasks, ["complete"]: newCompleteTasks };
 					update(newTasks);
 					break;
 			}
@@ -153,7 +148,7 @@ const Subtasks = ({ projectId, taskId, subTasks }) => {
 				updateSubtasksMutation.mutate({
 					projectId: projectId,
 					taskId: taskId,
-					subTasks: items,
+					subTasks: subtasks,
 				});
 				return;
 			}
@@ -163,7 +158,7 @@ const Subtasks = ({ projectId, taskId, subTasks }) => {
 
 	return (
 		<React.Fragment>
-			{items ? (
+			{subtasks ? (
 				<div>
 					<Toaster />
 					<DndContext
@@ -178,7 +173,7 @@ const Subtasks = ({ projectId, taskId, subTasks }) => {
 							<Grid item xs={12} md={4}>
 								<SubtaskContainer
 									id='toDo'
-									items={items.toDo}
+									items={subtasks.toDo}
 									columnName={"To Do"}
 									handlers={{
 										handleEditTask,
@@ -190,7 +185,7 @@ const Subtasks = ({ projectId, taskId, subTasks }) => {
 							<Grid item xs={12} md={4}>
 								<SubtaskContainer
 									id='inProgress'
-									items={items.inProgress}
+									items={subtasks.inProgress}
 									columnName={"In Progress"}
 									handlers={{
 										handleEditTask,
@@ -202,7 +197,7 @@ const Subtasks = ({ projectId, taskId, subTasks }) => {
 							<Grid item xs={12} md={4}>
 								<SubtaskContainer
 									id='complete'
-									items={items.complete}
+									items={subtasks.complete}
 									columnName={"Complete"}
 									handlers={{
 										handleEditTask,
@@ -220,11 +215,11 @@ const Subtasks = ({ projectId, taskId, subTasks }) => {
 	);
 
 	function findContainer(id) {
-		if (id in items) {
+		if (id in subtasks) {
 			return id;
 		}
 
-		return Object.keys(items).find((key) => items[key].includes(id));
+		return Object.keys(subtasks).find((key) => subtasks[key].includes(id));
 	}
 
 	function handleDragStart(event) {
@@ -247,7 +242,7 @@ const Subtasks = ({ projectId, taskId, subTasks }) => {
 			return;
 		}
 
-		setItems((prev) => {
+		setSubtasks((prev) => {
 			const activeItems = prev[activeContainer];
 			const overItems = prev[overContainer];
 
@@ -272,10 +267,12 @@ const Subtasks = ({ projectId, taskId, subTasks }) => {
 
 			return {
 				...prev,
-				[activeContainer]: [...prev[activeContainer].filter((item) => item !== active.id)],
+				[activeContainer]: [
+					...prev[activeContainer].filter((subtask) => subtask !== active.id),
+				],
 				[overContainer]: [
 					...prev[overContainer].slice(0, newIndex),
-					items[activeContainer][activeIndex],
+					subtasks[activeContainer][activeIndex],
 					...prev[overContainer].slice(newIndex, prev[overContainer].length),
 				],
 			};
@@ -294,15 +291,15 @@ const Subtasks = ({ projectId, taskId, subTasks }) => {
 			return;
 		}
 
-		const activeIndex = items[activeContainer].indexOf(active.id);
-		const overIndex = items[overContainer].indexOf(overId);
+		const activeIndex = subtasks[activeContainer].indexOf(active.id);
+		const overIndex = subtasks[overContainer].indexOf(overId);
 
 		if (activeIndex !== overIndex) {
-			setItems((items) => ({
-				...items,
-				[overContainer]: arrayMove(items[overContainer], activeIndex, overIndex),
-			}));
-			console.log(items);
+			const newSubtasks = {
+				...subtasks,
+				[overContainer]: arrayMove(subtasks[overContainer], activeIndex, overIndex),
+			};
+			update(newSubtasks);
 		}
 
 		setActiveId(null);

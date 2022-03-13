@@ -17,6 +17,7 @@ import Button from "@mui/material/Button";
 import Nav from "../nav/Nav";
 import RequirementDialog from "./RequirementDialog";
 import * as projectApis from "../apis/project";
+import * as requirementApis from "../apis/requirement";
 
 const Requirements = () => {
 	const [requirementAnchor, setRequirementAnchor] = useState(); //State
@@ -44,12 +45,12 @@ const Requirements = () => {
 	);
 
 	const requirementsQuery = useQuery("fetchProjectRequirements", () =>
-		projectApis.getRequirements(projectId)
+		requirementApis.getRequirements(projectId)
 	);
 
 	const requirementMutation = useMutation(
 		({ projectId, requirementIndex }) =>
-			projectApis.removeRequirement(projectId, requirementIndex),
+			requirementApis.removeRequirement(projectId, requirementIndex),
 		{
 			onSuccess: () => {
 				queryClient.invalidateQueries("fetchProjectRequirements");

@@ -22,7 +22,7 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 
-import * as projectApis from "../../apis/project";
+import * as taskApis from "../../apis/task";
 
 const AddTaskDialog = ({
 	open,
@@ -44,7 +44,7 @@ const AddTaskDialog = ({
 	const queryClient = new useQueryClient();
 
 	const projectMutation = useMutation(
-		({ projectId, task }) => projectApis.addTask(projectId, task),
+		({ projectId, task }) => taskApis.addTask(projectId, task),
 		{
 			onSuccess: () => {
 				queryClient.invalidateQueries("fetchProjectData");

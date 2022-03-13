@@ -17,7 +17,7 @@ import { Link } from "react-router-dom";
 // Custom Components
 import { taskTableRowStyles } from "./projectStyles";
 
-import * as projectApis from "../apis/project";
+import * as taskApis from "../apis/task";
 
 const TaskTableRow = ({ task, role, isMobile, projectId, removeTaskComplete }) => {
 	const [open, setOpen] = React.useState(false);
@@ -26,7 +26,7 @@ const TaskTableRow = ({ task, role, isMobile, projectId, removeTaskComplete }) =
 	const queryClient = new useQueryClient();
 
 	const taskMutation = useMutation(
-		({ projectId, taskId }) => projectApis.removeTask(projectId, taskId),
+		({ projectId, taskId }) => taskApis.removeTask(projectId, taskId),
 		{
 			onSuccess: () => {
 				queryClient.invalidateQueries("fetchProjectData");
@@ -55,11 +55,7 @@ const TaskTableRow = ({ task, role, isMobile, projectId, removeTaskComplete }) =
 					</React.Fragment>
 				) : null}
 				<TableCell>
-					<IconButton
-						aria-label='expand row'
-						size='small'
-						onClick={() => setOpen(!open)}
-					>
+					<IconButton aria-label='expand row' size='small' onClick={() => setOpen(!open)}>
 						{open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
 					</IconButton>
 				</TableCell>
@@ -119,11 +115,7 @@ const TaskTableRow = ({ task, role, isMobile, projectId, removeTaskComplete }) =
 							<br />
 							<br />
 							{role === "Team Leader" ? (
-								<Button
-									variant='outlined'
-									color='warning'
-									onClick={removeTask}
-								>
+								<Button variant='outlined' color='warning' onClick={removeTask}>
 									Delete task
 								</Button>
 							) : null}

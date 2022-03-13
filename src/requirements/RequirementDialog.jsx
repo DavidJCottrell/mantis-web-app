@@ -16,7 +16,7 @@ import Box from "@mui/material/Box";
 
 import RequirementForm from "./RequirementForm";
 import * as Collectors from "./Collectors";
-import * as projectApis from "../apis/project";
+import * as requirementApis from "../apis/requirement";
 
 import toast, { Toaster } from "react-hot-toast";
 
@@ -36,7 +36,7 @@ const RequirementDialog = ({ open, handleClose, requirement, projectId, totalReq
 	}, [requirement]);
 
 	const addRequirementMutation = useMutation(
-		({ projectId, requirement }) => projectApis.addRequirement(projectId, requirement),
+		({ projectId, requirement }) => requirementApis.addRequirement(projectId, requirement),
 		{
 			onSuccess: () => {
 				queryClient.invalidateQueries("fetchProjectRequirements");
@@ -46,7 +46,7 @@ const RequirementDialog = ({ open, handleClose, requirement, projectId, totalReq
 
 	const updateRequirementMutation = useMutation(
 		({ projectId, requirementIndex, requirement }) =>
-			projectApis.updateRequirement(projectId, requirementIndex, requirement),
+			requirementApis.updateRequirement(projectId, requirementIndex, requirement),
 		{
 			onSuccess: () => {
 				queryClient.invalidateQueries("fetchProjectRequirements");
