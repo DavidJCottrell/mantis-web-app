@@ -117,41 +117,47 @@ const Requirements = () => {
 											<TableCell align='left'>
 												{requirement.fullText}
 											</TableCell>
-											<TableCell align='center'>
-												<Button
-													onClick={(event) => {
-														setCurrentRequirement(
-															requirementsQuery.data.requirements[i]
-														);
-														handleRequirementOpen(event);
-													}}
-												>
-													Edit
-												</Button>
-												<Button
-													onClick={() => {
-														handleRemove(requirement.index);
-													}}
-													color='warning'
-												>
-													Remove
-												</Button>
-											</TableCell>
+											{roleQuery.data.role === "Team Leader" ? (
+												<TableCell align='center'>
+													<Button
+														onClick={(event) => {
+															setCurrentRequirement(
+																requirementsQuery.data.requirements[
+																	i
+																]
+															);
+															handleRequirementOpen(event);
+														}}
+													>
+														Edit
+													</Button>
+													<Button
+														onClick={() => {
+															handleRemove(requirement.index);
+														}}
+														color='warning'
+													>
+														Remove
+													</Button>
+												</TableCell>
+											) : null}
 										</TableRow>
 									))}
 								</TableBody>
 							</Table>
 						</TableContainer>
 						<br />
-						<Button
-							variant='outlined'
-							onClick={(event) => {
-								setCurrentRequirement(null);
-								handleRequirementOpen(event);
-							}}
-						>
-							+ Add Requirement
-						</Button>
+						{roleQuery.data.role === "Team Leader" ? (
+							<Button
+								variant='outlined'
+								onClick={(event) => {
+									setCurrentRequirement(null);
+									handleRequirementOpen(event);
+								}}
+							>
+								+ Add Requirement
+							</Button>
+						) : null}
 					</Container>
 					<RequirementDialog
 						open={isRequirementOpen}
