@@ -49,93 +49,50 @@ const Subtasks = ({ projectId, taskId, subtaskData }) => {
 		});
 	};
 
+	const parseColumnName = (columnName) => {
+		switch (columnName) {
+			case "To Do":
+				return "toDo";
+			case "In Progress":
+				return "inProgress";
+			case "Complete":
+				return "complete";
+		}
+	};
+
 	const handleAdd = (columnName) => {
 		const newText = prompt("Subtask:");
+		const parsedColumnName = parseColumnName(columnName);
 
-		let newTasks = null;
-
-		if (newText.length != 0) {
-			switch (columnName) {
-				case "To Do":
-					let newToDoTasks = subtasks["toDo"].slice();
-					newToDoTasks.push(newText);
-					newTasks = { ...subtasks, ["toDo"]: newToDoTasks };
-					update(newTasks);
-					break;
-				case "In Progress":
-					let newInProgressTasks = subtasks["inProgress"].slice();
-					newInProgressTasks.push(newText);
-					newTasks = { ...subtasks, ["inProgress"]: newInProgressTasks };
-					update(newTasks);
-					break;
-				case "Complete":
-					let newCompleteTasks = subtasks["complete"].slice();
-					newCompleteTasks.push(newText);
-					newTasks = { ...subtasks, ["complete"]: newCompleteTasks };
-					update(newTasks);
-					break;
+		if (newText !== null) {
+			if (newText.length != 0) {
+				let newTasks = subtasks[parsedColumnName].slice();
+				newTasks.push(newText);
+				update({ ...subtasks, [parsedColumnName]: newTasks });
+				toast.success("Subtask Added");
 			}
-			toast.success("Subtask Added");
 		}
 	};
 
 	const handleEditTask = (index, columnName) => {
-		let newText = "";
-		let newTasks = null;
-		switch (columnName) {
-			case "To Do":
-				let newToDoTasks = subtasks["toDo"].slice();
-				newText = prompt("Subtask:", subtasks["toDo"][index]);
-				if (newText.length !== 0) {
-					newToDoTasks[index] = newText;
-					newTasks = { ...subtasks, ["toDo"]: newToDoTasks };
-					update(newTasks);
-				}
-				break;
-			case "In Progress":
-				let newInProgressTasks = subtasks["inProgress"].slice();
-				newText = prompt("Subtask:", subtasks["inProgress"][index]);
-				if (newText.length !== 0) {
-					newInProgressTasks[index] = newText;
-					newTasks = { ...subtasks, ["inProgress"]: newInProgressTasks };
-					update(newTasks);
-				}
-				break;
-			case "Complete":
-				let newCompleteTasks = subtasks["complete"].slice();
-				newText = prompt("Subtask:", subtasks["complete"][index]);
-				if (newText.length !== 0) {
-					newCompleteTasks[index] = newText;
-					newTasks = { ...subtasks, ["complete"]: newCompleteTasks };
-					update(newTasks);
-				}
-				break;
+		let parsedColumnName = parseColumnName(columnName);
+		let newTasks = subtasks[parsedColumnName].slice();
+		let newText = prompt("Subtask:", subtasks[parsedColumnName][index]);
+
+		if (newText !== null) {
+			if (newText.length !== 0) {
+				newTasks[index] = newText;
+				update({ ...subtasks, [parsedColumnName]: newTasks });
+			}
 		}
 	};
 
 	const handleRemoveSubtask = (index, columnName) => {
 		if (confirm("Are you sure you want to delete this subtask?")) {
-			let newTasks = null;
-			switch (columnName) {
-				case "To Do":
-					let newToDoTasks = subtasks["toDo"].slice();
-					newToDoTasks.splice(index, 1);
-					newTasks = { ...subtasks, ["toDo"]: newToDoTasks };
-					update(newTasks);
-					break;
-				case "In Progress":
-					let newInProgressTasks = subtasks["inProgress"].slice();
-					newInProgressTasks.splice(index, 1);
-					newTasks = { ...subtasks, ["inProgress"]: newInProgressTasks };
-					update(newTasks);
-					break;
-				case "Complete":
-					let newCompleteTasks = subtasks["complete"].slice();
-					newCompleteTasks.splice(index, 1);
-					newTasks = { ...subtasks, ["complete"]: newCompleteTasks };
-					update(newTasks);
-					break;
-			}
+			let parsedColumnName = parseColumnName(columnName);
+			let newTasks = subtasks[parsedColumnName].slice();
+			newTasks.splice(index, 1);
+			update({ ...subtasks, [parsedColumnName]: newTasks });
 			toast.success("Subtask Removed");
 		}
 	};
@@ -215,10 +172,7 @@ const Subtasks = ({ projectId, taskId, subtaskData }) => {
 	);
 
 	function findContainer(id) {
-		if (id in subtasks) {
-			return id;
-		}
-
+		if (id in subtasks) return id;
 		return Object.keys(subtasks).find((key) => subtasks[key].includes(id));
 	}
 
@@ -238,9 +192,7 @@ const Subtasks = ({ projectId, taskId, subtaskData }) => {
 		const activeContainer = findContainer(id);
 		const overContainer = findContainer(overId);
 
-		if (!activeContainer || !overContainer || activeContainer === overContainer) {
-			return;
-		}
+		if (!activeContainer || !overContainer || activeContainer === overContainer) return;
 
 		setSubtasks((prev) => {
 			const activeItems = prev[activeContainer];
@@ -287,9 +239,7 @@ const Subtasks = ({ projectId, taskId, subtaskData }) => {
 		const activeContainer = findContainer(id);
 		const overContainer = findContainer(overId);
 
-		if (!activeContainer || !overContainer || activeContainer !== overContainer) {
-			return;
-		}
+		if (!activeContainer || !overContainer || activeContainer !== overContainer) return;
 
 		const activeIndex = subtasks[activeContainer].indexOf(active.id);
 		const overIndex = subtasks[overContainer].indexOf(overId);

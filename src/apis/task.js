@@ -18,9 +18,9 @@ export const getTaskComments = (projectId, taskId) =>
 		.then((res) => res.data)
 		.catch((e) => e.response);
 
-export const addTaskComment = (projectId, taskId, data) =>
+export const updateTaskComments = (projectId, taskId, comments) =>
 	api
-		.post(`/project/tasks/comments/addcomment/${projectId}/${taskId}`, data)
+		.patch(`/project/tasks/comments/updatecomments/${projectId}/${taskId}`, comments)
 		.then((res) => res.data)
 		.catch((e) => e.response);
 
@@ -44,4 +44,8 @@ export const addTask = (id, data) =>
 
 export const updateStatus = (projectId, taskId, data) => {
 	return api.patch(`/project/tasks/updatestatus/${projectId}/${taskId}`, data);
+};
+
+export const updateResolution = (projectId, taskId, data) => {
+	return api.patch(`/project/tasks/updateresolution/${projectId}/${taskId}`, data);
 };

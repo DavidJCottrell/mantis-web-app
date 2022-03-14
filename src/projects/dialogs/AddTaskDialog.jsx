@@ -12,15 +12,14 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
 import TextField from "@mui/material/TextField";
-import MobileDatePicker from "@mui/lab/MobileDatePicker";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
+import MobileDatePicker from "@mui/lab/MobileDatePicker";
 
 import * as taskApis from "../../apis/task";
 
@@ -37,6 +36,8 @@ const AddTaskDialog = ({
 	const handleDateChanged = (newDate) => {
 		setSelectedDate(newDate);
 	};
+
+	const [selectedAsignees, setSelectedAsignees] = useState([]);
 
 	const [userInputFields, setInputFields] = useState(1);
 	const [dueDateEnabled, setDueDateEnabled] = useState(false);
@@ -82,8 +83,8 @@ const AddTaskDialog = ({
 			taskKey: "T" + String(totalTasks + 1),
 			title: document.getElementById("title-field").value,
 			description: document.getElementById("description-field").value,
-			status: "Open",
-			resolution: "Unresolved",
+			status: "In Development",
+			resolution: "Un-Resolved",
 			type: document.getElementById("type-select").innerText,
 			dateCreated: formatDate(new Date()),
 			dateDue: dueDateEnabled ? formatDate(selectedDate) : "",
@@ -97,8 +98,34 @@ const AddTaskDialog = ({
 		addTask(data);
 	};
 
+	const handleSelectAssignee = (event, index) => {
+		const username = event.target.dataset.value;
+		if (username !== undefined) {
+			if (selectedAsignees.length < index) {
+				setSelectedAsignees([...selectedAsignees, username]);
+			} else {
+				let tempAssignees = [...selectedAsignees];
+				tempAssignees[index] = username;
+				setSelectedAsignees(tempAssignees);
+			}
+		}
+	};
+
+	const clearState = () => {
+		setSelectedAsignees([]);
+		setInputFields(1);
+		setDueDateEnabled(false);
+	};
+
 	return (
-		<Dialog open={open} onClose={handleClose} aria-labelledby='form-dialog-title' fullWidth>
+		<Dialog
+			open={open}
+			onClose={() => {
+				handleClose(() => clearState());
+			}}
+			aria-labelledby='form-dialog-title'
+			fullWidth
+		>
 			<form onSubmit={handleSubmit} autoComplete='off'>
 				<DialogContent>
 					{/* Add user field */}
@@ -131,8 +158,19 @@ const AddTaskDialog = ({
 									defaultValue={""}
 									id={"assignee-select-" + String(i)}
 								>
-									{projectUsers.map((user, i) => (
-										<MenuItem key={i} value={user.username}>
+									{projectUsers.map((user, x) => (
+										<MenuItem
+											key={x}
+											onClick={(event) => {
+												handleSelectAssignee(event, i);
+											}}
+											value={user.username}
+											disabled={
+												selectedAsignees.includes(user.username)
+													? true
+													: false
+											}
+										>
 											{user.name} - {user.username}
 										</MenuItem>
 									))}
@@ -158,6 +196,9 @@ const AddTaskDialog = ({
 							onClick={() => {
 								if (userInputFields > 1) {
 									setInputFields(userInputFields - 1);
+									let tempSelectedAsignees = [...selectedAsignees];
+									tempSelectedAsignees.pop();
+									setSelectedAsignees(tempSelectedAsignees);
 								}
 							}}
 						>
@@ -214,7 +255,12 @@ const AddTaskDialog = ({
 					<br />
 				</DialogContent>
 				<DialogActions>
-					<Button onClick={handleClose} color='inherit'>
+					<Button
+						onClick={() => {
+							handleClose(() => () => clearState());
+						}}
+						color='inherit'
+					>
 						Cancel
 					</Button>
 					<Button type='submit' color='inherit'>

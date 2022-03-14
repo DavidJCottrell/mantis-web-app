@@ -12,6 +12,7 @@ import Select from "@mui/material/Select";
 import FormControl from "@mui/material/FormControl";
 import MenuItem from "@mui/material/MenuItem";
 import InputLabel from "@mui/material/InputLabel";
+import ButtonGroup from "@mui/material/ButtonGroup";
 
 import { useMutation, useQueryClient } from "react-query";
 
@@ -56,12 +57,31 @@ const Task = () => {
 		projectApis.getRole(projectId, localStorage.getItem("userId"))
 	);
 
-	const foo = (projectId, taskId, status) => {
-		taskApis.updateStatus(projectId, taskId, status);
-	};
-
 	const updateStatusMutation = useMutation(
 		({ projectId, taskId, status }) => taskApis.updateStatus(projectId, taskId, status),
+		{
+			onSuccess: (data) => {
+				queryClient.setQueryData("fetchTask", data.data);
+				if (data.data.task.status === "Resolved") {
+					updateResolutionMutation.mutate({
+						projectId: projectId,
+						taskId: taskId,
+						resolution: { resolution: "Resolved" },
+					});
+				} else {
+					updateResolutionMutation.mutate({
+						projectId: projectId,
+						taskId: taskId,
+						resolution: { resolution: "Un-Resolved" },
+					});
+				}
+			},
+		}
+	);
+
+	const updateResolutionMutation = useMutation(
+		({ projectId, taskId, resolution }) =>
+			taskApis.updateResolution(projectId, taskId, resolution),
 		{
 			onSuccess: (data) => {
 				queryClient.setQueryData("fetchTask", data.data);
@@ -112,23 +132,28 @@ const Task = () => {
 						<h2>Task Lifecycle</h2>
 						<LifecycleBar status={taskData.task.status} isMobile={isMobile} />
 						<br />
-						{/* Lifecycle selector */}
-						<FormControl style={{ minWidth: "200px" }}>
-							<InputLabel>Status</InputLabel>
-							<Select
-								id='status-select'
-								required
-								label='Type'
-								defaultValue={""}
-								value={taskData.task.status}
-								onChange={handleStatusChange}
-							>
-								<MenuItem value={"In Development"}>In Development</MenuItem>
-								<MenuItem value={"Testing"}>Testing</MenuItem>
-								<MenuItem value={"In Review"}>In Review</MenuItem>
-								<MenuItem value={"Ready to Merge"}>Ready to Merge</MenuItem>
-							</Select>
-						</FormControl>
+
+						<ButtonGroup variant='outlined' aria-label='outlined button group'>
+							{/* Lifecycle selector */}
+							<FormControl style={{ minWidth: "200px" }}>
+								<InputLabel>Status</InputLabel>
+								<Select
+									id='status-select'
+									required
+									label='Type'
+									defaultValue={""}
+									value={taskData.task.status}
+									onChange={handleStatusChange}
+								>
+									<MenuItem value={"In Development"}>In Development</MenuItem>
+									<MenuItem value={"Testing"}>Testing</MenuItem>
+									<MenuItem value={"In Review"}>In Review</MenuItem>
+									<MenuItem value={"Ready to Merge"}>Ready to Merge</MenuItem>
+									<MenuItem value={"Resolved"}>Resolved</MenuItem>
+								</Select>
+							</FormControl>
+						</ButtonGroup>
+
 						<br />
 						<h2>Subtasks</h2>
 						<StrictMode>

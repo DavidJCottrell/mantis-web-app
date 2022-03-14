@@ -7,6 +7,7 @@ import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Grid from "@mui/material/Grid";
 import Hidden from "@mui/material/Hidden";
+import Typography from "@mui/material/Typography";
 
 // Custom components
 import Nav from "../nav/Nav";
@@ -37,7 +38,10 @@ const Project = () => {
 	// Add task dialog logic
 	const [addTaskAnchor, setAddTaskAnchor] = useState(); //State
 	const handleAddTaskOpen = (event) => setAddTaskAnchor(event.currentTarget); //Handle open
-	const handleAddTaskClose = () => setAddTaskAnchor(null); //Handle close
+	const handleAddTaskClose = (callback) => {
+		setAddTaskAnchor(null);
+		callback();
+	}; //Handle close
 	const isAddTaskOpen = Boolean(addTaskAnchor); //Is open
 
 	// Manage team dialog logic
@@ -78,6 +82,16 @@ const Project = () => {
 		projectApis.getRole(projectId, localStorage.getItem("userId"))
 	);
 
+	let unresolvedTasks = [];
+	let resolvedTasks = [];
+
+	if (projectQuery.isSuccess) {
+		for (const task of projectQuery.data.project.tasks) {
+			if (task.resolution === "Un-Resolved") unresolvedTasks.push(task);
+			else resolvedTasks.push(task);
+		}
+	}
+
 	const fullyLoaded = projectQuery.isSuccess && invitationQuery.isSuccess && roleQuery.isSuccess;
 
 	const projectCallbacks = {
@@ -98,6 +112,7 @@ const Project = () => {
 						projectCallbacks={projectCallbacks}
 						projectId={projectId}
 					>
+						<Typography variant='h4'>{projectQuery.data.project.title}</Typography>
 						<Grid
 							container
 							justifyContent='center'
@@ -106,24 +121,43 @@ const Project = () => {
 								width: "100%",
 							}}
 						>
-							<React.Fragment>
+							<Grid item xs={12} md={8}>
 								<TaskTable
 									isMobile={isMobile}
-									projectData={projectQuery.data.project}
+									title={"Un-Resolved Tasks"}
+									tasks={unresolvedTasks}
 									role={roleQuery.data.role}
 									projectId={projectId}
 									removeTaskComplete={removeTaskComplete}
 								/>
+							</Grid>
 
-								<Hidden only={["xs", "sm"]}>
-									<Grid item md={1}></Grid>
-								</Hidden>
+							<Hidden only={["xs", "sm"]}>
+								<Grid item md={1}></Grid>
+							</Hidden>
 
-								<TeamMembersCard
-									projectQuery={projectQuery}
-									invitationQuery={invitationQuery}
+							<Hidden only={["xs", "sm"]}>
+								<Grid item xs={12} md={3}>
+									<TeamMembersCard
+										members={projectQuery.data.project.users}
+										invitations={invitationQuery.data.invitations}
+									/>
+								</Grid>
+							</Hidden>
+
+							<Grid item xs={12} md={8}>
+								<TaskTable
+									isMobile={isMobile}
+									title={"Resolved Tasks"}
+									tasks={resolvedTasks}
+									role={roleQuery.data.role}
+									projectId={projectId}
+									removeTaskComplete={removeTaskComplete}
 								/>
-							</React.Fragment>
+							</Grid>
+							<Hidden only={["xs", "sm"]}>
+								<Grid item xs={4}></Grid>
+							</Hidden>
 						</Grid>
 					</Nav>
 

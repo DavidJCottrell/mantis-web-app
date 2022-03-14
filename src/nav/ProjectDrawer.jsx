@@ -10,7 +10,7 @@ import Divider from "@mui/material/Divider";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
-import { DrawerHeader, AppBar, Drawer } from "./navStyles";
+import { DrawerHeader, Drawer } from "./navStyles";
 import UserOptions from "./DrawerUserOptions";
 
 const ProjectDrawer = ({
@@ -36,11 +36,7 @@ const ProjectDrawer = ({
 						{userType}
 					</Typography>
 					<IconButton onClick={handleDrawerClose}>
-						{theme.direction === "rtl" ? (
-							<ChevronRightIcon />
-						) : (
-							<ChevronLeftIcon />
-						)}
+						{theme.direction === "rtl" ? <ChevronRightIcon /> : <ChevronLeftIcon />}
 					</IconButton>
 				</DrawerHeader>
 				<Divider />

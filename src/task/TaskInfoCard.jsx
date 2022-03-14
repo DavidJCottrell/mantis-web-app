@@ -40,7 +40,9 @@ const TaskInfoCard = ({ task }) => {
 								<Typography variant='body2'>Status: {task.status}</Typography>
 							</li>
 							<li>
-								<Typography variant='body2'>Status: {task.resolution}</Typography>
+								<Typography variant='body2'>
+									Resolution: {task.resolution}
+								</Typography>
 							</li>
 						</ul>
 					</Grid>

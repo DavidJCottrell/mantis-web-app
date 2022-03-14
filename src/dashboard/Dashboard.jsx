@@ -22,7 +22,10 @@ import toast, { Toaster } from "react-hot-toast";
 const Dashboard = () => {
 	const queryClient = useQueryClient();
 
-	const projectQuery = useQuery("fetchProjects", userApis.getProjectsData);
+	const { data: projectData, isSuccess: gotProjects } = useQuery(
+		"fetchProjects",
+		userApis.getProjectsData
+	);
 
 	const projectMutation = useMutation(projectApis.addProject, {
 		onSuccess: () => {
@@ -55,9 +58,9 @@ const Dashboard = () => {
 				<Typography variant='h5'>Your Projects</Typography>
 				<br />
 
-				{projectQuery.isSuccess ? (
+				{gotProjects ? (
 					<Grid container spacing={3} id='project-grid'>
-						{projectQuery.data?.map(({ project, role }, i) => (
+						{projectData.map(({ project, role }, i) => (
 							<ProjectCard
 								project={project}
 								role={role}
@@ -74,9 +77,7 @@ const Dashboard = () => {
 					<h2>Loading projects...</h2>
 				)}
 
-				{projectMutation.isLoading ? <h2>Loading new project...</h2> : null}
-
-				{projectQuery.isSuccess && projectQuery.data.length === 0 ? (
+				{gotProjects && projectData.length === 0 ? (
 					<h2>You currently have no projects</h2>
 				) : null}
 

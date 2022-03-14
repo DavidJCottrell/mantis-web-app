@@ -6,36 +6,62 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Hidden from "@mui/material/Hidden";
 
-const TeamMembersCard = ({ projectQuery, invitationQuery }) => {
+const TeamMembersCard = ({ members, invitations }) => {
+	let teamLeaders = [];
+	let developers = [];
+	let clients = [];
+
+	for (const user of members) {
+		if (user.role === "Team Leader") teamLeaders.push(user);
+		else if (user.role === "Developer") developers.push(user);
+		else clients.push(user);
+	}
+
 	return (
-		<Hidden only={["xs", "sm"]}>
-			<Grid item xs={12} md={3}>
-				<br />
-				<Card>
-					<CardContent>
-						<Typography variant='h5' component='h2' gutterBottom>
-							Team Members
+		<Card>
+			<CardContent>
+				<Typography variant='h5' component='h2' gutterBottom>
+					Team Members
+				</Typography>
+				<Typography variant='subtitle1' component='h2'>
+					Team Leaders
+				</Typography>
+				<ul>
+					{teamLeaders.map((leader, i) => (
+						<li key={i}>{leader.name + " (" + leader.username + ")"}</li>
+					))}
+				</ul>
+
+				<Typography variant='subtitle1' component='h2'>
+					Developers
+				</Typography>
+				<ul>
+					{developers.map((developer, i) => (
+						<li key={i}>{developer.name + " (" + developer.username + ")"}</li>
+					))}
+				</ul>
+
+				{clients.length > 0 ? (
+					<React.Fragment>
+						<Typography variant='subtitle1' component='h2'>
+							Clients
 						</Typography>
+						<ul>
+							{clients.map((client, i) => (
+								<li key={i}>{client.name + " (" + client.username + ")"}</li>
+							))}
+						</ul>
+					</React.Fragment>
+				) : null}
 
-						{projectQuery.data.project.users?.map((user, i) => (
-							<React.Fragment key={i}>
-								<Typography variant='subtitle1' component='h2'>
-									{user.role + "s"}
-								</Typography>
-								<ul>
-									<li key={i}>
-										{user.name + " (" + user.username + ")"}
-									</li>
-								</ul>
-							</React.Fragment>
-						))}
-
+				{invitations.length > 0 ? (
+					<React.Fragment>
 						<Typography variant='subtitle1' component='h2'>
 							Invited
 						</Typography>
 
 						<ul>
-							{invitationQuery.data.invitations?.map((invitation, i) => (
+							{invitations.map((invitation, i) => (
 								<li key={i}>
 									{invitation.invitee.name +
 										" (" +
@@ -45,10 +71,10 @@ const TeamMembersCard = ({ projectQuery, invitationQuery }) => {
 								</li>
 							))}
 						</ul>
-					</CardContent>
-				</Card>
-			</Grid>
-		</Hidden>
+					</React.Fragment>
+				) : null}
+			</CardContent>
+		</Card>
 	);
 };
 

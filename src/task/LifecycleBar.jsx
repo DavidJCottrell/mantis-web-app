@@ -22,6 +22,7 @@ import CodeIcon from "@mui/icons-material/Code";
 import BugReportIcon from "@mui/icons-material/BugReport";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import MergeIcon from "@mui/icons-material/Merge";
+import DoneIcon from "@mui/icons-material/Done";
 
 import * as styles from "./taskStyles";
 
@@ -59,6 +60,13 @@ const LifecycleBar = ({ status, isMobile }) => {
 						<MergeIcon />
 						<br />
 						{!isMobile ? "Ready to Merge" : null}
+					</div>
+				</ListItem>
+				<ListItem disablePadding style={styles.listItemStyle}>
+					<div style={status !== "Resolved" ? styles.inactiveStyle : null}>
+						<DoneIcon />
+						<br />
+						{!isMobile ? "Resolved" : null}
 					</div>
 				</ListItem>
 			</List>

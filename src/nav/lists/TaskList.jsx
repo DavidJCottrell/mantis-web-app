@@ -30,7 +30,7 @@ const TaskList = ({ open, anchorElement, handleClose, data, title }) => {
 					<Typography variant='subtitle1'>{title}</Typography>
 					<Divider />
 				</Box>
-				{data
+				{data.length > 0
 					? data.map(({ task, parentProjectTitle, parentProjectId }, i) => {
 							return (
 								<MenuItem
@@ -74,9 +74,7 @@ const TaskList = ({ open, anchorElement, handleClose, data, title }) => {
 													color='textSecondary'
 												>
 													{"Due: " +
-														(task.dateDue
-															? task.dateDue
-															: "TBC")}
+														(task.dateDue ? task.dateDue : "TBC")}
 												</Typography>
 											</CardContent>
 										</Card>

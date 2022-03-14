@@ -12,49 +12,46 @@ import Grid from "@mui/material/Grid";
 
 import TaskTableRow from "./TaskTableRow";
 
-const TaskTable = ({
-	projectData,
-	isMobile,
-	role,
-	projectId,
-	removeTaskComplete,
-}) => {
+const TaskTable = ({ isMobile, role, projectId, removeTaskComplete, title, tasks }) => {
 	return (
-		<Grid item xs={12} md={8}>
-			<Typography variant='h4'>{projectData.title}</Typography>
+		<React.Fragment>
 			<br />
-			<TableContainer component={Paper}>
-				<Table aria-label='collapsible table'>
-					<TableHead>
-						<TableRow>
-							<TableCell>Key</TableCell>
-							<TableCell align='left'>Title</TableCell>
-							{isMobile ? (
-								<React.Fragment>
-									<TableCell align='left'>Status</TableCell>
-									<TableCell align='left'>
-										Resolution
-									</TableCell>
-								</React.Fragment>
-							) : null}
-							<TableCell />
-						</TableRow>
-					</TableHead>
-					<TableBody>
-						{projectData.tasks.map((task) => (
-							<TaskTableRow
-								key={task.taskKey}
-								task={task}
-								role={role}
-								isMobile={isMobile}
-								projectId={projectId}
-								removeTaskComplete={removeTaskComplete}
-							/>
-						))}
-					</TableBody>
-				</Table>
-			</TableContainer>
-		</Grid>
+			<Typography variant='h5'>{title}</Typography>
+			<br />
+			{tasks.length > 0 ? (
+				<TableContainer component={Paper}>
+					<Table aria-label='collapsible table'>
+						<TableHead>
+							<TableRow>
+								<TableCell>Key</TableCell>
+								<TableCell align='left'>Title</TableCell>
+								{isMobile ? (
+									<React.Fragment>
+										<TableCell align='left'>Status</TableCell>
+										<TableCell align='left'>Resolution</TableCell>
+									</React.Fragment>
+								) : null}
+								<TableCell />
+							</TableRow>
+						</TableHead>
+						<TableBody>
+							{tasks.map((task) => (
+								<TaskTableRow
+									key={task.taskKey}
+									task={task}
+									role={role}
+									isMobile={isMobile}
+									projectId={projectId}
+									removeTaskComplete={removeTaskComplete}
+								/>
+							))}
+						</TableBody>
+					</Table>
+				</TableContainer>
+			) : (
+				<Typography variant='h6'>No Tasks</Typography>
+			)}
+		</React.Fragment>
 	);
 };
 
