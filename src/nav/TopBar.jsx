@@ -15,6 +15,7 @@ import AssignmentIcon from "@mui/icons-material/Assignment";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 
 import TaskList from "./lists/TaskList";
+import TaskCommentsList from "./lists/TaskCommentsList";
 import InvitationList from "./lists/InvitationList";
 import ProfileMenu from "./ProfileMenu";
 import { AppBar } from "./navStyles";
@@ -41,11 +42,10 @@ const TopBar = ({
 	const isInvitationMenuOpen = Boolean(invitationAnchor); //Is open
 
 	// Comment List Logic
-	const [taggedCommentsAnchor, setTaggedCommentsAnchor] = useState(); //State
-	const handleTaggedCommentsListOpen = (event) =>
-		setTaggedCommentsAnchor(event.currentTarget); //Handle open
-	const handleTaggedCommentsListClose = () => setTaggedCommentsAnchor(null); //Handle close
-	const isTaggedCommentsListOpen = Boolean(taggedCommentsAnchor); //Is open
+	const [commentsAnchor, setCommentsAnchor] = useState(); //State
+	const handleCommentsListOpen = (event) => setCommentsAnchor(event.currentTarget); //Handle open
+	const handleCommentsListClose = () => setCommentsAnchor(null); //Handle close
+	const isCommentsListOpen = Boolean(commentsAnchor); //Is open
 
 	// Profile Menu Logic
 	const [profileAnchor, setProfileAnchor] = useState(); //State
@@ -75,9 +75,7 @@ const TopBar = ({
 						<IconButton color='inherit' onClick={handleInvitationListOpen}>
 							<Badge
 								badgeContent={
-									invitationQuery.isSuccess
-										? invitationQuery.data.length
-										: null
+									invitationQuery.isSuccess ? invitationQuery.data.length : null
 								}
 								color='secondary'
 							>
@@ -86,10 +84,7 @@ const TopBar = ({
 						</IconButton>
 					</Tooltip>
 					<Tooltip title='Tagged comments'>
-						<IconButton
-							color='inherit'
-							onClick={handleTaggedCommentsListOpen}
-						>
+						<IconButton color='inherit' onClick={handleCommentsListOpen}>
 							<Badge badgeContent={0} color='secondary'>
 								<MailIcon />
 							</Badge>
@@ -98,9 +93,7 @@ const TopBar = ({
 					<Tooltip title='Your tasks'>
 						<IconButton color='inherit' onClick={hanleTaskListOpen}>
 							<Badge
-								badgeContent={
-									taskQuery.data ? taskQuery.data.length : null
-								}
+								badgeContent={taskQuery.data ? taskQuery.data.length : null}
 								color='secondary'
 							>
 								<AssignmentIcon />
@@ -115,15 +108,24 @@ const TopBar = ({
 				</Toolbar>
 			</AppBar>
 			{/* ** Message list here ** */}
+
 			{taskQuery.isSuccess ? (
-				<TaskList
-					title={"Your tasks:"}
-					type={"tasks"}
-					open={isTaskMenuOpen}
-					anchorElement={tasksAnchor}
-					handleClose={handleTaskListClose}
-					data={taskQuery.data}
-				/>
+				<React.Fragment>
+					<TaskCommentsList
+						title={"Task comments:"}
+						open={isCommentsListOpen}
+						anchorElement={commentsAnchor}
+						handleClose={handleCommentsListClose}
+						data={taskQuery.data}
+					/>
+					<TaskList
+						title={"Your tasks:"}
+						open={isTaskMenuOpen}
+						anchorElement={tasksAnchor}
+						handleClose={handleTaskListClose}
+						data={taskQuery.data}
+					/>
+				</React.Fragment>
 			) : null}
 			{invitationQuery.isSuccess ? (
 				<InvitationList

@@ -35,7 +35,6 @@ const Nav = ({ userType, showDrawer, children, projectCallbacks, projectId }) =>
 				handleDrawerOpen={handleDrawerOpen}
 				classes={classes}
 				invitationQuery={invitationQuery}
-				// taggedComments={taggedComments}
 				taskQuery={taskQuery}
 			/>
 			{/* Drawer and content for project */}

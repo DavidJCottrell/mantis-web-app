@@ -31,3 +31,9 @@ export const getRole = (projectId, userId) =>
 		.get(`/project/getrole/${projectId}/${userId}`)
 		.then((res) => res.data)
 		.catch((e) => e.response);
+
+export const updateUserRole = (projectId, userId, role) =>
+	api
+		.patch(`/project/updateuserrole/${projectId}/${userId}`, role)
+		.then((res) => res.data)
+		.catch((e) => e.response);

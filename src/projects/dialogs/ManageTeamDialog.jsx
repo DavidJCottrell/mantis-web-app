@@ -22,6 +22,8 @@ import Tooltip from "@mui/material/Tooltip";
 import * as invitationApis from "../../apis/invitation";
 import * as projectApis from "../../apis/project";
 
+import toast, { Toaster } from "react-hot-toast";
+
 const ManageTeamDialog = ({
 	open,
 	handleClose,
@@ -30,11 +32,21 @@ const ManageTeamDialog = ({
 	invitations,
 	removeUserComplete,
 	removeInvitationComplete,
+	role,
 }) => {
 	const queryClient = useQueryClient();
 
 	const userMutation = useMutation(
 		({ projectId, userId }) => projectApis.removeUser(projectId, userId),
+		{
+			onSuccess: () => {
+				queryClient.invalidateQueries("fetchProjectData");
+			},
+		}
+	);
+
+	const userRoleMutation = useMutation(
+		({ projectId, userId, role }) => projectApis.updateUserRole(projectId, userId, role),
 		{
 			onSuccess: () => {
 				queryClient.invalidateQueries("fetchProjectData");
@@ -61,8 +73,32 @@ const ManageTeamDialog = ({
 		}
 	};
 
-	const handleEditRole = (e) => {
-		console.log("Edit Role");
+	const getNewRole = (currentRole) => {
+		const newRole = prompt("Enter new role: (Team Leader, Developer or Client)", currentRole);
+		if (newRole !== null) {
+			let splitStr = newRole.toLowerCase().split(" ");
+			for (let i = 0; i < splitStr.length; i++)
+				splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);
+			return splitStr.join(" ");
+		}
+		return "";
+	};
+
+	const handleEditRole = (index) => {
+		const availableRoles = ["Team Leader", "Developer", "Client"];
+
+		const newRole = getNewRole(users[index].role);
+
+		if (availableRoles.includes(newRole)) {
+			userRoleMutation.mutate({
+				projectId: projectId,
+				userId: users[index].userId,
+				role: { role: newRole },
+			});
+			toast.success("User role updated");
+		} else {
+			toast.error("Please enter a valid role.");
+		}
 	};
 
 	const removeInvitation = (index) => {
@@ -74,12 +110,8 @@ const ManageTeamDialog = ({
 
 	return (
 		<React.Fragment>
-			<Dialog
-				open={open}
-				onClose={handleClose}
-				aria-labelledby='form-dialog-title'
-				fullWidth
-			>
+			<Toaster />
+			<Dialog open={open} onClose={handleClose} aria-labelledby='form-dialog-title' fullWidth>
 				<DialogContent>
 					{/* Add user field */}
 					<Typography sx={{ mt: 1, mb: 1 }} variant='h6' component='div'>
@@ -88,58 +120,49 @@ const ManageTeamDialog = ({
 
 					<Box sx={{ flexGrow: 1, maxWidth: 800 }}>
 						<Grid container>
-							<Grid
-								item
-								xs={12}
-								md={12}
-								// style={{ backgroundColor: "green" }}
-							>
+							<Grid item xs={12} md={12}>
 								<List>
 									{users.map((user, i) => (
 										<ListItem
 											key={i}
 											secondaryAction={
-												<React.Fragment>
-													<Tooltip title='Remove user'>
-														<IconButton
-															edge='end'
-															aria-label='delete'
-															style={{
-																marginRight: "1px",
-															}}
-															onClick={() => {
-																removeUser(i);
-															}}
-														>
-															<RemoveCircleIcon />
-														</IconButton>
-													</Tooltip>
-													<Tooltip title='Edit role'>
-														<IconButton
-															edge='end'
-															aria-label='delete'
-															onClick={handleEditRole}
-														>
-															<EditIcon />
-														</IconButton>
-													</Tooltip>
-												</React.Fragment>
+												role === "Team Leader" ? (
+													<React.Fragment>
+														<Tooltip title='Remove user'>
+															<IconButton
+																edge='end'
+																aria-label='delete'
+																style={{
+																	marginRight: "1px",
+																}}
+																onClick={() => {
+																	removeUser(i);
+																}}
+															>
+																<RemoveCircleIcon />
+															</IconButton>
+														</Tooltip>
+														<Tooltip title='Edit role'>
+															<IconButton
+																edge='end'
+																aria-label='delete'
+																onClick={() => handleEditRole(i)}
+															>
+																<EditIcon />
+															</IconButton>
+														</Tooltip>
+													</React.Fragment>
+												) : null
 											}
 										>
 											<ListItemText
-												primary={
-													user.name + " (" + user.role + ")"
-												}
+												primary={user.name + " (" + user.role + ")"}
 											/>
 										</ListItem>
 									))}
 								</List>
 								<Divider />
-								<Typography
-									sx={{ mt: 4, mb: 2 }}
-									variant='h6'
-									component='div'
-								>
+								<Typography sx={{ mt: 4, mb: 2 }} variant='h6' component='div'>
 									Invited Users
 								</Typography>
 								{invitations.map((invitation, i) => (

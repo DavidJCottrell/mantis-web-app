@@ -29,7 +29,9 @@ const notificationListStyles = makeStyles(() => ({
 		display: "flex",
 	},
 	card: {
-		width: 200,
+		inlineSize: 220,
+		minWidth: 220,
+		overflowWrap: "break-word",
 		maxHeight: 200,
 		"&:hover": {
 			backgroundColor: "rgba(0, 0, 0, 0.04)",
@@ -129,11 +131,4 @@ const Drawer = styled(MuiDrawer, {
 	}),
 }));
 
-export {
-	NavStyles,
-	notificationListStyles,
-	invitationListStyles,
-	DrawerHeader,
-	AppBar,
-	Drawer,
-};
+export { NavStyles, notificationListStyles, invitationListStyles, DrawerHeader, AppBar, Drawer };

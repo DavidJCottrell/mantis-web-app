@@ -185,6 +185,7 @@ const Project = () => {
 							invitations={invitationQuery.data.invitations}
 							removeUserComplete={removeUserComplete}
 							removeInvitationComplete={removeInvitationComplete}
+							role={roleQuery.data.role}
 						/>
 						<SettingsDialog
 							open={isSettingsOpen}
