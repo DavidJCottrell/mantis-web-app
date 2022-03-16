@@ -38,10 +38,7 @@ const Project = () => {
 	// Add task dialog logic
 	const [addTaskAnchor, setAddTaskAnchor] = useState(); //State
 	const handleAddTaskOpen = (event) => setAddTaskAnchor(event.currentTarget); //Handle open
-	const handleAddTaskClose = (callback) => {
-		setAddTaskAnchor(null);
-		callback();
-	}; //Handle close
+	const handleAddTaskClose = () => setAddTaskAnchor(null); //Handle close
 	const isAddTaskOpen = Boolean(addTaskAnchor); //Is open
 
 	// Manage team dialog logic

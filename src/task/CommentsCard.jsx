@@ -103,24 +103,26 @@ const CommentsCard = ({ comments, projectId, taskId }) => {
 									</Typography>
 									<Typography variant='body2'>{comment.content}</Typography>
 								</CardContent>
-								<CardActions>
-									<Button
-										color='secondary'
-										onClick={() => {
-											handleEdit(i);
-										}}
-									>
-										Edit
-									</Button>
-									<Button
-										color='warning'
-										onClick={() => {
-											handleRemove(i);
-										}}
-									>
-										Remove
-									</Button>
-								</CardActions>
+								{comment.authorId === localStorage.getItem("userId") ? (
+									<CardActions>
+										<Button
+											color='secondary'
+											onClick={() => {
+												handleEdit(i);
+											}}
+										>
+											Edit
+										</Button>
+										<Button
+											color='warning'
+											onClick={() => {
+												handleRemove(i);
+											}}
+										>
+											Remove
+										</Button>
+									</CardActions>
+								) : null}
 							</Card>
 						</React.Fragment>
 					))}

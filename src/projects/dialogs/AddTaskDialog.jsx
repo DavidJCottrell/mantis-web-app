@@ -121,7 +121,8 @@ const AddTaskDialog = ({
 		<Dialog
 			open={open}
 			onClose={() => {
-				handleClose(() => clearState());
+				handleClose();
+				clearState();
 			}}
 			aria-labelledby='form-dialog-title'
 			fullWidth
@@ -257,13 +258,20 @@ const AddTaskDialog = ({
 				<DialogActions>
 					<Button
 						onClick={() => {
-							handleClose(() => () => clearState());
+							handleClose();
+							clearState();
 						}}
 						color='inherit'
 					>
 						Cancel
 					</Button>
-					<Button type='submit' color='inherit'>
+					<Button
+						type='submit'
+						color='inherit'
+						onClick={() => {
+							clearState();
+						}}
+					>
 						Create
 					</Button>
 				</DialogActions>

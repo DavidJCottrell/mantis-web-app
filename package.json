@@ -32,6 +32,9 @@
 		"report": "node bundle-report.js"
 	},
 	"devDependencies": {
+		"@testing-library/react": "^12.1.4",
+		"jest-dom": "^4.0.0",
+		"react-test-render": "^1.1.2",
 		"webpack-bundle-analyzer": "^4.5.0"
 	},
 	"browserslist": {

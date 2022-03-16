@@ -49,45 +49,47 @@ const Dashboard = () => {
 
 	return (
 		<React.Fragment>
-			<Toaster />
-			<Nav />
-			<Container>
-				<Typography variant='h4'>{localStorage.getItem("fullName")}</Typography>
+			{gotProjects ? (
+				<React.Fragment>
+					<Toaster />
+					<Nav />
+					<Container>
+						<Typography variant='h4'>{localStorage.getItem("fullName")}</Typography>
 
-				<br />
-				<Typography variant='h5'>Your Projects</Typography>
-				<br />
+						<br />
+						<Typography variant='h5'>Your Projects</Typography>
+						<br />
 
-				{gotProjects ? (
-					<Grid container spacing={3} id='project-grid'>
-						{projectData.map(({ project, role }, i) => (
-							<ProjectCard
-								project={project}
-								role={role}
-								key={i}
+						<Grid container spacing={3} id='project-grid'>
+							{projectData.map(({ project, role }, i) => (
+								<ProjectCard
+									project={project}
+									role={role}
+									key={i}
+									cardStyle={cardStyle}
+								/>
+							))}
+							<AddProjectCard
 								cardStyle={cardStyle}
+								handleAddProjectOpen={handleAddProjectOpen}
 							/>
-						))}
-						<AddProjectCard
-							cardStyle={cardStyle}
-							handleAddProjectOpen={handleAddProjectOpen}
-						/>
-					</Grid>
-				) : (
-					<h2>Loading projects...</h2>
-				)}
+						</Grid>
 
-				{gotProjects && projectData.length === 0 ? (
-					<h2>You currently have no projects</h2>
-				) : null}
+						{gotProjects && projectData.length === 0 ? (
+							<h2>You currently have no projects</h2>
+						) : null}
 
-				<br />
-			</Container>
-			<AddProjectDialog
-				open={addProjectOpen}
-				handleClose={handleAddProjectClose}
-				handleAddProject={handleAddProject}
-			/>
+						<br />
+					</Container>
+					<AddProjectDialog
+						open={addProjectOpen}
+						handleClose={handleAddProjectClose}
+						handleAddProject={handleAddProject}
+					/>
+				</React.Fragment>
+			) : (
+				<h2>Loading projects...</h2>
+			)}
 		</React.Fragment>
 	);
 };
