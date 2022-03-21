@@ -1,4 +1,3 @@
-// System
 import React from "react";
 
 // MUI

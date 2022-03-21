@@ -8,13 +8,16 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
-import Grid from "@mui/material/Grid";
 
 import TaskTableRow from "./TaskTableRow";
+import toast, { Toaster } from "react-hot-toast";
 
-const TaskTable = ({ isMobile, role, projectId, removeTaskComplete, title, tasks }) => {
+const TaskTable = ({ isMobile, role, projectId, title, tasks }) => {
+	const toastTaskAdded = () => toast.success("Task removed successfully");
+
 	return (
 		<React.Fragment>
+			<Toaster />
 			<br />
 			<Typography variant='h5'>{title}</Typography>
 			<br />
@@ -42,7 +45,7 @@ const TaskTable = ({ isMobile, role, projectId, removeTaskComplete, title, tasks
 									role={role}
 									isMobile={isMobile}
 									projectId={projectId}
-									removeTaskComplete={removeTaskComplete}
+									toastTaskAdded={toastTaskAdded}
 								/>
 							))}
 						</TableBody>

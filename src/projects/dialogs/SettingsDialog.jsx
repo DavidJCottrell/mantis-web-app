@@ -30,7 +30,7 @@ const SettingsDialog = ({ open, handleClose, projectId }) => {
 
 	return (
 		<React.Fragment>
-			<Dialog open={open} onClose={handleClose} aria-labelledby='form-dialog-title' fullWidth>
+			<Dialog open={open} onClose={handleClose} fullWidth>
 				<form autoComplete='off'>
 					<DialogContent>
 						<Typography sx={{ mt: 1, mb: 1 }} variant='h6' component='div'>

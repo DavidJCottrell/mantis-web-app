@@ -24,16 +24,7 @@ import * as projectApis from "../../apis/project";
 
 import toast, { Toaster } from "react-hot-toast";
 
-const ManageTeamDialog = ({
-	open,
-	handleClose,
-	projectId,
-	users,
-	invitations,
-	removeUserComplete,
-	removeInvitationComplete,
-	role,
-}) => {
+const ManageTeamDialog = ({ open, handleClose, projectId, users, invitations, role }) => {
 	const queryClient = useQueryClient();
 
 	const userMutation = useMutation(
@@ -41,6 +32,7 @@ const ManageTeamDialog = ({
 		{
 			onSuccess: () => {
 				queryClient.invalidateQueries("fetchProjectData");
+				toast.success("User removed successfully");
 			},
 		}
 	);
@@ -50,6 +42,7 @@ const ManageTeamDialog = ({
 		{
 			onSuccess: () => {
 				queryClient.invalidateQueries("fetchProjectData");
+				toast.success("User role updated");
 			},
 		}
 	);
@@ -69,7 +62,6 @@ const ManageTeamDialog = ({
 				projectId: projectId,
 				userId: users[index].userId,
 			});
-			removeUserComplete();
 		}
 	};
 
@@ -95,7 +87,6 @@ const ManageTeamDialog = ({
 				userId: users[index].userId,
 				role: { role: newRole },
 			});
-			toast.success("User role updated");
 		} else {
 			toast.error("Please enter a valid role.");
 		}
@@ -104,14 +95,14 @@ const ManageTeamDialog = ({
 	const removeInvitation = (index) => {
 		if (window.confirm("Are you sure you want to remove this invitation?")) {
 			invitationMutation.mutate(invitations[index]._id);
-			removeInvitationComplete();
+			toast.success("Invitation removed successfully");
 		}
 	};
 
 	return (
 		<React.Fragment>
 			<Toaster />
-			<Dialog open={open} onClose={handleClose} aria-labelledby='form-dialog-title' fullWidth>
+			<Dialog open={open} onClose={handleClose} fullWidth>
 				<DialogContent>
 					{/* Add user field */}
 					<Typography sx={{ mt: 1, mb: 1 }} variant='h6' component='div'>

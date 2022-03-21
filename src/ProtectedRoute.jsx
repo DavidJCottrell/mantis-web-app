@@ -1,6 +1,6 @@
 import React from "react";
 import { Navigate, Outlet } from "react-router-dom";
-import auth from "./utils/auth";
+import auth from "./auth";
 
 const ProtectedRoute = () => {
 	// If authorized, return an outlet that will render child elements

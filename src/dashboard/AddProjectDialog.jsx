@@ -13,7 +13,7 @@ import Button from "@mui/material/Button";
 const AddProjectDialog = ({ open, handleClose, handleAddProject }) => {
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		const form = document.getElementById("addProject-form");
+		const form = document.getElementById("add-project-form");
 		const data = {
 			title: form.projectTitle.value,
 			users: [],
@@ -25,14 +25,9 @@ const AddProjectDialog = ({ open, handleClose, handleAddProject }) => {
 		handleClose();
 	};
 	return (
-		<Dialog
-			open={open}
-			onClose={handleClose}
-			aria-labelledby='form-dialog-title'
-			fullWidth
-		>
-			<DialogTitle id='form-dialog-title'>Create project</DialogTitle>
-			<form onSubmit={handleSubmit} autoComplete='off' id='addProject-form'>
+		<Dialog open={open} onClose={handleClose} fullWidth>
+			<DialogTitle>Create project</DialogTitle>
+			<form onSubmit={handleSubmit} autoComplete='off' id='add-project-form'>
 				<DialogContent>
 					<Typography variant='subtitle1'>Project details</Typography>
 					<Divider />

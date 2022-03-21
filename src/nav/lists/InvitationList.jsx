@@ -32,42 +32,30 @@ const InvitationList = ({ open, anchorElement, handleClose, invitationData }) =>
 		}
 	);
 
-	const acceptInvitationMutation = useMutation(
-		(data) => invitationApis.acceptInvitation(data),
-		{
-			onSuccess: () => {
-				queryClient.invalidateQueries("fetchProjects");
-			},
-		}
-	);
+	const acceptInvitationMutation = useMutation((data) => invitationApis.acceptInvitation(data), {
+		onSuccess: () => {
+			deleteInvitationMutation.mutate(invitationData[index]._id);
+			queryClient.invalidateQueries("fetchProjects");
+		},
+	});
 
 	const handleAcceptClick = (e) => {
 		const index = e.target.dataset.index;
-
 		acceptInvitationMutation.mutate({
 			projectId: invitationData[index].project.projectId,
 			userId: invitationData[index].invitee.userId,
 			role: invitationData[index].role,
 		});
-
-		deleteInvitationMutation.mutate(invitationData[index]._id);
 	};
 
 	const handleDeclineClick = (e) => {
 		const index = e.target.dataset.index;
-
 		if (window.confirm("Are you sure you want to decline?"))
 			deleteInvitationMutation.mutate(invitationData[index]._id);
 	};
 
 	return (
-		<Menu
-			id='simple-menu'
-			anchorEl={anchorElement}
-			keepMounted
-			open={open}
-			onClose={handleClose}
-		>
+		<Menu anchorEl={anchorElement} open={open} onClose={handleClose} keepMounted>
 			<Container>
 				<Box component='div' whiteSpace='normal'>
 					<Typography variant='subtitle1'>Your Invitations</Typography>
@@ -75,12 +63,7 @@ const InvitationList = ({ open, anchorElement, handleClose, invitationData }) =>
 				</Box>
 				{invitationData?.map((invitation, i) => {
 					return (
-						<MenuItem
-							key={i}
-							style={{
-								backgroundColor: "transparent",
-							}}
-						>
+						<MenuItem key={i} style={{ backgroundColor: "transparent" }}>
 							<Card className={classes.card} variant='outlined'>
 								<CardContent>
 									<Typography
@@ -106,11 +89,7 @@ const InvitationList = ({ open, anchorElement, handleClose, invitationData }) =>
 									</Typography>
 								</CardContent>
 								<CardActions>
-									<Button
-										size='small'
-										onClick={handleAcceptClick}
-										data-index={i}
-									>
+									<Button size='small' onClick={handleAcceptClick} data-index={i}>
 										Accept
 									</Button>
 									<Button

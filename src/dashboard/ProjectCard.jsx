@@ -11,14 +11,15 @@ import Box from "@mui/material/Box";
 import LinearProgress from "@mui/material/LinearProgress";
 
 const ProjectCard = ({ project, role, cardStyle }) => {
+	// Split tasks into resolved and un-resolved
 	let unresolvedTasks = [];
 	let resolvedTasks = [];
-
 	for (const task of project.tasks) {
 		if (task.resolution === "Un-Resolved") unresolvedTasks.push(task);
 		else resolvedTasks.push(task);
 	}
 
+	// Calculate the percentage towards completion
 	let percentageComplete = Math.round((resolvedTasks.length / project.tasks.length) * 100);
 	if (Number.isNaN(percentageComplete)) percentageComplete = 0;
 
@@ -64,12 +65,8 @@ const ProjectCard = ({ project, role, cardStyle }) => {
 				<CardActions>
 					<Link
 						to={"/project"}
-						state={{
-							projectId: project._id,
-						}}
-						style={{
-							textDecoration: "none",
-						}}
+						state={{ projectId: project._id }}
+						style={{ textDecoration: "none" }}
 					>
 						<Button size='small'>
 							Open&nbsp;

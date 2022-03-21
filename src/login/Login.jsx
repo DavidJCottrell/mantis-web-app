@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
 
 // Material-UI
 import Avatar from "@mui/material/Avatar";
@@ -18,17 +17,28 @@ import { loginStyles } from "./loginStyles";
 
 import SignUpDialog from "./SignUpDialog";
 import logo from "../images/mantis.jpg";
-import auth from "../utils/auth";
+import auth from "../auth";
 import * as userApis from "../apis/user";
+
+import toast, { Toaster } from "react-hot-toast";
 
 const Login = () => {
 	const classes = loginStyles();
 
+	const [signUpOpen, setSignUpOpen] = useState(false);
+	const handleSignUpOpen = () => setSignUpOpen(true);
+	const handleSignUpClose = () => setSignUpOpen(false);
+
 	const login = (email, password) => {
-		userApis.login({ email, password }).then((userData) => {
-			auth.login(userData); // Front-end login, store auth-token, and user details
-			window.location.href = "/";
-		});
+		userApis
+			.login({ email, password })
+			.then((userData) => {
+				auth.login(userData.data); // Front-end login, store auth-token, and user details
+				window.location.href = "/";
+			})
+			.catch((e) => {
+				toast.error(e.response.data);
+			});
 	};
 
 	const signUp = (signUpData) => {
@@ -40,33 +50,22 @@ const Login = () => {
 				email: signUpData.email,
 				password: signUpData.password,
 			};
-			userApis
-				.signUp(data)
-				.then(() => login(signUpData.email, signUpData.password));
+			userApis.signUp(data).then(() => login(signUpData.email, signUpData.password));
 		} else {
 			toast.error("Passwords do not match, please try again.");
 		}
 	};
-
-	const [signUpOpen, setSignUpOpen] = useState(false);
-	const handleSignUpOpen = () => setSignUpOpen(true);
-	const handleSignUpClose = () => setSignUpOpen(false);
 
 	return (
 		<React.Fragment>
 			<Toaster />
 			<Grid container component='main' className={classes.root}>
 				<CssBaseline />
-				{/* component={Paper} */}
 				<Grid item xs={false} md={7}>
 					<Hidden only={["xs", "sm"]}>
 						<div className={classes.center}>
 							<div>
-								<Avatar
-									alt='Logo'
-									src={logo}
-									sx={{ width: 200, height: 200 }}
-								/>
+								<Avatar src={logo} sx={{ width: 200, height: 200 }} />
 							</div>
 						</div>
 					</Hidden>
@@ -102,21 +101,17 @@ const Login = () => {
 								color='secondary'
 							/>
 							<Button
-								// type='submit'
 								fullWidth
 								variant='contained'
 								color='secondary'
 								className={classes.submit}
 								onClick={() => {
 									const form = document.getElementById("login-form");
-									const email = form.email.value;
-									const password = form.password.value;
-									login(email, password);
+									login(form.email.value, form.password.value);
 								}}
 							>
 								Sign In
 							</Button>
-							{/* </RouterLink> */}
 							<Grid container>
 								<Grid item xs>
 									<Link href='#' variant='body2' color='inherit'>

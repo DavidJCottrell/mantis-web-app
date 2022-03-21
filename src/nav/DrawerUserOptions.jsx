@@ -14,15 +14,11 @@ import AssessmentIcon from "@mui/icons-material/Assessment";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { useTheme } from "@mui/material/styles";
 
-const UserOptions = ({
-	userType,
-	handleAddUserOpen,
-	handleAddTaskOpen,
-	handleManageTeamOpen,
-	handleSettingsOpen,
-	projectId,
-}) => {
+const UserOptions = ({ userType, dialogCallbacks, projectId }) => {
 	const theme = useTheme();
+
+	const { handleAddUserOpen, handleAddTaskOpen, handleManageTeamOpen, handleSettingsOpen } =
+		dialogCallbacks;
 
 	return (
 		<React.Fragment>

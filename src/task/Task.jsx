@@ -26,8 +26,6 @@ import Subtasks from "./subtasks/Subtasks";
 import * as projectApis from "../apis/project";
 import * as taskApis from "../apis/task";
 
-// let previousTaskId = "";
-
 const Task = () => {
 	const mobileViewSize = 760;
 	const location = useLocation();
@@ -45,6 +43,7 @@ const Task = () => {
 	})();
 
 	const [isMobile, _setIsMobile] = useState(window.innerWidth <= mobileViewSize ? true : false);
+
 	// (Event listener requires ref to set state)
 	const isMobileRef = React.useRef(isMobile);
 	const setIsMobile = (data) => {
@@ -52,17 +51,9 @@ const Task = () => {
 		_setIsMobile(data);
 	};
 
-	const {
-		data: taskData,
-		isSuccess: gotTasks,
-		refetch,
-	} = useQuery("fetchTask", () => taskApis.getTask(projectId, taskId));
-
-	// if (taskId !== previousTaskId) {
-	// 	console.log("New task selected");
-	// 	previousTaskId = taskId;
-	// 	refetch();
-	// }
+	const { data: taskData, isSuccess: gotTasks } = useQuery("fetchTask", () =>
+		taskApis.getTask(projectId, taskId)
+	);
 
 	const { data: roleData, isSuccess: gotRole } = useQuery("fetchProjectRole", () =>
 		projectApis.getRole(projectId, localStorage.getItem("userId"))
@@ -101,7 +92,6 @@ const Task = () => {
 	);
 
 	useEffect(() => {
-		// previousTaskId = taskId;
 		const handleResize = () => {
 			if (window.innerWidth <= mobileViewSize) setIsMobile(true);
 			else setIsMobile(false);

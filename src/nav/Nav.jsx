@@ -1,20 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useQuery } from "react-query";
 
 //Material-UI Components
 import Toolbar from "@mui/material/Toolbar";
 import Box from "@mui/material/Box";
 
-import { NavStyles } from "./navStyles";
-
 import TopBar from "./TopBar";
 import ProjectDrawer from "./ProjectDrawer";
 
 import * as userApis from "../apis/user";
+import { NavStyles } from "./navStyles";
 
-const drawerWidth = 240;
-
-const Nav = ({ userType, showDrawer, children, projectCallbacks, projectId }) => {
+const Nav = ({ userType, showDrawer, children, dialogCallbacks, projectId }) => {
 	const classes = NavStyles();
 
 	//Drawer Logic
@@ -44,7 +41,7 @@ const Nav = ({ userType, showDrawer, children, projectCallbacks, projectId }) =>
 					classes={classes}
 					userType={userType}
 					handleDrawerClose={handleDrawerClose}
-					projectCallbacks={projectCallbacks}
+					dialogCallbacks={dialogCallbacks}
 					children={children}
 					projectId={projectId}
 				/>

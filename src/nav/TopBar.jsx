@@ -27,7 +27,6 @@ const TopBar = ({
 	classes,
 	invitationQuery,
 	taskQuery,
-	// taggedComments,
 }) => {
 	// Task List Logic
 	const [tasksAnchor, setTasksAnchor] = useState(); //State
@@ -107,8 +106,6 @@ const TopBar = ({
 					</Tooltip>
 				</Toolbar>
 			</AppBar>
-			{/* ** Message list here ** */}
-
 			{taskQuery.isSuccess ? (
 				<React.Fragment>
 					<TaskCommentsList

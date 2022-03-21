@@ -19,7 +19,7 @@ import { taskTableRowStyles } from "./projectStyles";
 
 import * as taskApis from "../apis/task";
 
-const TaskTableRow = ({ task, role, isMobile, projectId, removeTaskComplete }) => {
+const TaskTableRow = ({ task, role, isMobile, projectId, toastTaskAdded }) => {
 	const [open, setOpen] = React.useState(false);
 	const classes = taskTableRowStyles();
 
@@ -30,15 +30,14 @@ const TaskTableRow = ({ task, role, isMobile, projectId, removeTaskComplete }) =
 		{
 			onSuccess: () => {
 				queryClient.invalidateQueries("fetchProjectData");
+				toastTaskAdded();
 			},
 		}
 	);
 
 	const removeTask = () => {
-		if (window.confirm("Are you sure you want to delete this task?")) {
+		if (window.confirm("Are you sure you want to delete this task?"))
 			taskMutation.mutate({ projectId: projectId, taskId: task._id });
-			removeTaskComplete();
-		}
 	};
 
 	return (

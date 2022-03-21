@@ -18,13 +18,7 @@ const TaskList = ({ open, anchorElement, handleClose, data, title }) => {
 	const classes = notificationListStyles();
 
 	return (
-		<Menu
-			id='simple-menu'
-			anchorEl={anchorElement}
-			keepMounted
-			open={open}
-			onClose={handleClose}
-		>
+		<Menu anchorEl={anchorElement} open={open} onClose={handleClose} keepMounted>
 			<Container>
 				<Box component='div' whiteSpace='normal'>
 					<Typography variant='subtitle1'>{title}</Typography>

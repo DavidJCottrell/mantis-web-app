@@ -21,16 +21,11 @@ import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import MobileDatePicker from "@mui/lab/MobileDatePicker";
 
+import toast, { Toaster } from "react-hot-toast";
+
 import * as taskApis from "../../apis/task";
 
-const AddTaskDialog = ({
-	open,
-	handleClose,
-	totalTasks,
-	projectId,
-	addTaskComplete,
-	projectUsers,
-}) => {
+const AddTaskDialog = ({ open, handleClose, totalTasks, projectId, projectUsers }) => {
 	const [selectedDate, setSelectedDate] = useState(new Date());
 
 	const handleDateChanged = (newDate) => {
@@ -49,13 +44,13 @@ const AddTaskDialog = ({
 		{
 			onSuccess: () => {
 				queryClient.invalidateQueries("fetchProjectData");
+				toast.success("Task added successfully");
 			},
 		}
 	);
 
 	const addTask = (data) => {
 		projectMutation.mutate({ projectId: projectId, task: data });
-		addTaskComplete();
 		handleClose();
 	};
 
@@ -118,165 +113,169 @@ const AddTaskDialog = ({
 	};
 
 	return (
-		<Dialog
-			open={open}
-			onClose={() => {
-				handleClose();
-				clearState();
-			}}
-			aria-labelledby='form-dialog-title'
-			fullWidth
-		>
-			<form onSubmit={handleSubmit} autoComplete='off'>
-				<DialogContent>
-					{/* Add user field */}
-					<Typography sx={{ mt: 1, mb: 1 }} variant='h6' component='div'>
-						Add task
-					</Typography>
+		<React.Fragment>
+			<Toaster />
+			<Dialog
+				open={open}
+				onClose={() => {
+					handleClose();
+					clearState();
+				}}
+				fullWidth
+			>
+				<form onSubmit={handleSubmit} autoComplete='off'>
+					<DialogContent>
+						{/* Add user field */}
+						<Typography sx={{ mt: 1, mb: 1 }} variant='h6' component='div'>
+							Add task
+						</Typography>
 
-					<TextField
-						variant='outlined'
-						margin='normal'
-						label='Title'
-						id='title-field'
-						name='title'
-						required
-						autoComplete='off'
-						color='secondary'
-						fullWidth
-					/>
+						<TextField
+							variant='outlined'
+							margin='normal'
+							label='Title'
+							id='title-field'
+							name='title'
+							required
+							autoComplete='off'
+							color='secondary'
+							fullWidth
+						/>
 
-					<br />
+						<br />
 
-					{[...Array(userInputFields)].map((e, i) => (
-						<Box sx={{ minWidth: 120 }} key={i}>
-							<br />
+						{[...Array(userInputFields)].map((e, i) => (
+							<Box sx={{ minWidth: 120 }} key={i}>
+								<br />
+								<FormControl fullWidth>
+									<InputLabel>Assignees</InputLabel>
+									<Select
+										required
+										label='Type'
+										defaultValue={""}
+										id={"assignee-select-" + String(i)}
+									>
+										{projectUsers.map((user, x) => (
+											<MenuItem
+												key={x}
+												onClick={(event) => {
+													handleSelectAssignee(event, i);
+												}}
+												value={user.username}
+												disabled={
+													selectedAsignees.includes(user.username)
+														? true
+														: false
+												}
+											>
+												{user.name} - {user.username}
+											</MenuItem>
+										))}
+									</Select>
+								</FormControl>
+							</Box>
+						))}
+
+						<Tooltip title='Add another member'>
+							<IconButton
+								color='inherit'
+								onClick={() => {
+									setInputFields(userInputFields + 1);
+								}}
+							>
+								<AddIcon />
+							</IconButton>
+						</Tooltip>
+
+						<Tooltip title='Remove member'>
+							<IconButton
+								color='inherit'
+								onClick={() => {
+									if (userInputFields > 1) {
+										setInputFields(userInputFields - 1);
+										let tempSelectedAsignees = [...selectedAsignees];
+										tempSelectedAsignees.pop();
+										setSelectedAsignees(tempSelectedAsignees);
+									}
+								}}
+							>
+								<RemoveIcon />
+							</IconButton>
+						</Tooltip>
+
+						<TextField
+							variant='outlined'
+							margin='normal'
+							label='Description'
+							id='description-field'
+							name='description'
+							autoComplete='off'
+							color='secondary'
+							fullWidth
+						/>
+
+						<br />
+						<br />
+
+						<LocalizationProvider dateAdapter={AdapterDateFns}>
+							<MobileDatePicker
+								disabled={!dueDateEnabled}
+								label='Date mobile'
+								inputFormat='dd/MM/yyyy'
+								value={selectedDate}
+								onChange={handleDateChanged}
+								renderInput={(params) => <TextField {...params} />}
+							/>
+						</LocalizationProvider>
+						<br />
+						<br />
+						<Button
+							variant='outlined'
+							onClick={() => {
+								setDueDateEnabled(!dueDateEnabled);
+							}}
+						>
+							{dueDateEnabled ? "Remove due date" : "Add due date"}
+						</Button>
+						<br />
+						<br />
+						<Box sx={{ minWidth: 120 }}>
 							<FormControl fullWidth>
-								<InputLabel>Assignees</InputLabel>
-								<Select
-									required
-									label='Type'
-									defaultValue={""}
-									id={"assignee-select-" + String(i)}
-								>
-									{projectUsers.map((user, x) => (
-										<MenuItem
-											key={x}
-											onClick={(event) => {
-												handleSelectAssignee(event, i);
-											}}
-											value={user.username}
-											disabled={
-												selectedAsignees.includes(user.username)
-													? true
-													: false
-											}
-										>
-											{user.name} - {user.username}
-										</MenuItem>
-									))}
+								<InputLabel>Task Type</InputLabel>
+								<Select id='type-select' required label='Type' defaultValue={""}>
+									<MenuItem value={"New Feature"}>New Feature</MenuItem>
+									<MenuItem value={"System Improvement"}>
+										System Improvement
+									</MenuItem>
+									<MenuItem value={"Bug"}>Bug/system issue</MenuItem>
 								</Select>
 							</FormControl>
 						</Box>
-					))}
-
-					<Tooltip title='Add another member'>
-						<IconButton
+						<br />
+					</DialogContent>
+					<DialogActions>
+						<Button
+							onClick={() => {
+								handleClose();
+								clearState();
+							}}
+							color='inherit'
+						>
+							Cancel
+						</Button>
+						<Button
+							type='submit'
 							color='inherit'
 							onClick={() => {
-								setInputFields(userInputFields + 1);
+								clearState();
 							}}
 						>
-							<AddIcon />
-						</IconButton>
-					</Tooltip>
-
-					<Tooltip title='Remove member'>
-						<IconButton
-							color='inherit'
-							onClick={() => {
-								if (userInputFields > 1) {
-									setInputFields(userInputFields - 1);
-									let tempSelectedAsignees = [...selectedAsignees];
-									tempSelectedAsignees.pop();
-									setSelectedAsignees(tempSelectedAsignees);
-								}
-							}}
-						>
-							<RemoveIcon />
-						</IconButton>
-					</Tooltip>
-
-					<TextField
-						variant='outlined'
-						margin='normal'
-						label='Description'
-						id='description-field'
-						name='description'
-						autoComplete='off'
-						color='secondary'
-						fullWidth
-					/>
-
-					<br />
-					<br />
-
-					<LocalizationProvider dateAdapter={AdapterDateFns}>
-						<MobileDatePicker
-							disabled={!dueDateEnabled}
-							label='Date mobile'
-							inputFormat='dd/MM/yyyy'
-							value={selectedDate}
-							onChange={handleDateChanged}
-							renderInput={(params) => <TextField {...params} />}
-						/>
-					</LocalizationProvider>
-					<br />
-					<br />
-					<Button
-						variant='outlined'
-						onClick={() => {
-							setDueDateEnabled(!dueDateEnabled);
-						}}
-					>
-						{dueDateEnabled ? "Remove due date" : "Add due date"}
-					</Button>
-					<br />
-					<br />
-					<Box sx={{ minWidth: 120 }}>
-						<FormControl fullWidth>
-							<InputLabel>Task Type</InputLabel>
-							<Select id='type-select' required label='Type' defaultValue={""}>
-								<MenuItem value={"New Feature"}>New Feature</MenuItem>
-								<MenuItem value={"System Improvement"}>System Improvement</MenuItem>
-								<MenuItem value={"Bug"}>Bug/system issue</MenuItem>
-							</Select>
-						</FormControl>
-					</Box>
-					<br />
-				</DialogContent>
-				<DialogActions>
-					<Button
-						onClick={() => {
-							handleClose();
-							clearState();
-						}}
-						color='inherit'
-					>
-						Cancel
-					</Button>
-					<Button
-						type='submit'
-						color='inherit'
-						onClick={() => {
-							clearState();
-						}}
-					>
-						Create
-					</Button>
-				</DialogActions>
-			</form>
-		</Dialog>
+							Create
+						</Button>
+					</DialogActions>
+				</form>
+			</Dialog>
+		</React.Fragment>
 	);
 };
 

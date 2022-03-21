@@ -59,12 +59,7 @@ const InviteUserDialog = ({ open, handleClose, projectId, title }) => {
 	return (
 		<React.Fragment>
 			<Toaster />
-			<Dialog
-				open={open}
-				onClose={handleClose}
-				aria-labelledby='form-dialog-title'
-				fullWidth
-			>
+			<Dialog open={open} onClose={handleClose} fullWidth>
 				<form onSubmit={inviteUser} autoComplete='off'>
 					<DialogContent>
 						{/* Add user field */}
@@ -85,12 +80,7 @@ const InviteUserDialog = ({ open, handleClose, projectId, title }) => {
 						<Box sx={{ minWidth: 120 }}>
 							<FormControl fullWidth>
 								<InputLabel>Role</InputLabel>
-								<Select
-									id='role-select'
-									required
-									label='Role'
-									defaultValue={""}
-								>
+								<Select id='role-select' required label='Role' defaultValue={""}>
 									<MenuItem value={"Team Leader"}>Team Leader</MenuItem>
 									<MenuItem value={"Developer"}>Developer</MenuItem>
 									<MenuItem value={"Client"}>Client</MenuItem>

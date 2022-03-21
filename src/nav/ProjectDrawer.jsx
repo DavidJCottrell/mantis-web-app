@@ -18,7 +18,7 @@ const ProjectDrawer = ({
 	classes,
 	userType,
 	handleDrawerClose,
-	projectCallbacks,
+	dialogCallbacks,
 	children,
 	projectId,
 }) => {
@@ -43,10 +43,7 @@ const ProjectDrawer = ({
 				<UserOptions
 					userType={userType}
 					projectId={projectId}
-					handleAddUserOpen={projectCallbacks.handleAddUserOpen}
-					handleAddTaskOpen={projectCallbacks.handleAddTaskOpen}
-					handleManageTeamOpen={projectCallbacks.handleManageTeamOpen}
-					handleSettingsOpen={projectCallbacks.handleSettingsOpen}
+					dialogCallbacks={dialogCallbacks}
 				/>
 			</Drawer>
 			{/* Main content of page */}
