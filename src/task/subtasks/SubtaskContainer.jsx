@@ -10,7 +10,13 @@ import Button from "@mui/material/Button";
 
 import SubtaskItem from "./SubtaskItem";
 
-export default function SubtaskContainer({ id, items, columnName, handlers }) {
+export default function SubtaskContainer({
+	id,
+	items,
+	columnName,
+	handlers,
+	currentUserIsAssigned,
+}) {
 	const { setNodeRef } = useDroppable({
 		id,
 	});
@@ -29,18 +35,21 @@ export default function SubtaskContainer({ id, items, columnName, handlers }) {
 							index={i}
 							handlers={handlers}
 							columnName={columnName}
+							currentUserIsAssigned={currentUserIsAssigned}
 						/>
 					))}
 					<br />
-					<Button
-						variant='contained'
-						color='secondary'
-						onClick={() => {
-							handlers.handleAdd(columnName);
-						}}
-					>
-						Add Task
-					</Button>
+					{currentUserIsAssigned ? (
+						<Button
+							variant='contained'
+							color='secondary'
+							onClick={() => {
+								handlers.handleAdd(columnName);
+							}}
+						>
+							Add Task
+						</Button>
+					) : null}
 				</CardContent>
 			</Card>
 		</SortableContext>

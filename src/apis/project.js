@@ -26,9 +26,9 @@ export const deleteProject = (projectId) =>
 		.then((res) => res.data)
 		.catch((e) => handleError(e));
 
-export const getRole = (projectId, userId) =>
+export const getRole = (projectId) =>
 	api
-		.get(`/project/getrole/${projectId}/${userId}`)
+		.get(`/project/getrole/${projectId}`)
 		.then((res) => res.data)
 		.catch((e) => handleError(e));
 

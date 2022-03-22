@@ -13,6 +13,9 @@ export const handleError = (e) => {
 			localStorage.clear();
 			window.location.href = "/";
 			break;
+		case 400: // Could not find recourse
+			window.location.href = "/";
+			break;
 		default:
 			console.log("Unknown error:", e.response);
 	}

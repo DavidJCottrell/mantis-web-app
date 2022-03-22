@@ -18,7 +18,7 @@ const AccountMenu = (props) => {
 			<DialogContent>
 				<Typography variant='subtitle1'>Profile details</Typography>
 				<ul>
-					<li>Name: {localStorage.getItem("fullnNme")}</li>
+					<li>Name: {localStorage.getItem("fullName")}</li>
 					<li>Username: {localStorage.getItem("username")}</li>
 					<li>Email: {localStorage.getItem("email")}</li>
 				</ul>

@@ -24,10 +24,7 @@ const UserOptions = ({ userType, dialogCallbacks, projectId }) => {
 		<React.Fragment>
 			<List>
 				<Link
-					to={"/project/requirements"}
-					state={{
-						projectId: projectId,
-					}}
+					to={`/project/requirements/${projectId}`}
 					style={{
 						textDecoration: "none",
 						color: theme.palette.text.primary,

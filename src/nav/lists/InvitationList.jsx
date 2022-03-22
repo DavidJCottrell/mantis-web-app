@@ -32,20 +32,18 @@ const InvitationList = ({ open, anchorElement, handleClose, invitationData }) =>
 		}
 	);
 
-	const acceptInvitationMutation = useMutation((data) => invitationApis.acceptInvitation(data), {
-		onSuccess: () => {
-			deleteInvitationMutation.mutate(invitationData[index]._id);
-			queryClient.invalidateQueries("fetchProjects");
-		},
-	});
+	const acceptInvitationMutation = useMutation(
+		(invitationId) => invitationApis.acceptInvitation(invitationId),
+		{
+			onSuccess: () => {
+				queryClient.invalidateQueries("fetchUsersInvitations");
+			},
+		}
+	);
 
 	const handleAcceptClick = (e) => {
 		const index = e.target.dataset.index;
-		acceptInvitationMutation.mutate({
-			projectId: invitationData[index].project.projectId,
-			userId: invitationData[index].invitee.userId,
-			role: invitationData[index].role,
-		});
+		acceptInvitationMutation.mutate(invitationData[index]._id);
 	};
 
 	const handleDeclineClick = (e) => {

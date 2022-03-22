@@ -41,20 +41,21 @@ const App = () => {
 			<CssBaseline />
 			<Routes>
 				<Route path='/login' element={<Login />}></Route>
+
 				<Route path='/' element={<ProtectedRoute />}>
 					<Route path='/' element={<Dashboard />} />
 				</Route>
 
-				<Route path='/project' element={<ProtectedRoute />}>
-					<Route path='/project' element={<Project />} />
+				<Route path='/project/:projectId' element={<ProtectedRoute />}>
+					<Route path='/project/:projectId' element={<Project />} />
 				</Route>
 
-				<Route path='/project/requirements' element={<ProtectedRoute />}>
-					<Route path='/project/requirements' element={<Requirements />} />
+				<Route path='/project/requirements/:projectId' element={<ProtectedRoute />}>
+					<Route path='/project/requirements/:projectId' element={<Requirements />} />
 				</Route>
 
-				<Route path='/project/task' element={<ProtectedRoute />}>
-					<Route path='/project/task' element={<Task />} />
+				<Route path='/project/task/:taskId/:projectId' element={<ProtectedRoute />}>
+					<Route path='/project/task/:taskId/:projectId' element={<Task />} />
 				</Route>
 
 				<Route path='*' element={<PageNotFound />} />

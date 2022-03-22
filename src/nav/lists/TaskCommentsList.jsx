@@ -14,22 +14,8 @@ import Divider from "@mui/material/Divider";
 // Styles
 import { notificationListStyles } from "../navStyles";
 
-const TaskCommentsList = ({ open, anchorElement, handleClose, data, title }) => {
+const TaskCommentsList = ({ open, anchorElement, handleClose, comments, title }) => {
 	const classes = notificationListStyles();
-	let comments = [];
-	for (const task of data) {
-		for (const comment of task.task.comments) {
-			comments.push({
-				parentTask: task.task,
-				parentProject: {
-					title: task.parentProjectTitle,
-					id: task.parentProjectId,
-				},
-				content: comment.content,
-				author: comment.authorName,
-			});
-		}
-	}
 
 	return (
 		<Menu
@@ -53,13 +39,7 @@ const TaskCommentsList = ({ open, anchorElement, handleClose, data, title }) => 
 									style={{ backgroundColor: "transparent" }}
 								>
 									<Link
-										to={{
-											pathname: "/project/task",
-										}}
-										state={{
-											task: parentTask,
-											projectId: parentProject.id,
-										}}
+										to={`/project/task/${parentTask._id}/${parentProject.id}`}
 										style={{
 											textDecoration: "none",
 										}}

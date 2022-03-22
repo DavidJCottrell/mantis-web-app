@@ -35,25 +35,34 @@ const SubtaskItem = (props) => {
 
 	return (
 		<React.Fragment>
-			<div ref={setNodeRef} style={style} {...attributes} {...listeners}>
+			{/* Only users who are assigned to the task can move tasks */}
+			{props.currentUserIsAssigned ? (
+				<div ref={setNodeRef} style={style} {...attributes} {...listeners}>
+					<Item id={props.id} subtaskStyle={subtaskStyle} />
+				</div>
+			) : (
 				<Item id={props.id} subtaskStyle={subtaskStyle} />
-			</div>
-			<Button
-				color='secondary'
-				onClick={() => {
-					props.handlers.handleEditTask(props.index, props.columnName);
-				}}
-			>
-				Edit
-			</Button>
-			<Button
-				color='warning'
-				onClick={() => {
-					props.handlers.handleRemoveSubtask(props.index, props.columnName);
-				}}
-			>
-				Remove
-			</Button>
+			)}
+			{props.currentUserIsAssigned ? (
+				<React.Fragment>
+					<Button
+						color='secondary'
+						onClick={() => {
+							props.handlers.handleEditTask(props.index, props.columnName);
+						}}
+					>
+						Edit
+					</Button>
+					<Button
+						color='warning'
+						onClick={() => {
+							props.handlers.handleRemoveSubtask(props.index, props.columnName);
+						}}
+					>
+						Remove
+					</Button>
+				</React.Fragment>
+			) : null}
 		</React.Fragment>
 	);
 };

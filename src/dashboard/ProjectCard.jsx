@@ -1,4 +1,3 @@
-import React from "react";
 import { Link } from "react-router-dom";
 
 import Button from "@mui/material/Button";
@@ -63,11 +62,7 @@ const ProjectCard = ({ project, role, cardStyle }) => {
 					</Box>
 				</CardContent>
 				<CardActions>
-					<Link
-						to={"/project"}
-						state={{ projectId: project._id }}
-						style={{ textDecoration: "none" }}
-					>
+					<Link to={`/project/${project._id}`} style={{ textDecoration: "none" }}>
 						<Button size='small'>
 							Open&nbsp;
 							<b>{project.title}</b>

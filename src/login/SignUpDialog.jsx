@@ -1,5 +1,3 @@
-import React from "react";
-
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
@@ -22,11 +20,7 @@ const SignUpDialog = ({ signUpOpen, handleSignUpClose, classes, signUp }) => {
 	};
 
 	return (
-		<Dialog
-			open={signUpOpen}
-			onClose={handleSignUpClose}
-			aria-labelledby='form-dialog-title'
-		>
+		<Dialog open={signUpOpen} onClose={handleSignUpClose} aria-labelledby='form-dialog-title'>
 			<DialogTitle id='form-dialog-title'>Sign Up</DialogTitle>
 			<form
 				className={classes.form}

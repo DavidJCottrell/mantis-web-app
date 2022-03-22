@@ -1,5 +1,5 @@
-import React, { StrictMode, useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useQuery } from "react-query";
 
@@ -12,35 +12,24 @@ import Select from "@mui/material/Select";
 import FormControl from "@mui/material/FormControl";
 import MenuItem from "@mui/material/MenuItem";
 import InputLabel from "@mui/material/InputLabel";
-import ButtonGroup from "@mui/material/ButtonGroup";
 
 import { useMutation, useQueryClient } from "react-query";
 
 // Custom components
-import Nav from "../nav/Nav";
 import LifecycleBar from "./LifecycleBar";
 import TaskInfoCard from "./TaskInfoCard";
 import CommentsCard from "./CommentsCard";
 import Subtasks from "./subtasks/Subtasks";
 
+import Page from "../Page";
+
 import * as projectApis from "../apis/project";
 import * as taskApis from "../apis/task";
 
 const Task = () => {
-	const mobileViewSize = 760;
-	const location = useLocation();
+	const { taskId, projectId } = useParams();
 	const queryClient = useQueryClient();
-
-	const { taskId, projectId } = (() => {
-		try {
-			return {
-				taskId: location.state.task._id,
-				projectId: location.state.projectId,
-			};
-		} catch (error) {
-			window.location.replace("/");
-		}
-	})();
+	const mobileViewSize = 760;
 
 	const [isMobile, _setIsMobile] = useState(window.innerWidth <= mobileViewSize ? true : false);
 
@@ -51,14 +40,11 @@ const Task = () => {
 		_setIsMobile(data);
 	};
 
-	const { data: taskData, isSuccess: gotTasks } = useQuery("fetchTask", () =>
-		taskApis.getTask(projectId, taskId)
-	);
+	const { data: taskData } = useQuery("fetchTask", () => taskApis.getTask(projectId, taskId));
 
-	const { data: roleData, isSuccess: gotRole } = useQuery("fetchProjectRole", () =>
+	const { data: roleData } = useQuery("fetchProjectRole", () =>
 		projectApis.getRole(projectId, localStorage.getItem("userId"))
 	);
-
 	const updateStatusMutation = useMutation(
 		({ projectId, taskId, status }) => taskApis.updateStatus(projectId, taskId, status),
 		{
@@ -108,85 +94,85 @@ const Task = () => {
 		});
 	};
 
+	let currentUserIsAssigned;
+	if (taskData) {
+		for (const asignee of taskData.task.assignees) {
+			if (localStorage.getItem("userId") === asignee.userId) currentUserIsAssigned = true;
+			else currentUserIsAssigned = false;
+		}
+	}
+
 	return (
-		<React.Fragment>
-			{gotTasks && gotRole ? (
-				<React.Fragment>
-					<Nav />
-					<Container>
-						<Typography variant='h4'>
-							{taskData.task.taskKey} - {taskData.task.title}
-						</Typography>
-						<br />
-						<Link
-							to={"/project"}
-							state={{
-								projectId: projectId,
-								role: roleData.role,
-							}}
-							style={{
-								textDecoration: "none",
-							}}
-						>
-							<Button variant='contained'>Back to project</Button>
-						</Link>
-						<br />
-						<h2>Task Lifecycle</h2>
-						<LifecycleBar status={taskData.task.status} isMobile={isMobile} />
-						<br />
+		<Page>
+			{taskData && roleData ? (
+				<Container>
+					<Typography variant='h4'>
+						{taskData.task.taskKey} - {taskData.task.title}
+					</Typography>
+					<br />
 
-						<ButtonGroup variant='outlined' aria-label='outlined button group'>
-							{/* Lifecycle selector */}
-							<FormControl style={{ minWidth: "200px" }}>
-								<InputLabel>Status</InputLabel>
-								<Select
-									id='status-select'
-									required
-									label='Type'
-									defaultValue={""}
-									value={taskData.task.status}
-									onChange={handleStatusChange}
-								>
-									<MenuItem value={"In Development"}>In Development</MenuItem>
-									<MenuItem value={"Testing"}>Testing</MenuItem>
-									<MenuItem value={"In Review"}>In Review</MenuItem>
-									<MenuItem value={"Ready to Merge"}>Ready to Merge</MenuItem>
-									<MenuItem value={"Resolved"}>Resolved</MenuItem>
-								</Select>
-							</FormControl>
-						</ButtonGroup>
+					<Link to={`/project/${projectId}`} style={{ textDecoration: "none" }}>
+						<Button variant='contained'>Back to project</Button>
+					</Link>
 
-						<br />
-						<h2>Subtasks</h2>
-						<StrictMode>
-							<Subtasks
-								subtaskData={taskData.task.subtasks}
+					<br />
+					<h2>Task Lifecycle</h2>
+					<LifecycleBar status={taskData.task.status} isMobile={isMobile} />
+					<br />
+
+					{/* Lifecycle selector */}
+					{currentUserIsAssigned ? (
+						<FormControl style={{ minWidth: "200px" }}>
+							<InputLabel>Status</InputLabel>
+							<Select
+								id='status-select'
+								required
+								label='Type'
+								defaultValue={""}
+								value={taskData.task.status}
+								onChange={handleStatusChange}
+							>
+								<MenuItem value={"In Development"}>In Development</MenuItem>
+								<MenuItem value={"Testing"}>Testing</MenuItem>
+								<MenuItem value={"In Review"}>In Review</MenuItem>
+								<MenuItem value={"Ready to Merge"}>Ready to Merge</MenuItem>
+								<MenuItem value={"Resolved"}>Resolved</MenuItem>
+							</Select>
+						</FormControl>
+					) : null}
+
+					<br />
+					<h2>Subtasks</h2>
+					<Subtasks
+						subtaskData={taskData.task.subtasks}
+						projectId={projectId}
+						taskId={taskData.task._id}
+						currentUserIsAssigned={currentUserIsAssigned}
+					/>
+
+					<br />
+					<br />
+					<Grid container spacing={5}>
+						{/* Task Information */}
+						<Grid item xs={12} md={6}>
+							<TaskInfoCard
+								task={taskData.task}
+								currentUserIsAssigned={currentUserIsAssigned}
+							/>
+						</Grid>
+						<Grid item xs={12} md={6}>
+							<CommentsCard
+								comments={taskData.task.comments}
 								projectId={projectId}
 								taskId={taskData.task._id}
 							/>
-						</StrictMode>
-
-						<br />
-						<br />
-						<Grid container spacing={5}>
-							{/* Task Information */}
-							<Grid item xs={12} md={6}>
-								<TaskInfoCard task={taskData.task} />
-							</Grid>
-							<Grid item xs={12} md={6}>
-								<CommentsCard
-									comments={taskData.task.comments}
-									projectId={projectId}
-									taskId={taskData.task._id}
-								/>
-							</Grid>
 						</Grid>
-						<br />
-						<br />
-					</Container>
-				</React.Fragment>
+					</Grid>
+					<br />
+					<br />
+				</Container>
 			) : null}
-		</React.Fragment>
+		</Page>
 	);
 };
 

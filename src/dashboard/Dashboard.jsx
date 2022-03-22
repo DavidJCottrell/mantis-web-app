@@ -11,13 +11,14 @@ import * as userApis from "../apis/user";
 import * as projectApis from "../apis/project";
 
 // Custom components
-import Nav from "../nav/Nav";
 import AddProjectDialog from "./AddProjectDialog";
 import AddProjectCard from "./AddProjectCard";
 import ProjectCard from "./ProjectCard";
 
+import Page from "../Page";
+
 // Toast Notifications
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 const Dashboard = () => {
 	const queryClient = useQueryClient();
@@ -48,11 +49,9 @@ const Dashboard = () => {
 	};
 
 	return (
-		<React.Fragment>
+		<Page>
 			{gotProjects ? (
 				<React.Fragment>
-					<Toaster />
-					<Nav />
 					<Container>
 						<Typography variant='h4'>{localStorage.getItem("fullName")}</Typography>
 
@@ -90,7 +89,7 @@ const Dashboard = () => {
 			) : (
 				<h2>Loading projects...</h2>
 			)}
-		</React.Fragment>
+		</Page>
 	);
 };
 

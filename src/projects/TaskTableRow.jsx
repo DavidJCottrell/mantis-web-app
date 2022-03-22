@@ -96,13 +96,8 @@ const TaskTableRow = ({ task, role, isMobile, projectId, toastTaskAdded }) => {
 								Due: <b>{task.dateDue}</b>
 							</Typography>
 							<br />
-
 							<Link
-								to={"/project/task"}
-								state={{
-									task: task,
-									projectId: projectId,
-								}}
+								to={`/project/task/${task._id}/${projectId}`}
 								style={{
 									textDecoration: "none",
 								}}

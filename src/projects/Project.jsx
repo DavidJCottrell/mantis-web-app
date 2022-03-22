@@ -1,29 +1,40 @@
 import React, { useState } from "react";
 import { useQuery } from "react-query";
-import { useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 // Material-UI
-import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Grid from "@mui/material/Grid";
 import Hidden from "@mui/material/Hidden";
 import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+
+import { useTheme } from "@mui/material/styles";
+
+import { NavStyles } from "../nav/navStyles";
 
 // Custom components
-import Nav from "../nav/Nav";
 import TaskTable from "./TaskTable";
 import InviteUserDialog from "./dialogs/InviteUserDialog";
 import AddTaskDialog from "./dialogs/AddTaskDialog";
 import ManageTeamDialog from "./dialogs/ManageTeamDialog";
 import SettingsDialog from "./dialogs/SettingsDialog";
 import TeamMembersCard from "./TeamMembersCard";
+import Page from "../Page";
 
 import * as projectApis from "../apis/project";
 
+import ProjectDrawer from "./drawer/ProjectDrawer";
+
 const Project = () => {
+	const { projectId } = useParams();
 	const theme = useTheme();
 	const isMobile = useMediaQuery(theme.breakpoints.up("sm"));
-	const location = useLocation();
+
+	//Drawer Logic
+	const [drawerOpen, setDrawerOpen] = useState(false); //State
+	const handleDrawerOpen = () => setDrawerOpen(true); //Handle open
+	const handleDrawerClose = () => setDrawerOpen(false); //Handle close
 
 	// Add user dialog logic
 	const [addUserAnchor, setAddUserAnchor] = useState(); //State
@@ -52,130 +63,124 @@ const Project = () => {
 		handleSettingsOpen: (event) => setSettingsAnchor(event.currentTarget),
 	};
 
-	// Get params passed from dashboard
-	const { projectId } = (() => {
-		try {
-			return {
-				projectId: location.state.projectId,
-			};
-		} catch (error) {
-			window.location.replace("/");
-		}
-	})();
+	const { data: projectData } = useQuery("fetchProjectData", () =>
+		projectApis.getProject(projectId)
+	);
 
-	const projectQuery = useQuery("fetchProjectData", () => projectApis.getProject(projectId));
-
-	const invitationQuery = useQuery("fetchInvitationData", () =>
+	const { data: invitationData } = useQuery("fetchInvitationData", () =>
 		projectApis.getInvitations(projectId)
 	);
 
-	const roleQuery = useQuery("fetchProjectRole", () =>
-		projectApis.getRole(projectId, localStorage.getItem("userId"))
-	);
+	const { data: roleData } = useQuery("fetchProjectRole", () => projectApis.getRole(projectId));
 
 	// Split project's tasks into resolved and un-resolved
 	let unresolvedTasks = [];
 	let resolvedTasks = [];
-	if (projectQuery.isSuccess) {
-		for (const task of projectQuery.data.project.tasks) {
+	if (projectData) {
+		for (const task of projectData.project.tasks) {
 			if (task.resolution === "Un-Resolved") unresolvedTasks.push(task);
 			else resolvedTasks.push(task);
 		}
 	}
 
-	const fullyLoaded = projectQuery.isSuccess && invitationQuery.isSuccess && roleQuery.isSuccess;
+	const classes = NavStyles();
 
 	return (
-		<React.Fragment>
-			{fullyLoaded ? (
+		<Page drawerOpen={drawerOpen} handleDrawerOpen={handleDrawerOpen} showDrawer={true}>
+			{projectData && invitationData && roleData ? (
 				<React.Fragment>
-					<Nav
-						userType={roleQuery.data.role}
-						showDrawer={true}
-						dialogCallbacks={dialogCallbacks}
-						projectId={projectId}
-					>
-						<Typography variant='h4'>{projectQuery.data.project.title}</Typography>
-						<Grid
-							container
-							justifyContent='center'
-							style={{
-								margin: 0,
-								width: "100%",
-							}}
-						>
-							<Grid item xs={12} md={8}>
-								<TaskTable
-									isMobile={isMobile}
-									title={"Un-Resolved Tasks"}
-									tasks={unresolvedTasks}
-									role={roleQuery.data.role}
-									projectId={projectId}
-								/>
-							</Grid>
+					<Box sx={{ display: "flex" }}>
+						<ProjectDrawer
+							drawerOpen={drawerOpen}
+							dialogCallbacks={dialogCallbacks}
+							projectId={projectId}
+							role={roleData.role}
+							classes={classes}
+							handleDrawerClose={handleDrawerClose}
+							theme={theme}
+						/>
 
-							<Hidden only={["xs", "sm"]}>
-								<Grid item md={1}></Grid>
-							</Hidden>
-
-							<Hidden only={["xs", "sm"]}>
-								<Grid item xs={12} md={3}>
-									<TeamMembersCard
-										members={projectQuery.data.project.users}
-										invitations={invitationQuery.data.invitations}
+						<div className={classes.content}>
+							<Typography variant='h4'>{projectData.project.title}</Typography>
+							<Grid
+								container
+								justifyContent='center'
+								style={{
+									margin: 0,
+									width: "100%",
+								}}
+							>
+								<Grid item xs={12} md={8}>
+									<TaskTable
+										isMobile={isMobile}
+										title={"Un-Resolved Tasks"}
+										tasks={unresolvedTasks}
+										role={roleData.role}
+										projectId={projectId}
 									/>
 								</Grid>
-							</Hidden>
 
-							<Grid item xs={12} md={8}>
-								<TaskTable
-									isMobile={isMobile}
-									title={"Resolved Tasks"}
-									tasks={resolvedTasks}
-									role={roleQuery.data.role}
-									projectId={projectId}
-								/>
+								<Hidden only={["xs", "sm"]}>
+									<Grid item md={1}></Grid>
+								</Hidden>
+
+								<Hidden only={["xs", "sm"]}>
+									<Grid item xs={12} md={3}>
+										<TeamMembersCard
+											members={projectData.project.users}
+											invitations={invitationData.invitations}
+										/>
+									</Grid>
+								</Hidden>
+
+								<Grid item xs={12} md={8}>
+									<TaskTable
+										isMobile={isMobile}
+										title={"Resolved Tasks"}
+										tasks={resolvedTasks}
+										role={roleData.role}
+										projectId={projectId}
+									/>
+								</Grid>
+								<Hidden only={["xs", "sm"]}>
+									<Grid item xs={4}></Grid>
+								</Hidden>
 							</Grid>
-							<Hidden only={["xs", "sm"]}>
-								<Grid item xs={4}></Grid>
-							</Hidden>
-						</Grid>
-					</Nav>
+						</div>
+					</Box>
 
 					{/* Popup windows */}
-					<React.Fragment>
-						<AddTaskDialog
-							open={isAddTaskOpen}
-							handleClose={handleAddTaskClose}
-							totalTasks={projectQuery.data.project.tasks.length}
-							projectId={projectId}
-							projectUsers={projectQuery.data.project.users}
-						/>
-						<InviteUserDialog
-							open={isAddUserOpen}
-							handleClose={handleAddUserClose}
-							projectId={projectId}
-							title={projectQuery.data.project.title}
-						/>
-						<ManageTeamDialog
-							open={isManageTeamOpen}
-							handleClose={handleManageTeamClose}
-							projectId={projectId}
-							users={projectQuery.data.project.users}
-							invitations={invitationQuery.data.invitations}
-							role={roleQuery.data.role}
-						/>
-						<SettingsDialog
-							open={isSettingsOpen}
-							handleClose={handleSettingsClose}
-							projectId={projectId}
-						/>
-					</React.Fragment>
+					<AddTaskDialog
+						open={isAddTaskOpen}
+						handleClose={handleAddTaskClose}
+						totalTasks={projectData.project.tasks.length}
+						projectId={projectId}
+						projectUsers={projectData.project.users}
+					/>
+					<InviteUserDialog
+						open={isAddUserOpen}
+						handleClose={handleAddUserClose}
+						projectId={projectId}
+						title={projectData.project.title}
+					/>
+					<ManageTeamDialog
+						open={isManageTeamOpen}
+						handleClose={handleManageTeamClose}
+						projectId={projectId}
+						users={projectData.project.users}
+						invitations={invitationData.invitations}
+						role={roleData.role}
+					/>
+					<SettingsDialog
+						open={isSettingsOpen}
+						handleClose={handleSettingsClose}
+						projectId={projectId}
+					/>
 				</React.Fragment>
 			) : (
 				<h2>Loading project...</h2>
 			)}
-		</React.Fragment>
+		</Page>
 	);
 };
 

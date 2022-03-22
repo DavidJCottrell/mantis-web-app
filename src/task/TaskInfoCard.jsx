@@ -8,7 +8,7 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 
-const TaskInfoCard = ({ task }) => {
+const TaskInfoCard = ({ task, currentUserIsAssigned }) => {
 	return (
 		<Card sx={{ minWidth: 275 }}>
 			<CardContent>
@@ -69,7 +69,7 @@ const TaskInfoCard = ({ task }) => {
 				</Grid>
 			</CardContent>
 			<CardActions>
-				<Button size='small'>Edit</Button>
+				{currentUserIsAssigned ? <Button size='small'>Edit</Button> : null}
 			</CardActions>
 		</Card>
 	);

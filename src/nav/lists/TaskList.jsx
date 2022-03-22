@@ -14,7 +14,7 @@ import Divider from "@mui/material/Divider";
 // Styles
 import { notificationListStyles } from "../navStyles";
 
-const TaskList = ({ open, anchorElement, handleClose, data, title }) => {
+const TaskList = ({ open, anchorElement, handleClose, tasks, title }) => {
 	const classes = notificationListStyles();
 
 	return (
@@ -24,8 +24,8 @@ const TaskList = ({ open, anchorElement, handleClose, data, title }) => {
 					<Typography variant='subtitle1'>{title}</Typography>
 					<Divider />
 				</Box>
-				{data.length > 0
-					? data.map(({ task, parentProjectTitle, parentProjectId }, i) => {
+				{tasks.length > 0
+					? tasks.map(({ task, parentProjectTitle, parentProjectId }, i) => {
 							return (
 								<MenuItem
 									onClick={handleClose}
@@ -33,11 +33,7 @@ const TaskList = ({ open, anchorElement, handleClose, data, title }) => {
 									style={{ backgroundColor: "transparent" }}
 								>
 									<Link
-										to={"/project/task"}
-										state={{
-											task: task,
-											projectId: parentProjectId,
-										}}
+										to={`/project/task/${task._id}/${parentProjectId}`}
 										style={{
 											textDecoration: "none",
 										}}

@@ -18,7 +18,7 @@ import {
 
 // Credit - https://codesandbox.io/s/lknfe
 
-const Subtasks = ({ projectId, taskId, subtaskData }) => {
+const Subtasks = ({ projectId, taskId, subtaskData, currentUserIsAssigned }) => {
 	const [subtasks, setSubtasks] = useState(subtaskData);
 	const [activeId, setActiveId] = useState();
 
@@ -117,7 +117,6 @@ const Subtasks = ({ projectId, taskId, subtaskData }) => {
 		<React.Fragment>
 			{subtasks ? (
 				<div>
-					<Toaster />
 					<DndContext
 						sensors={sensors}
 						collisionDetection={closestCorners}
@@ -132,6 +131,7 @@ const Subtasks = ({ projectId, taskId, subtaskData }) => {
 									id='toDo'
 									items={subtasks.toDo}
 									columnName={"To Do"}
+									currentUserIsAssigned={currentUserIsAssigned}
 									handlers={{
 										handleEditTask,
 										handleRemoveSubtask,
@@ -144,6 +144,7 @@ const Subtasks = ({ projectId, taskId, subtaskData }) => {
 									id='inProgress'
 									items={subtasks.inProgress}
 									columnName={"In Progress"}
+									currentUserIsAssigned={currentUserIsAssigned}
 									handlers={{
 										handleEditTask,
 										handleRemoveSubtask,
@@ -156,6 +157,7 @@ const Subtasks = ({ projectId, taskId, subtaskData }) => {
 									id='complete'
 									items={subtasks.complete}
 									columnName={"Complete"}
+									currentUserIsAssigned={currentUserIsAssigned}
 									handlers={{
 										handleEditTask,
 										handleRemoveSubtask,
@@ -179,7 +181,6 @@ const Subtasks = ({ projectId, taskId, subtaskData }) => {
 	function handleDragStart(event) {
 		const { active } = event;
 		const { id } = active;
-
 		setActiveId(id);
 	}
 

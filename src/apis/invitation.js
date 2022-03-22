@@ -12,8 +12,8 @@ export const deleteInvitation = (invitationId) =>
 		.then((res) => res.data)
 		.catch((e) => handleError(e));
 
-export const acceptInvitation = (data) =>
+export const acceptInvitation = (invitationId) =>
 	api
-		.post("/invitation/accept/", data)
+		.post(`/invitation/accept/${invitationId}`)
 		.then((res) => res.data)
 		.catch((e) => handleError(e));
