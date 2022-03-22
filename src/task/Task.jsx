@@ -102,76 +102,76 @@ const Task = () => {
 		}
 	}
 
+	if (!taskData || !roleData) return <Page isLoading={true} />;
+
 	return (
 		<Page>
-			{taskData && roleData ? (
-				<Container>
-					<Typography variant='h4'>
-						{taskData.task.taskKey} - {taskData.task.title}
-					</Typography>
-					<br />
+			<Container>
+				<Typography variant='h4'>
+					{taskData.task.taskKey} - {taskData.task.title}
+				</Typography>
+				<br />
 
-					<Link to={`/project/${projectId}`} style={{ textDecoration: "none" }}>
-						<Button variant='contained'>Back to project</Button>
-					</Link>
+				<Link to={`/project/${projectId}`} style={{ textDecoration: "none" }}>
+					<Button variant='contained'>Back to project</Button>
+				</Link>
 
-					<br />
-					<h2>Task Lifecycle</h2>
-					<LifecycleBar status={taskData.task.status} isMobile={isMobile} />
-					<br />
+				<br />
+				<h2>Task Lifecycle</h2>
+				<LifecycleBar status={taskData.task.status} isMobile={isMobile} />
+				<br />
 
-					{/* Lifecycle selector */}
-					{currentUserIsAssigned ? (
-						<FormControl style={{ minWidth: "200px" }}>
-							<InputLabel>Status</InputLabel>
-							<Select
-								id='status-select'
-								required
-								label='Type'
-								defaultValue={""}
-								value={taskData.task.status}
-								onChange={handleStatusChange}
-							>
-								<MenuItem value={"In Development"}>In Development</MenuItem>
-								<MenuItem value={"Testing"}>Testing</MenuItem>
-								<MenuItem value={"In Review"}>In Review</MenuItem>
-								<MenuItem value={"Ready to Merge"}>Ready to Merge</MenuItem>
-								<MenuItem value={"Resolved"}>Resolved</MenuItem>
-							</Select>
-						</FormControl>
-					) : null}
+				{/* Lifecycle selector */}
+				{currentUserIsAssigned ? (
+					<FormControl style={{ minWidth: "200px" }}>
+						<InputLabel>Status</InputLabel>
+						<Select
+							id='status-select'
+							required
+							label='Type'
+							defaultValue={""}
+							value={taskData.task.status}
+							onChange={handleStatusChange}
+						>
+							<MenuItem value={"In Development"}>In Development</MenuItem>
+							<MenuItem value={"Testing"}>Testing</MenuItem>
+							<MenuItem value={"In Review"}>In Review</MenuItem>
+							<MenuItem value={"Ready to Merge"}>Ready to Merge</MenuItem>
+							<MenuItem value={"Resolved"}>Resolved</MenuItem>
+						</Select>
+					</FormControl>
+				) : null}
 
-					<br />
-					<h2>Subtasks</h2>
-					<Subtasks
-						subtaskData={taskData.task.subtasks}
-						projectId={projectId}
-						taskId={taskData.task._id}
-						currentUserIsAssigned={currentUserIsAssigned}
-					/>
+				<br />
+				<h2>Subtasks</h2>
+				<Subtasks
+					subtaskData={taskData.task.subtasks}
+					projectId={projectId}
+					taskId={taskData.task._id}
+					currentUserIsAssigned={currentUserIsAssigned}
+				/>
 
-					<br />
-					<br />
-					<Grid container spacing={5}>
-						{/* Task Information */}
-						<Grid item xs={12} md={6}>
-							<TaskInfoCard
-								task={taskData.task}
-								currentUserIsAssigned={currentUserIsAssigned}
-							/>
-						</Grid>
-						<Grid item xs={12} md={6}>
-							<CommentsCard
-								comments={taskData.task.comments}
-								projectId={projectId}
-								taskId={taskData.task._id}
-							/>
-						</Grid>
+				<br />
+				<br />
+				<Grid container spacing={5}>
+					{/* Task Information */}
+					<Grid item xs={12} md={6}>
+						<TaskInfoCard
+							task={taskData.task}
+							currentUserIsAssigned={currentUserIsAssigned}
+						/>
 					</Grid>
-					<br />
-					<br />
-				</Container>
-			) : null}
+					<Grid item xs={12} md={6}>
+						<CommentsCard
+							comments={taskData.task.comments}
+							projectId={projectId}
+							taskId={taskData.task._id}
+						/>
+					</Grid>
+				</Grid>
+				<br />
+				<br />
+			</Container>
 		</Page>
 	);
 };

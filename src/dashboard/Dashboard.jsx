@@ -23,10 +23,7 @@ import toast from "react-hot-toast";
 const Dashboard = () => {
 	const queryClient = useQueryClient();
 
-	const { data: projectData, isSuccess: gotProjects } = useQuery(
-		"fetchProjects",
-		userApis.getProjectsData
-	);
+	const { data: projectData } = useQuery("fetchProjects", userApis.getProjectsData);
 
 	const projectMutation = useMutation(projectApis.addProject, {
 		onSuccess: () => {
@@ -44,51 +41,46 @@ const Dashboard = () => {
 	const handleAddProjectOpen = () => setAddProjectOpen(true);
 	const handleAddProjectClose = () => setAddProjectOpen(false);
 
-	const cardStyle = {
-		minHeight: "250px",
-	};
+	const cardStyle = { minHeight: "250px" };
+
+	if (!projectData) return <Page isLoading={true} />;
 
 	return (
 		<Page>
-			{gotProjects ? (
-				<React.Fragment>
-					<Container>
-						<Typography variant='h4'>{localStorage.getItem("fullName")}</Typography>
+			<React.Fragment>
+				<Container>
+					<Typography variant='h4'>{localStorage.getItem("fullName")}</Typography>
 
-						<br />
-						<Typography variant='h5'>Your Projects</Typography>
-						<br />
+					<br />
+					<Typography variant='h5'>Your Projects</Typography>
+					<br />
 
-						<Grid container spacing={3} id='project-grid'>
-							{projectData.map(({ project, role }, i) => (
-								<ProjectCard
-									project={project}
-									role={role}
-									key={i}
-									cardStyle={cardStyle}
-								/>
-							))}
-							<AddProjectCard
+					<Grid container spacing={3} id='project-grid'>
+						{projectData.map(({ project, role }, i) => (
+							<ProjectCard
+								project={project}
+								role={role}
+								key={i}
 								cardStyle={cardStyle}
-								handleAddProjectOpen={handleAddProjectOpen}
 							/>
-						</Grid>
+						))}
+						<AddProjectCard
+							cardStyle={cardStyle}
+							handleAddProjectOpen={handleAddProjectOpen}
+						/>
+					</Grid>
 
-						{gotProjects && projectData.length === 0 ? (
-							<h2>You currently have no projects</h2>
-						) : null}
+					{projectData.length === 0 ? <h2>You currently have no projects</h2> : null}
 
-						<br />
-					</Container>
-					<AddProjectDialog
-						open={addProjectOpen}
-						handleClose={handleAddProjectClose}
-						handleAddProject={handleAddProject}
-					/>
-				</React.Fragment>
-			) : (
-				<h2>Loading projects...</h2>
-			)}
+					<br />
+				</Container>
+
+				<AddProjectDialog
+					open={addProjectOpen}
+					handleClose={handleAddProjectClose}
+					handleAddProject={handleAddProject}
+				/>
+			</React.Fragment>
 		</Page>
 	);
 };

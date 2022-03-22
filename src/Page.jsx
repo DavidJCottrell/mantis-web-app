@@ -1,23 +1,17 @@
-import React, { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "react-query";
-
-// APIs
-// import * as userApis from "../apis/user";
-// import * as projectApis from "../apis/project";
-
-// Custom components
-// import Nav from "../nav/Nav";
+import React from "react";
 import Nav from "./nav/Nav";
 
 // Toast Notifications
 import { Toaster } from "react-hot-toast";
+
+import Loading from "./Loading";
 
 const Page = (props) => {
 	return (
 		<React.Fragment>
 			<Toaster />
 			<Nav {...props} />
-			{props.children}
+			{!props.isLoading ? props.children : <Loading />}
 		</React.Fragment>
 	);
 };

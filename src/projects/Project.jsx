@@ -85,101 +85,99 @@ const Project = () => {
 
 	const classes = NavStyles();
 
+	if (!projectData || !invitationData || !roleData) return <Page isLoading={true} />;
+
 	return (
 		<Page drawerOpen={drawerOpen} handleDrawerOpen={handleDrawerOpen} showDrawer={true}>
-			{projectData && invitationData && roleData ? (
-				<React.Fragment>
-					<Box sx={{ display: "flex" }}>
-						<ProjectDrawer
-							drawerOpen={drawerOpen}
-							dialogCallbacks={dialogCallbacks}
-							projectId={projectId}
-							role={roleData.role}
-							classes={classes}
-							handleDrawerClose={handleDrawerClose}
-							theme={theme}
-						/>
-
-						<div className={classes.content}>
-							<Typography variant='h4'>{projectData.project.title}</Typography>
-							<Grid
-								container
-								justifyContent='center'
-								style={{
-									margin: 0,
-									width: "100%",
-								}}
-							>
-								<Grid item xs={12} md={8}>
-									<TaskTable
-										isMobile={isMobile}
-										title={"Un-Resolved Tasks"}
-										tasks={unresolvedTasks}
-										role={roleData.role}
-										projectId={projectId}
-									/>
-								</Grid>
-
-								<Hidden only={["xs", "sm"]}>
-									<Grid item md={1}></Grid>
-								</Hidden>
-
-								<Hidden only={["xs", "sm"]}>
-									<Grid item xs={12} md={3}>
-										<TeamMembersCard
-											members={projectData.project.users}
-											invitations={invitationData.invitations}
-										/>
-									</Grid>
-								</Hidden>
-
-								<Grid item xs={12} md={8}>
-									<TaskTable
-										isMobile={isMobile}
-										title={"Resolved Tasks"}
-										tasks={resolvedTasks}
-										role={roleData.role}
-										projectId={projectId}
-									/>
-								</Grid>
-								<Hidden only={["xs", "sm"]}>
-									<Grid item xs={4}></Grid>
-								</Hidden>
-							</Grid>
-						</div>
-					</Box>
-
-					{/* Popup windows */}
-					<AddTaskDialog
-						open={isAddTaskOpen}
-						handleClose={handleAddTaskClose}
-						totalTasks={projectData.project.tasks.length}
+			<React.Fragment>
+				<Box sx={{ display: "flex" }}>
+					<ProjectDrawer
+						drawerOpen={drawerOpen}
+						dialogCallbacks={dialogCallbacks}
 						projectId={projectId}
-						projectUsers={projectData.project.users}
-					/>
-					<InviteUserDialog
-						open={isAddUserOpen}
-						handleClose={handleAddUserClose}
-						projectId={projectId}
-						title={projectData.project.title}
-					/>
-					<ManageTeamDialog
-						open={isManageTeamOpen}
-						handleClose={handleManageTeamClose}
-						projectId={projectId}
-						users={projectData.project.users}
-						invitations={invitationData.invitations}
 						role={roleData.role}
+						classes={classes}
+						handleDrawerClose={handleDrawerClose}
+						theme={theme}
 					/>
-					<SettingsDialog
-						open={isSettingsOpen}
-						handleClose={handleSettingsClose}
-						projectId={projectId}
-					/>
-				</React.Fragment>
-			) : (
-				<h2>Loading project...</h2>
-			)}
+
+					<div className={classes.content}>
+						<Typography variant='h4'>{projectData.project.title}</Typography>
+						<Grid
+							container
+							justifyContent='center'
+							style={{
+								margin: 0,
+								width: "100%",
+							}}
+						>
+							<Grid item xs={12} md={8}>
+								<TaskTable
+									isMobile={isMobile}
+									title={"Un-Resolved Tasks"}
+									tasks={unresolvedTasks}
+									role={roleData.role}
+									projectId={projectId}
+								/>
+							</Grid>
+
+							<Hidden only={["xs", "sm"]}>
+								<Grid item md={1}></Grid>
+							</Hidden>
+
+							<Hidden only={["xs", "sm"]}>
+								<Grid item xs={12} md={3}>
+									<TeamMembersCard
+										members={projectData.project.users}
+										invitations={invitationData.invitations}
+									/>
+								</Grid>
+							</Hidden>
+
+							<Grid item xs={12} md={8}>
+								<TaskTable
+									isMobile={isMobile}
+									title={"Resolved Tasks"}
+									tasks={resolvedTasks}
+									role={roleData.role}
+									projectId={projectId}
+								/>
+							</Grid>
+							<Hidden only={["xs", "sm"]}>
+								<Grid item xs={4}></Grid>
+							</Hidden>
+						</Grid>
+					</div>
+				</Box>
+
+				{/* Popup windows */}
+				<AddTaskDialog
+					open={isAddTaskOpen}
+					handleClose={handleAddTaskClose}
+					totalTasks={projectData.project.tasks.length}
+					projectId={projectId}
+					projectUsers={projectData.project.users}
+				/>
+				<InviteUserDialog
+					open={isAddUserOpen}
+					handleClose={handleAddUserClose}
+					projectId={projectId}
+					title={projectData.project.title}
+				/>
+				<ManageTeamDialog
+					open={isManageTeamOpen}
+					handleClose={handleManageTeamClose}
+					projectId={projectId}
+					users={projectData.project.users}
+					invitations={invitationData.invitations}
+					role={roleData.role}
+				/>
+				<SettingsDialog
+					open={isSettingsOpen}
+					handleClose={handleSettingsClose}
+					projectId={projectId}
+				/>
+			</React.Fragment>
 		</Page>
 	);
 };
