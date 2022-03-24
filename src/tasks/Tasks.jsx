@@ -21,12 +21,12 @@ import TaskInfoCard from "./TaskInfoCard";
 import CommentsCard from "./CommentsCard";
 import Subtasks from "./subtasks/Subtasks";
 
-import Page from "../Page";
+import Page from "../global-components/Page";
 
 import * as projectApis from "../apis/project";
 import * as taskApis from "../apis/task";
 
-const Task = () => {
+const Tasks = () => {
 	const { taskId, projectId } = useParams();
 	const queryClient = useQueryClient();
 	const mobileViewSize = 760;
@@ -112,7 +112,7 @@ const Task = () => {
 				</Typography>
 				<br />
 
-				<Link to={`/project/${projectId}`} style={{ textDecoration: "none" }}>
+				<Link to={`/projects/${projectId}`} style={{ textDecoration: "none" }}>
 					<Button variant='contained'>Back to project</Button>
 				</Link>
 
@@ -176,4 +176,4 @@ const Task = () => {
 	);
 };
 
-export default Task;
+export default Tasks;

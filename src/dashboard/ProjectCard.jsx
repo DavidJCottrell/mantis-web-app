@@ -9,7 +9,7 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LinearProgress from "@mui/material/LinearProgress";
 
-const ProjectCard = ({ project, role, cardStyle }) => {
+const ProjectCard = ({ project, role }) => {
 	// Split tasks into resolved and un-resolved
 	let unresolvedTasks = [];
 	let resolvedTasks = [];
@@ -24,7 +24,7 @@ const ProjectCard = ({ project, role, cardStyle }) => {
 
 	return (
 		<Grid item xs={12} sm={6} md={4} key={project._id}>
-			<Card style={cardStyle}>
+			<Card>
 				<CardContent>
 					<Typography variant='h5' component='h2'>
 						{project.title}
@@ -62,7 +62,7 @@ const ProjectCard = ({ project, role, cardStyle }) => {
 					</Box>
 				</CardContent>
 				<CardActions>
-					<Link to={`/project/${project._id}`} style={{ textDecoration: "none" }}>
+					<Link to={`/projects/${project._id}`} style={{ textDecoration: "none" }}>
 						<Button size='small'>
 							Open&nbsp;
 							<b>{project.title}</b>

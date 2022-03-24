@@ -7,8 +7,8 @@ import Typography from "@mui/material/Typography";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
-import { DrawerHeader, Drawer } from "../../nav/navStyles";
-import UserOptions from "../../nav/DrawerUserOptions";
+import { DrawerHeader, Drawer } from "./drawerStyles";
+import UserOptions from "./DrawerUserOptions";
 
 const ProjectDrawer = ({
 	drawerOpen,

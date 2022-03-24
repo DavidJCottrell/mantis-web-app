@@ -2,13 +2,13 @@ import React from "react";
 import { Routes, Route } from "react-router-dom";
 
 //Pages
-import ProtectedRoute from "./ProtectedRoute";
+import ProtectedRoute from "./global-components/ProtectedRoute";
 import Login from "./login/Login";
 import Dashboard from "./dashboard/Dashboard";
-import Project from "./projects/Project";
+import Projects from "./projects/Projects";
 import Requirements from "./requirements/Requirements";
-import Task from "./task/Task";
-import PageNotFound from "./PageNotFound";
+import Tasks from "./tasks/Tasks";
+import PageNotFound from "./global-components/PageNotFound";
 
 //Theme
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -46,16 +46,16 @@ const App = () => {
 					<Route path='/' element={<Dashboard />} />
 				</Route>
 
-				<Route path='/project/:projectId' element={<ProtectedRoute />}>
-					<Route path='/project/:projectId' element={<Project />} />
+				<Route path='/projects/:projectId' element={<ProtectedRoute />}>
+					<Route path='/projects/:projectId' element={<Projects />} />
 				</Route>
 
-				<Route path='/project/requirements/:projectId' element={<ProtectedRoute />}>
-					<Route path='/project/requirements/:projectId' element={<Requirements />} />
+				<Route path='/projects/requirements/:projectId' element={<ProtectedRoute />}>
+					<Route path='/projects/requirements/:projectId' element={<Requirements />} />
 				</Route>
 
-				<Route path='/project/task/:taskId/:projectId' element={<ProtectedRoute />}>
-					<Route path='/project/task/:taskId/:projectId' element={<Task />} />
+				<Route path='/projects/tasks/:taskId/:projectId' element={<ProtectedRoute />}>
+					<Route path='/projects/tasks/:taskId/:projectId' element={<Tasks />} />
 				</Route>
 
 				<Route path='*' element={<PageNotFound />} />

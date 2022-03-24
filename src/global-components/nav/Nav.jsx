@@ -4,7 +4,7 @@ import { useQuery } from "react-query";
 //Material-UI Components
 import Box from "@mui/material/Box";
 
-import * as userApis from "../apis/user";
+import * as userApis from "../../apis/user";
 import { NavStyles } from "./navStyles";
 
 // MUI

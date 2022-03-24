@@ -97,7 +97,7 @@ const TaskTableRow = ({ task, role, isMobile, projectId, toastTaskAdded }) => {
 							</Typography>
 							<br />
 							<Link
-								to={`/project/task/${task._id}/${projectId}`}
+								to={`/projects/tasks/${task._id}/${projectId}`}
 								style={{
 									textDecoration: "none",
 								}}

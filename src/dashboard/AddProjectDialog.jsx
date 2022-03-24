@@ -1,4 +1,6 @@
-// Material-UI
+import { useMutation, useQueryClient } from "react-query";
+
+// MUI
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -8,18 +10,30 @@ import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 
-const AddProjectDialog = ({ open, handleClose, handleAddProject }) => {
+import toast from "react-hot-toast";
+import * as projectApis from "../apis/project";
+
+const AddProjectDialog = ({ open, handleClose }) => {
+	const queryClient = useQueryClient();
+
+	// Add project mutation
+	const projectMutation = useMutation(projectApis.addProject, {
+		onSuccess: () => {
+			queryClient.invalidateQueries("fetchProjects");
+		},
+	});
+
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		const form = document.getElementById("add-project-form");
-		const data = {
+		projectMutation.mutate({
 			title: form.projectTitle.value,
 			users: [],
 			tasks: [],
 			githubURL: form.githubURL.value,
 			description: form.description.value,
-		};
-		handleAddProject(data);
+		});
+		toast.success("Project added!");
 		handleClose();
 	};
 	return (

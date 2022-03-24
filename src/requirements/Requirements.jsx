@@ -14,7 +14,7 @@ import Paper from "@mui/material/Paper";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 
-import Page from "../Page";
+import Page from "../global-components/Page";
 import RequirementDialog from "./RequirementDialog";
 import * as projectApis from "../apis/project";
 import * as requirementApis from "../apis/requirement";
@@ -64,7 +64,7 @@ const Requirements = () => {
 		<Page>
 			<Container>
 				<h2>Requirements</h2>
-				<Link to={`/project/${projectId}`} style={{ textDecoration: "none" }}>
+				<Link to={`/projects/${projectId}`} style={{ textDecoration: "none" }}>
 					<Button variant='contained'>Back to project</Button>
 				</Link>
 				<br />

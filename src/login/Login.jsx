@@ -16,7 +16,7 @@ import Typography from "@mui/material/Typography";
 import { loginStyles } from "./loginStyles";
 
 import SignUpDialog from "./SignUpDialog";
-import logo from "../images/mantis.jpg";
+import logo from "./mantis.jpg";
 import auth from "../auth";
 import * as userApis from "../apis/user";
 

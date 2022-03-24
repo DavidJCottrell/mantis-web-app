@@ -11,7 +11,7 @@ import Box from "@mui/material/Box";
 
 import { useTheme } from "@mui/material/styles";
 
-import { NavStyles } from "../nav/navStyles";
+import { NavStyles } from "../global-components/nav/navStyles";
 
 // Custom components
 import TaskTable from "./TaskTable";
@@ -20,13 +20,13 @@ import AddTaskDialog from "./dialogs/AddTaskDialog";
 import ManageTeamDialog from "./dialogs/ManageTeamDialog";
 import SettingsDialog from "./dialogs/SettingsDialog";
 import TeamMembersCard from "./TeamMembersCard";
-import Page from "../Page";
+import Page from "../global-components/Page";
 
 import * as projectApis from "../apis/project";
 
 import ProjectDrawer from "./drawer/ProjectDrawer";
 
-const Project = () => {
+const Projects = () => {
 	const { projectId } = useParams();
 	const theme = useTheme();
 	const isMobile = useMediaQuery(theme.breakpoints.up("sm"));
@@ -182,4 +182,4 @@ const Project = () => {
 	);
 };
 
-export default Project;
+export default Projects;

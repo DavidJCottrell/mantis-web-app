@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "react-query";
+import { useQuery } from "react-query";
 
 // MUI
 import Container from "@mui/material/Container";
@@ -8,43 +8,25 @@ import Grid from "@mui/material/Grid";
 
 // APIs
 import * as userApis from "../apis/user";
-import * as projectApis from "../apis/project";
 
 // Custom components
 import AddProjectDialog from "./AddProjectDialog";
 import AddProjectCard from "./AddProjectCard";
 import ProjectCard from "./ProjectCard";
 
-import Page from "../Page";
-
-// Toast Notifications
-import toast from "react-hot-toast";
+import Page from "../global-components/Page";
 
 const Dashboard = () => {
-	const queryClient = useQueryClient();
-
+	// Fetch the projects the user belongs to
 	const { data: projectData } = useQuery("fetchProjects", userApis.getProjectsData);
-
-	const projectMutation = useMutation(projectApis.addProject, {
-		onSuccess: () => {
-			queryClient.invalidateQueries("fetchProjects");
-		},
-	});
-
-	const handleAddProject = (data) => {
-		projectMutation.mutate(data);
-		toast.success("Project added!");
-	};
 
 	// Add project dialog logic
 	const [addProjectOpen, setAddProjectOpen] = useState(false);
 	const handleAddProjectOpen = () => setAddProjectOpen(true);
 	const handleAddProjectClose = () => setAddProjectOpen(false);
 
-	const cardStyle = { minHeight: "250px" };
-
+	//Wait for API to fetch data before rendering
 	if (!projectData) return <Page isLoading={true} />;
-
 	return (
 		<Page>
 			<React.Fragment>
@@ -57,17 +39,9 @@ const Dashboard = () => {
 
 					<Grid container spacing={3} id='project-grid'>
 						{projectData.map(({ project, role }, i) => (
-							<ProjectCard
-								project={project}
-								role={role}
-								key={i}
-								cardStyle={cardStyle}
-							/>
+							<ProjectCard project={project} role={role} key={i} />
 						))}
-						<AddProjectCard
-							cardStyle={cardStyle}
-							handleAddProjectOpen={handleAddProjectOpen}
-						/>
+						<AddProjectCard handleAddProjectOpen={handleAddProjectOpen} />
 					</Grid>
 
 					{projectData.length === 0 ? <h2>You currently have no projects</h2> : null}
@@ -75,14 +49,9 @@ const Dashboard = () => {
 					<br />
 				</Container>
 
-				<AddProjectDialog
-					open={addProjectOpen}
-					handleClose={handleAddProjectClose}
-					handleAddProject={handleAddProject}
-				/>
+				<AddProjectDialog open={addProjectOpen} handleClose={handleAddProjectClose} />
 			</React.Fragment>
 		</Page>
 	);
 };
-
 export default Dashboard;

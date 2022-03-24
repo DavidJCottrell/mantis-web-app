@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 
-import auth from "../auth";
+import auth from "../../auth";
 
 import ProfileDialog from "./ProfileDialog";
 

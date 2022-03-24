@@ -3,9 +3,6 @@ import { makeStyles } from "@mui/styles";
 const loginStyles = makeStyles((theme) => ({
 	root: {
 		height: "100vh",
-		// minHeight: "-webkit-fill-available",
-		// minHeight: "-moz-available",
-		// minHeight: "-fill-available",
 	},
 	center: {
 		display: "grid",

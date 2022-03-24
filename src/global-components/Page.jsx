@@ -1,4 +1,3 @@
-import React from "react";
 import Nav from "./nav/Nav";
 
 // Toast Notifications
@@ -8,11 +7,11 @@ import Loading from "./Loading";
 
 const Page = (props) => {
 	return (
-		<React.Fragment>
+		<div id='page'>
 			<Toaster />
 			<Nav {...props} />
 			{!props.isLoading ? props.children : <Loading />}
-		</React.Fragment>
+		</div>
 	);
 };
 

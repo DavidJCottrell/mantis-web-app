@@ -13,7 +13,7 @@ export const handleError = (e) => {
 			localStorage.clear();
 			window.location.href = "/";
 			break;
-		case 400: // Could not find recourse
+		case 400: // Could not find recourse (invalid id passed in url)
 			window.location.href = "/";
 			break;
 		default:

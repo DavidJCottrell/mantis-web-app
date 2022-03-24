@@ -7,16 +7,16 @@ import Card from "@mui/material/Card";
 // MUI Icons
 import AddIcon from "@mui/icons-material/Add";
 
-const AddProjectCard = ({ cardStyle, handleAddProjectOpen }) => {
+const AddProjectCard = ({ handleAddProjectOpen }) => {
 	return (
 		<Grid item xs={12} sm={6} md={4}>
-			<Card style={cardStyle}>
+			<Card>
 				<Grid
 					container
 					direction='column'
 					alignItems='center'
 					justifyContent='center'
-					style={cardStyle}
+					style={{ minHeight: "340px" }}
 				>
 					<Grid item>
 						<Tooltip title='Add a project'>
