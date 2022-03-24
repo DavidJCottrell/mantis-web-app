@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useMutation } from "react-query";
 
 // Material-UI
 import Avatar from "@mui/material/Avatar";
@@ -25,36 +26,17 @@ import toast, { Toaster } from "react-hot-toast";
 const Login = () => {
 	const classes = loginStyles();
 
+	const loginMutation = useMutation(userApis.login, {
+		onSuccess: (data) => {
+			auth.login(data.data); // Front-end login, store auth-token, and user details
+			window.location.href = "/";
+		},
+		onError: (error) => toast.error(error.response.data.message),
+	});
+
 	const [signUpOpen, setSignUpOpen] = useState(false);
 	const handleSignUpOpen = () => setSignUpOpen(true);
 	const handleSignUpClose = () => setSignUpOpen(false);
-
-	const login = (email, password) => {
-		userApis
-			.login({ email, password })
-			.then((userData) => {
-				auth.login(userData.data); // Front-end login, store auth-token, and user details
-				window.location.href = "/";
-			})
-			.catch((e) => {
-				toast.error(e.response.data);
-			});
-	};
-
-	const signUp = (signUpData) => {
-		console.log(signUpData);
-		if (signUpData.password === signUpData.vpassword) {
-			const data = {
-				firstName: signUpData.firstName,
-				lastName: signUpData.lastName,
-				email: signUpData.email,
-				password: signUpData.password,
-			};
-			userApis.signUp(data).then(() => login(signUpData.email, signUpData.password));
-		} else {
-			toast.error("Passwords do not match, please try again.");
-		}
-	};
 
 	return (
 		<React.Fragment>
@@ -107,7 +89,10 @@ const Login = () => {
 								className={classes.submit}
 								onClick={() => {
 									const form = document.getElementById("login-form");
-									login(form.email.value, form.password.value);
+									loginMutation.mutate({
+										email: form.email.value,
+										password: form.password.value,
+									});
 								}}
 							>
 								Sign In
@@ -137,7 +122,6 @@ const Login = () => {
 				signUpOpen={signUpOpen}
 				handleSignUpClose={handleSignUpClose}
 				classes={classes}
-				signUp={signUp}
 			/>
 		</React.Fragment>
 	);

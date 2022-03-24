@@ -5,12 +5,23 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 
-const SignUpDialog = ({ signUpOpen, handleSignUpClose, classes, signUp }) => {
+import { useMutation } from "react-query";
+import * as userApis from "../apis/user";
+import auth from "../auth";
+
+const SignUpDialog = ({ signUpOpen, handleSignUpClose, classes }) => {
+	const signUpMutation = useMutation(userApis.signUp, {
+		onSuccess: (data) => {
+			auth.login(data.data); // Front-end login, store auth-token, and user details
+			window.location.href = "/";
+		},
+		onError: (error) => toast.error(error.response.data.message),
+	});
+
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		const form = document.getElementById("signUp-form");
-		handleSignUpClose();
-		signUp({
+		signUpMutation.mutate({
 			password: form.password.value,
 			vpassword: form.vpassword.value,
 			email: form.email.value.toLowerCase(),
