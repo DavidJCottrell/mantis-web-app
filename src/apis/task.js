@@ -43,7 +43,13 @@ export const addTask = (id, data) =>
 		.catch((e) => handleError(e));
 
 export const updateStatus = (projectId, taskId, data) =>
-	api.patch(`/project/tasks/updatestatus/${projectId}/${taskId}`, data);
+	api
+		.patch(`/project/tasks/updatestatus/${projectId}/${taskId}`, data)
+		.then((res) => res.data)
+		.catch((e) => handleError(e));
 
 export const updateResolution = (projectId, taskId, data) =>
-	api.patch(`/project/tasks/updateresolution/${projectId}/${taskId}`, data);
+	api
+		.patch(`/project/tasks/updateresolution/${projectId}/${taskId}`, data)
+		.then((res) => res.data)
+		.catch((e) => handleError(e));

@@ -1,6 +1,6 @@
 import { api, handleError } from "./api";
 
-export const getProjectsData = () =>
+export const getUserProjects = () =>
 	api
 		.get("/user/projects/")
 		.then((res) => res.data)

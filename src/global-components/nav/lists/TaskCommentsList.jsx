@@ -39,7 +39,7 @@ const TaskCommentsList = ({ open, anchorElement, handleClose, comments, title })
 									style={{ backgroundColor: "transparent" }}
 								>
 									<Link
-										to={`/project/task/${parentTask._id}/${parentProject.id}`}
+										to={`/projects/tasks/${parentTask._id}/${parentProject.id}`}
 										style={{
 											textDecoration: "none",
 										}}

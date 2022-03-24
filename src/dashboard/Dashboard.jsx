@@ -18,7 +18,7 @@ import Page from "../global-components/Page";
 
 const Dashboard = () => {
 	// Fetch the projects the user belongs to
-	const { data: projectData } = useQuery("fetchProjects", userApis.getProjectsData);
+	const { data: projectData } = useQuery("getUserProjects", userApis.getUserProjects);
 
 	// Add project dialog logic
 	const [addProjectOpen, setAddProjectOpen] = useState(false);

@@ -1,6 +1,10 @@
 import { api, handleError } from "./api";
 
-export const addProject = (data) => api.post("/project/add", data);
+export const addProject = (data) =>
+	api
+		.post("/project/add", data)
+		.then((res) => res.data)
+		.catch((e) => handleError(e));
 
 export const getProject = (id) =>
 	api

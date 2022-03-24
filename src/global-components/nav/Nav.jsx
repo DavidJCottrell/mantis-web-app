@@ -58,6 +58,8 @@ const Nav = ({ drawerOpen, handleDrawerOpen, showDrawer }) => {
 	const handleProfileMenuClose = () => setProfileAnchor(null); //Handle close
 	const isProfileMenuOpen = Boolean(profileAnchor); //Is open
 
+	// console.log(taskData);
+
 	// Extract comments from each task
 	let comments = [];
 	if (taskData) {

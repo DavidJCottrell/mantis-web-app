@@ -49,20 +49,19 @@ const Tasks = () => {
 		({ projectId, taskId, status }) => taskApis.updateStatus(projectId, taskId, status),
 		{
 			onSuccess: (data) => {
-				queryClient.setQueryData("fetchTask", data.data);
-				if (data.data.task.status === "Resolved") {
+				queryClient.setQueryData("fetchTask", data);
+				if (data.task.status === "Resolved")
 					updateResolutionMutation.mutate({
 						projectId: projectId,
 						taskId: taskId,
 						resolution: { resolution: "Resolved" },
 					});
-				} else {
+				else
 					updateResolutionMutation.mutate({
 						projectId: projectId,
 						taskId: taskId,
 						resolution: { resolution: "Un-Resolved" },
 					});
-				}
 			},
 		}
 	);
@@ -72,17 +71,19 @@ const Tasks = () => {
 			taskApis.updateResolution(projectId, taskId, resolution),
 		{
 			onSuccess: (data) => {
-				queryClient.setQueryData("fetchTask", data.data);
+				queryClient.setQueryData("fetchTask", data);
 			},
 		}
 	);
 
 	useEffect(() => {
+		// Lifecycle bar should change when on mobile
 		const handleResize = () => {
 			if (window.innerWidth <= mobileViewSize) setIsMobile(true);
 			else setIsMobile(false);
 		};
 		window.addEventListener("resize", handleResize);
+		// Remove event listener when component is destroyed
 		return () => window.removeEventListener("resize", handleResize);
 	}, []);
 

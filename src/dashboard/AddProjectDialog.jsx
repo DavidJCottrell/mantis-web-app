@@ -18,8 +18,8 @@ const AddProjectDialog = ({ open, handleClose }) => {
 
 	// Add project mutation
 	const projectMutation = useMutation(projectApis.addProject, {
-		onSuccess: () => {
-			queryClient.invalidateQueries("fetchProjects");
+		onSuccess: (data) => {
+			queryClient.setQueryData("getUserProjects", data);
 		},
 	});
 
