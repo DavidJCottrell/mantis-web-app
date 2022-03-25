@@ -11,11 +11,8 @@ import auth from "../auth";
 
 const SignUpDialog = ({ signUpOpen, handleSignUpClose, classes }) => {
 	const signUpMutation = useMutation(userApis.signUp, {
-		onSuccess: (data) => {
-			auth.login(data.data); // Front-end login, store auth-token, and user details
-			window.location.href = "/";
-		},
-		onError: (error) => toast.error(error.response.data.message),
+		onSuccess: ({ data }) => auth.login(data), // Front-end login, store auth-token, and user details
+		onError: (error) => toast.error(error.response.data),
 	});
 
 	const handleSubmit = (e) => {

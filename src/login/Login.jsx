@@ -27,11 +27,8 @@ const Login = () => {
 	const classes = loginStyles();
 
 	const loginMutation = useMutation(userApis.login, {
-		onSuccess: (data) => {
-			auth.login(data.data); // Front-end login, store auth-token, and user details
-			window.location.href = "/";
-		},
-		onError: (error) => toast.error(error.response.data.message),
+		onSuccess: ({ data }) => auth.login(data), // Front-end login, store auth-token, and user details
+		onError: (error) => toast.error(error.response.data),
 	});
 
 	const [signUpOpen, setSignUpOpen] = useState(false);

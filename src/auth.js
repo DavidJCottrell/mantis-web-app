@@ -7,8 +7,12 @@ const login = (data) => {
 	localStorage.setItem("fullName", data.user.firstName + " " + data.user.lastName);
 	localStorage.setItem("username", data.user.username);
 	localStorage.setItem("email", data.user.email);
+	window.location.href = "/";
 };
-const logout = () => localStorage.clear();
+const logout = () => {
+	window.location.href = "/login";
+	localStorage.clear();
+};
 
 const isAuthenticated = () => localStorage.getItem("isLoggedIn") === "true";
 

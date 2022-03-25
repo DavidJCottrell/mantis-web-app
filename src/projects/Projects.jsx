@@ -71,8 +71,6 @@ const Projects = () => {
 		projectApis.getInvitations(projectId)
 	);
 
-	const { data: roleData } = useQuery("fetchProjectRole", () => projectApis.getRole(projectId));
-
 	// Split project's tasks into resolved and un-resolved
 	let unresolvedTasks = [];
 	let resolvedTasks = [];
@@ -85,7 +83,7 @@ const Projects = () => {
 
 	const classes = NavStyles();
 
-	if (!projectData || !invitationData || !roleData) return <Page isLoading={true} />;
+	if (!projectData || !invitationData) return <Page isLoading={true} />;
 
 	return (
 		<Page drawerOpen={drawerOpen} handleDrawerOpen={handleDrawerOpen} showDrawer={true}>
@@ -95,7 +93,7 @@ const Projects = () => {
 						drawerOpen={drawerOpen}
 						dialogCallbacks={dialogCallbacks}
 						projectId={projectId}
-						role={roleData.role}
+						role={projectData.role}
 						classes={classes}
 						handleDrawerClose={handleDrawerClose}
 						theme={theme}
@@ -116,7 +114,7 @@ const Projects = () => {
 									isMobile={isMobile}
 									title={"Un-Resolved Tasks"}
 									tasks={unresolvedTasks}
-									role={roleData.role}
+									role={projectData.role}
 									projectId={projectId}
 								/>
 							</Grid>
@@ -139,7 +137,7 @@ const Projects = () => {
 									isMobile={isMobile}
 									title={"Resolved Tasks"}
 									tasks={resolvedTasks}
-									role={roleData.role}
+									role={projectData.role}
 									projectId={projectId}
 								/>
 							</Grid>
@@ -170,7 +168,7 @@ const Projects = () => {
 					projectId={projectId}
 					users={projectData.project.users}
 					invitations={invitationData.invitations}
-					role={roleData.role}
+					role={projectData.role}
 				/>
 				<SettingsDialog
 					open={isSettingsOpen}

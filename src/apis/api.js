@@ -1,4 +1,7 @@
 import axios from "axios";
+import toast from "react-hot-toast";
+
+import auth from "../auth";
 
 export const api = axios.create({
 	baseURL: "http://localhost:9000",
@@ -8,15 +11,12 @@ export const api = axios.create({
 });
 
 export const handleError = (e) => {
-	switch (e.response.status) {
-		case 401: // Client has an invalid token
-			localStorage.clear();
+	// User has an invalid auth token (status 401)
+	if (e.response.status === 401) auth.logout();
+	else {
+		toast.error(`${e.response.status}: ${e.response.data}`);
+		setTimeout(() => {
 			window.location.href = "/";
-			break;
-		case 400: // Could not find recourse (invalid id passed in url)
-			window.location.href = "/";
-			break;
-		default:
-			console.log("Unknown error:", e.response);
+		}, 2000);
 	}
 };
