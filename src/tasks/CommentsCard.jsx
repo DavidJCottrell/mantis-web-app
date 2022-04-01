@@ -44,7 +44,9 @@ const CommentsCard = ({ comments, projectId, taskId }) => {
 			comments: comments,
 		});
 
-		toast.success("Added Comment");
+		document.getElementById("comment-field").value = "";
+
+		toast.success("Comment Posted");
 	};
 
 	const handleRemove = (index) => {

@@ -45,12 +45,13 @@ const Tasks = () => {
 	const { data: roleData } = useQuery("fetchProjectRole", () =>
 		projectsApis.getRole(projectId, localStorage.getItem("userId"))
 	);
+
 	const updateStatusMutation = useMutation(
 		({ projectId, taskId, status }) => tasksApis.updateStatus(projectId, taskId, status),
 		{
 			onSuccess: (data) => {
 				queryClient.setQueryData("fetchTask", data);
-				if (data.task.status === "Resolved")
+				if (data.status === "Resolved")
 					updateResolutionMutation.mutate({
 						projectId: projectId,
 						taskId: taskId,
@@ -97,7 +98,7 @@ const Tasks = () => {
 
 	let currentUserIsAssigned;
 	if (taskData) {
-		for (const asignee of taskData.task.assignees) {
+		for (const asignee of taskData.assignees) {
 			if (localStorage.getItem("userId") === asignee.userId) currentUserIsAssigned = true;
 			else currentUserIsAssigned = false;
 		}
@@ -109,7 +110,7 @@ const Tasks = () => {
 		<Page>
 			<Container>
 				<Typography variant='h4'>
-					{taskData.task.taskKey} - {taskData.task.title}
+					{taskData.taskKey} - {taskData.title}
 				</Typography>
 				<br />
 
@@ -119,7 +120,7 @@ const Tasks = () => {
 
 				<br />
 				<h2>Task Lifecycle</h2>
-				<LifecycleBar status={taskData.task.status} isMobile={isMobile} />
+				<LifecycleBar status={taskData.status} isMobile={isMobile} />
 				<br />
 
 				{/* Lifecycle selector */}
@@ -131,7 +132,7 @@ const Tasks = () => {
 							required
 							label='Type'
 							defaultValue={""}
-							value={taskData.task.status}
+							value={taskData.status}
 							onChange={handleStatusChange}
 						>
 							<MenuItem value={"In Development"}>In Development</MenuItem>
@@ -146,9 +147,9 @@ const Tasks = () => {
 				<br />
 				<h2>Subtasks</h2>
 				<Subtasks
-					subtaskData={taskData.task.subtasks}
+					subtaskData={taskData.subtasks}
 					projectId={projectId}
-					taskId={taskData.task._id}
+					taskId={taskData._id}
 					currentUserIsAssigned={currentUserIsAssigned}
 				/>
 
@@ -158,15 +159,15 @@ const Tasks = () => {
 					{/* Task Information */}
 					<Grid item xs={12} md={6}>
 						<TaskInfoCard
-							task={taskData.task}
+							task={taskData}
 							currentUserIsAssigned={currentUserIsAssigned}
 						/>
 					</Grid>
 					<Grid item xs={12} md={6}>
 						<CommentsCard
-							comments={taskData.task.comments}
+							comments={taskData.comments}
 							projectId={projectId}
-							taskId={taskData.task._id}
+							taskId={taskData._id}
 						/>
 					</Grid>
 				</Grid>
