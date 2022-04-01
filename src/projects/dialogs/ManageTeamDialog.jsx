@@ -19,8 +19,8 @@ import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import EditIcon from "@mui/icons-material/Edit";
 import Tooltip from "@mui/material/Tooltip";
 
-import * as invitationApis from "../../apis/invitation";
-import * as projectApis from "../../apis/project";
+import * as invitationsApis from "../../apis/invitations";
+import * as projectsApis from "../../apis/projects";
 
 import toast, { Toaster } from "react-hot-toast";
 
@@ -28,7 +28,7 @@ const ManageTeamDialog = ({ open, handleClose, projectId, users, invitations, ro
 	const queryClient = useQueryClient();
 
 	const userMutation = useMutation(
-		({ projectId, userId }) => projectApis.removeUser(projectId, userId),
+		({ projectId, userId }) => projectsApis.removeUser(projectId, userId),
 		{
 			onSuccess: () => {
 				queryClient.invalidateQueries("fetchProjectData");
@@ -38,7 +38,7 @@ const ManageTeamDialog = ({ open, handleClose, projectId, users, invitations, ro
 	);
 
 	const userRoleMutation = useMutation(
-		({ projectId, userId, role }) => projectApis.updateUserRole(projectId, userId, role),
+		({ projectId, userId, role }) => projectsApis.updateUserRole(projectId, userId, role),
 		{
 			onSuccess: () => {
 				queryClient.invalidateQueries("fetchProjectData");
@@ -48,7 +48,7 @@ const ManageTeamDialog = ({ open, handleClose, projectId, users, invitations, ro
 	);
 
 	const invitationMutation = useMutation(
-		(invitationId) => invitationApis.deleteInvitation(invitationId),
+		(invitationId) => invitationsApis.deleteInvitation(invitationId),
 		{
 			onSuccess: () => {
 				queryClient.invalidateQueries("fetchInvitationData");

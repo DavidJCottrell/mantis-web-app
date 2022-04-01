@@ -17,7 +17,7 @@ import { Link } from "react-router-dom";
 // Custom Components
 import { taskTableRowStyles } from "./projectStyles";
 
-import * as taskApis from "../apis/task";
+import * as tasksApis from "../apis/tasks";
 
 const TaskTableRow = ({ task, role, isMobile, projectId, toastTaskAdded }) => {
 	const [open, setOpen] = React.useState(false);
@@ -26,7 +26,7 @@ const TaskTableRow = ({ task, role, isMobile, projectId, toastTaskAdded }) => {
 	const queryClient = new useQueryClient();
 
 	const taskMutation = useMutation(
-		({ projectId, taskId }) => taskApis.removeTask(projectId, taskId),
+		({ projectId, taskId }) => tasksApis.removeTask(projectId, taskId),
 		{
 			onSuccess: () => {
 				queryClient.invalidateQueries("fetchProjectData");

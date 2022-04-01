@@ -1,22 +1,22 @@
 import { api, handleError } from "./api";
 
-export const signUp = (data) => api.post("/user/register/", data);
-export const login = (data) => api.post("/user/login/", data);
+export const signUp = (data) => api.post("/users/register/", data);
+export const login = (data) => api.post("/users/login/", data);
 
 export const getUserProjects = () =>
 	api
-		.get("/user/projects/")
+		.get("/users/projects/")
 		.then((res) => res.data)
 		.catch((e) => handleError(e));
 
 export const getInvitations = () =>
 	api
-		.get("/user/invitations/")
+		.get("/users/invitations/")
 		.then((res) => res.data)
 		.catch((e) => handleError(e));
 
 export const getTasks = () =>
 	api
-		.get("/user/tasks/")
+		.get("/users/tasks/")
 		.then((res) => res.data)
 		.catch((e) => handleError(e));

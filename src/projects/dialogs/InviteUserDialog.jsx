@@ -18,13 +18,13 @@ import TextField from "@mui/material/TextField";
 
 import toast, { Toaster } from "react-hot-toast";
 
-import * as invitationApis from "../../apis/invitation";
+import * as invitationsApis from "../../apis/invitations";
 
 const InviteUserDialog = ({ open, handleClose, projectId, title }) => {
 	const queryClient = useQueryClient();
 
 	const invitationMutation = useMutation(
-		({ username, invitation }) => invitationApis.addInvitation(username, invitation),
+		({ username, invitation }) => invitationsApis.addInvitation(username, invitation),
 		{
 			onSuccess: () => {
 				queryClient.invalidateQueries("fetchInvitationData");

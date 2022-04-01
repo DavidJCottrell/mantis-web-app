@@ -2,24 +2,24 @@ import { api, handleError } from "./api";
 
 export const addRequirement = (id, data) =>
 	api
-		.patch(`/project/requirements/addrequirement/${id}`, data)
+		.patch(`/projects/requirements/addrequirement/${id}`, data)
 		.then((res) => res.data)
 		.catch((e) => handleError(e));
 
 export const updateRequirement = (projectId, requirementIndex, data) =>
 	api
-		.patch(`/project/requirements/updaterequirement/${projectId}/${requirementIndex}`, data)
+		.patch(`/projects/requirements/updaterequirement/${projectId}/${requirementIndex}`, data)
 		.then((res) => res.data)
 		.catch((e) => handleError(e));
 
 export const removeRequirement = (projectId, requirementIndex) =>
 	api
-		.patch(`/project/requirements/removerequirement/${projectId}/${requirementIndex}`)
+		.patch(`/projects/requirements/removerequirement/${projectId}/${requirementIndex}`)
 		.then((res) => res.data)
 		.catch((e) => handleError(e));
 
 export const getRequirements = (id) =>
 	api
-		.get(`/project/requirements/getall/${id}`)
+		.get(`/projects/requirements/getall/${id}`)
 		.then((res) => res.data)
 		.catch((e) => handleError(e));

@@ -23,8 +23,8 @@ import Subtasks from "./subtasks/Subtasks";
 
 import Page from "../global-components/Page";
 
-import * as projectApis from "../apis/project";
-import * as taskApis from "../apis/task";
+import * as projectsApis from "../apis/projects";
+import * as tasksApis from "../apis/tasks";
 
 const Tasks = () => {
 	const { taskId, projectId } = useParams();
@@ -40,13 +40,13 @@ const Tasks = () => {
 		_setIsMobile(data);
 	};
 
-	const { data: taskData } = useQuery("fetchTask", () => taskApis.getTask(projectId, taskId));
+	const { data: taskData } = useQuery("fetchTask", () => tasksApis.getTask(projectId, taskId));
 
 	const { data: roleData } = useQuery("fetchProjectRole", () =>
-		projectApis.getRole(projectId, localStorage.getItem("userId"))
+		projectsApis.getRole(projectId, localStorage.getItem("userId"))
 	);
 	const updateStatusMutation = useMutation(
-		({ projectId, taskId, status }) => taskApis.updateStatus(projectId, taskId, status),
+		({ projectId, taskId, status }) => tasksApis.updateStatus(projectId, taskId, status),
 		{
 			onSuccess: (data) => {
 				queryClient.setQueryData("fetchTask", data);
@@ -68,7 +68,7 @@ const Tasks = () => {
 
 	const updateResolutionMutation = useMutation(
 		({ projectId, taskId, resolution }) =>
-			taskApis.updateResolution(projectId, taskId, resolution),
+			tasksApis.updateResolution(projectId, taskId, resolution),
 		{
 			onSuccess: (data) => {
 				queryClient.setQueryData("fetchTask", data);

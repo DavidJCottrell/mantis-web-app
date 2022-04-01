@@ -9,12 +9,12 @@ import DialogContent from "@mui/material/DialogContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 
-import * as projectApis from "../../apis/project";
+import * as projectsApis from "../../apis/projects";
 
 const SettingsDialog = ({ open, handleClose, projectId }) => {
 	const queryClient = useQueryClient();
 
-	const projectMutation = useMutation((projectId) => projectApis.deleteProject(projectId), {
+	const projectMutation = useMutation((projectId) => projectsApis.deleteProject(projectId), {
 		onSuccess: () => {
 			queryClient.invalidateQueries("fetchProjects");
 			handleClose();

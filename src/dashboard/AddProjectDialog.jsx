@@ -11,13 +11,13 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 
 import toast from "react-hot-toast";
-import * as projectApis from "../apis/project";
+import * as projectsApis from "../apis/projects";
 
 const AddProjectDialog = ({ open, handleClose }) => {
 	const queryClient = useQueryClient();
 
 	// Add project mutation
-	const projectMutation = useMutation(projectApis.addProject, {
+	const projectMutation = useMutation(projectsApis.addProject, {
 		onSuccess: (data) => {
 			queryClient.setQueryData("getUserProjects", data);
 		},

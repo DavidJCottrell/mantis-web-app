@@ -17,14 +17,14 @@ import Button from "@mui/material/Button";
 // Styles
 import { invitationListStyles } from "../navStyles";
 
-import * as invitationApis from "../../../apis/invitation";
+import * as invitationsApis from "../../../apis/invitations";
 
 const InvitationList = ({ open, anchorElement, handleClose, invitationData }) => {
 	const classes = invitationListStyles();
 	const queryClient = useQueryClient();
 
 	const deleteInvitationMutation = useMutation(
-		(invitationId) => invitationApis.deleteInvitation(invitationId),
+		(invitationId) => invitationsApis.deleteInvitation(invitationId),
 		{
 			onSuccess: () => {
 				queryClient.invalidateQueries("fetchUsersInvitations");
@@ -33,10 +33,11 @@ const InvitationList = ({ open, anchorElement, handleClose, invitationData }) =>
 	);
 
 	const acceptInvitationMutation = useMutation(
-		(invitationId) => invitationApis.acceptInvitation(invitationId),
+		(invitationId) => invitationsApis.acceptInvitation(invitationId),
 		{
-			onSuccess: () => {
-				queryClient.invalidateQueries("fetchUsersInvitations");
+			onSuccess: (data) => {
+				queryClient.setQueryData("getUserProjects", data.updatedProjects);
+				queryClient.setQueryData("fetchUsersInvitations", data.updatedInvitations);
 			},
 		}
 	);

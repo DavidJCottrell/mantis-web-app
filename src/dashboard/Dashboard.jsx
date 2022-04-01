@@ -7,7 +7,7 @@ import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 
 // APIs
-import * as userApis from "../apis/user";
+import * as usersApis from "../apis/users";
 
 // Custom components
 import AddProjectDialog from "./AddProjectDialog";
@@ -18,7 +18,7 @@ import Page from "../global-components/Page";
 
 const Dashboard = () => {
 	// Fetch the projects the user belongs to
-	const { data: projectData } = useQuery("getUserProjects", userApis.getUserProjects);
+	const { data: projectData } = useQuery("getUserProjects", usersApis.getUserProjects);
 
 	// Add project dialog logic
 	const [addProjectOpen, setAddProjectOpen] = useState(false);

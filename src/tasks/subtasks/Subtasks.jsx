@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import Grid from "@mui/material/Grid";
 import { useMutation, useQueryClient } from "react-query";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import SubtaskContainer from "./SubtaskContainer";
 import { Item } from "./SubtaskItem";
-import * as taskApis from "../../apis/task";
+import * as tasksApis from "../../apis/tasks";
 import { arrayMove, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 import {
 	DndContext,
@@ -32,7 +32,7 @@ const Subtasks = ({ projectId, taskId, subtaskData, currentUserIsAssigned }) => 
 	const queryClient = new useQueryClient();
 
 	const updateSubtasksMutation = useMutation(
-		({ projectId, taskId, subTasks }) => taskApis.updateSubtasks(projectId, taskId, subTasks),
+		({ projectId, taskId, subTasks }) => tasksApis.updateSubtasks(projectId, taskId, subTasks),
 		{
 			onSuccess: () => {
 				queryClient.invalidateQueries("fetchSubTasks");

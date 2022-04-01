@@ -4,7 +4,7 @@ import { useQuery } from "react-query";
 //Material-UI Components
 import Box from "@mui/material/Box";
 
-import * as userApis from "../../apis/user";
+import * as usersApis from "../../apis/users";
 import { NavStyles } from "./navStyles";
 
 // MUI
@@ -30,9 +30,9 @@ import { AppBar } from "./navStyles";
 const Nav = ({ drawerOpen, handleDrawerOpen, showDrawer }) => {
 	const classes = NavStyles();
 
-	const { data: taskData } = useQuery("fetchUsersTasks", userApis.getTasks);
+	const { data: taskData } = useQuery("fetchUsersTasks", usersApis.getTasks);
 
-	const { data: invitationData } = useQuery("fetchUsersInvitations", userApis.getInvitations);
+	const { data: invitationData } = useQuery("fetchUsersInvitations", usersApis.getInvitations);
 
 	// Task List Logic
 	const [tasksAnchor, setTasksAnchor] = useState(); //State

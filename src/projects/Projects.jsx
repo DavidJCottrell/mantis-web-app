@@ -22,7 +22,7 @@ import SettingsDialog from "./dialogs/SettingsDialog";
 import TeamMembersCard from "./TeamMembersCard";
 import Page from "../global-components/Page";
 
-import * as projectApis from "../apis/project";
+import * as projectsApis from "../apis/projects";
 
 import ProjectDrawer from "./drawer/ProjectDrawer";
 
@@ -64,11 +64,11 @@ const Projects = () => {
 	};
 
 	const { data: projectData } = useQuery("fetchProjectData", () =>
-		projectApis.getProject(projectId)
+		projectsApis.getProject(projectId)
 	);
 
 	const { data: invitationData } = useQuery("fetchInvitationData", () =>
-		projectApis.getInvitations(projectId)
+		projectsApis.getInvitations(projectId)
 	);
 
 	// Split project's tasks into resolved and un-resolved

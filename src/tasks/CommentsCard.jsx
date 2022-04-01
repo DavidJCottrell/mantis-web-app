@@ -10,7 +10,7 @@ import TextField from "@mui/material/TextField";
 
 import toast, { Toaster } from "react-hot-toast";
 
-import * as taskApis from "../apis/task";
+import * as tasksApis from "../apis/tasks";
 import { useMutation, useQueryClient } from "react-query";
 
 const CommentsCard = ({ comments, projectId, taskId }) => {
@@ -18,7 +18,7 @@ const CommentsCard = ({ comments, projectId, taskId }) => {
 
 	const updateCommentsMutation = useMutation(
 		({ projectId, taskId, comments }) =>
-			taskApis.updateTaskComments(projectId, taskId, comments),
+			tasksApis.updateTaskComments(projectId, taskId, comments),
 		{
 			onSuccess: () => {
 				queryClient.invalidateQueries("fetchTask");

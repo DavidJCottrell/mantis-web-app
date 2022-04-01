@@ -19,14 +19,14 @@ import { loginStyles } from "./loginStyles";
 import SignUpDialog from "./SignUpDialog";
 import logo from "./mantis.jpg";
 import auth from "../auth";
-import * as userApis from "../apis/user";
+import * as usersApis from "../apis/users";
 
 import toast, { Toaster } from "react-hot-toast";
 
 const Login = () => {
 	const classes = loginStyles();
 
-	const loginMutation = useMutation(userApis.login, {
+	const loginMutation = useMutation(usersApis.login, {
 		onSuccess: ({ data }) => auth.login(data), // Front-end login, store auth-token, and user details
 		onError: (error) => toast.error(error.response.data),
 	});

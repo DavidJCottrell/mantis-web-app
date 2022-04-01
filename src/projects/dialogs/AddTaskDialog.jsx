@@ -23,7 +23,7 @@ import MobileDatePicker from "@mui/lab/MobileDatePicker";
 
 import toast, { Toaster } from "react-hot-toast";
 
-import * as taskApis from "../../apis/task";
+import * as tasksApis from "../../apis/tasks";
 
 const AddTaskDialog = ({ open, handleClose, totalTasks, projectId, projectUsers }) => {
 	const [selectedDate, setSelectedDate] = useState(new Date());
@@ -40,7 +40,7 @@ const AddTaskDialog = ({ open, handleClose, totalTasks, projectId, projectUsers 
 	const queryClient = new useQueryClient();
 
 	const projectMutation = useMutation(
-		({ projectId, task }) => taskApis.addTask(projectId, task),
+		({ projectId, task }) => tasksApis.addTask(projectId, task),
 		{
 			onSuccess: () => {
 				queryClient.invalidateQueries("fetchProjectData");

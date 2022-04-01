@@ -6,11 +6,11 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 
 import { useMutation } from "react-query";
-import * as userApis from "../apis/user";
+import * as usersApis from "../apis/users";
 import auth from "../auth";
 
 const SignUpDialog = ({ signUpOpen, handleSignUpClose, classes }) => {
-	const signUpMutation = useMutation(userApis.signUp, {
+	const signUpMutation = useMutation(usersApis.signUp, {
 		onSuccess: ({ data }) => auth.login(data), // Front-end login, store auth-token, and user details
 		onError: (error) => toast.error(error.response.data),
 	});

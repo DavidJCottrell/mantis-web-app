@@ -15,8 +15,8 @@ export const handleError = (e) => {
 	if (e.response.status === 401) auth.logout();
 	else {
 		toast.error(`${e.response.status}: ${e.response.data}`);
-		setTimeout(() => {
-			window.location.href = "/";
-		}, 2000);
+		// setTimeout(() => {
+		// 	window.location.href = "/";
+		// }, 2000);
 	}
 };

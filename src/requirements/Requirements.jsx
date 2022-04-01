@@ -16,8 +16,8 @@ import Button from "@mui/material/Button";
 
 import Page from "../global-components/Page";
 import RequirementDialog from "./RequirementDialog";
-import * as projectApis from "../apis/project";
-import * as requirementApis from "../apis/requirement";
+import * as projectsApis from "../apis/projects";
+import * as requirementsApis from "../apis/requirements";
 
 const Requirements = () => {
 	const { projectId } = useParams();
@@ -32,16 +32,16 @@ const Requirements = () => {
 	const queryClient = new useQueryClient();
 
 	const { data: roleData } = useQuery("fetchProjectRole", () =>
-		projectApis.getRole(projectId, localStorage.getItem("userId"))
+		projectsApis.getRole(projectId, localStorage.getItem("userId"))
 	);
 
 	const { data: requirementsData } = useQuery("fetchProjectRequirements", () =>
-		requirementApis.getRequirements(projectId)
+		requirementsApis.getRequirements(projectId)
 	);
 
 	const requirementMutation = useMutation(
 		({ projectId, requirementIndex }) =>
-			requirementApis.removeRequirement(projectId, requirementIndex),
+			requirementsApis.removeRequirement(projectId, requirementIndex),
 		{
 			onSuccess: () => {
 				queryClient.invalidateQueries("fetchProjectRequirements");
