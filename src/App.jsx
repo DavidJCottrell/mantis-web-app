@@ -54,8 +54,8 @@ const App = () => {
 					<Route path='/projects/requirements/:projectId' element={<Requirements />} />
 				</Route>
 
-				<Route path='/projects/tasks/:taskId/:projectId' element={<ProtectedRoute />}>
-					<Route path='/projects/tasks/:taskId/:projectId' element={<Tasks />} />
+				<Route path='/projects/tasks/:projectId/:taskId' element={<ProtectedRoute />}>
+					<Route path='/projects/tasks/:projectId/:taskId' element={<Tasks />} />
 				</Route>
 
 				<Route path='*' element={<PageNotFound />} />

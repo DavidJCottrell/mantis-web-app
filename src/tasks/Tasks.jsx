@@ -51,28 +51,6 @@ const Tasks = () => {
 		{
 			onSuccess: (data) => {
 				queryClient.setQueryData("fetchTask", data);
-				if (data.status === "Resolved")
-					updateResolutionMutation.mutate({
-						projectId: projectId,
-						taskId: taskId,
-						resolution: { resolution: "Resolved" },
-					});
-				else
-					updateResolutionMutation.mutate({
-						projectId: projectId,
-						taskId: taskId,
-						resolution: { resolution: "Un-Resolved" },
-					});
-			},
-		}
-	);
-
-	const updateResolutionMutation = useMutation(
-		({ projectId, taskId, resolution }) =>
-			tasksApis.updateResolution(projectId, taskId, resolution),
-		{
-			onSuccess: (data) => {
-				queryClient.setQueryData("fetchTask", data);
 			},
 		}
 	);

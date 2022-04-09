@@ -27,7 +27,7 @@ const Login = () => {
 	const classes = loginStyles();
 
 	const loginMutation = useMutation(usersApis.login, {
-		onSuccess: ({ data }) => auth.login(data), // Front-end login, store auth-token, and user details
+		onSuccess: ({ data }) => auth.login(data),
 		onError: (error) => toast.error(error.response.data),
 	});
 

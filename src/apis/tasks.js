@@ -47,9 +47,3 @@ export const updateStatus = (projectId, taskId, data) =>
 		.patch(`/projects/tasks/updatestatus/${projectId}/${taskId}`, data)
 		.then((res) => res.data)
 		.catch((e) => handleError(e));
-
-export const updateResolution = (projectId, taskId, data) =>
-	api
-		.patch(`/projects/tasks/updateresolution/${projectId}/${taskId}`, data)
-		.then((res) => res.data)
-		.catch((e) => handleError(e));

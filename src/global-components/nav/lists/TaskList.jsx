@@ -33,7 +33,7 @@ const TaskList = ({ open, anchorElement, handleClose, tasks, title }) => {
 									style={{ backgroundColor: "transparent" }}
 								>
 									<Link
-										to={`/projects/tasks/${task._id}/${parentProjectId}`}
+										to={`/projects/tasks/${parentProjectId}/${task._id}`}
 										style={{
 											textDecoration: "none",
 										}}
