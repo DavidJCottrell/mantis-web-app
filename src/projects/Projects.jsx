@@ -98,7 +98,6 @@ const Projects = () => {
 						handleDrawerClose={handleDrawerClose}
 						theme={theme}
 					/>
-
 					<div className={classes.content}>
 						<Typography variant='h4'>{projectData.project.title}</Typography>
 						<Grid
@@ -147,7 +146,6 @@ const Projects = () => {
 						</Grid>
 					</div>
 				</Box>
-
 				{/* Popup windows */}
 				<AddTaskDialog
 					open={isAddTaskOpen}

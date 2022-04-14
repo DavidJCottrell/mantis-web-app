@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import Grid from "@mui/material/Grid";
 import { useMutation, useQueryClient } from "react-query";
-import toast from "react-hot-toast";
+import Grid from "@mui/material/Grid";
 import SubtaskContainer from "./SubtaskContainer";
 import { Item } from "./SubtaskItem";
 import * as tasksApis from "../../apis/tasks";
+import toast from "react-hot-toast";
 import { arrayMove, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 import {
 	DndContext,
@@ -97,7 +97,7 @@ const Subtasks = ({ projectId, taskId, subtaskData, currentUserIsAssigned }) => 
 		}
 	};
 
-	const defaultAnnouncements = {
+	const announcements = {
 		onDragStart(id) {},
 		onDragOver(id, overId) {},
 		onDragEnd(id, overId) {
@@ -123,7 +123,7 @@ const Subtasks = ({ projectId, taskId, subtaskData, currentUserIsAssigned }) => 
 						onDragStart={handleDragStart}
 						onDragOver={handleDragOver}
 						onDragEnd={handleDragEnd}
-						announcements={defaultAnnouncements}
+						announcements={announcements}
 					>
 						<Grid container spacing={5}>
 							<Grid item xs={12} md={4}>

@@ -64,6 +64,7 @@ const Login = () => {
 								required
 								fullWidth
 								label='Email Address'
+								id='email-input'
 								name='email'
 								autoComplete='email'
 								color='secondary'
@@ -74,6 +75,7 @@ const Login = () => {
 								required
 								fullWidth
 								name='password'
+								id='password-input'
 								label='Password'
 								type='password'
 								autoComplete='current-password'
@@ -84,6 +86,7 @@ const Login = () => {
 								variant='contained'
 								color='secondary'
 								className={classes.submit}
+								id='sign-in-btn'
 								onClick={() => {
 									const form = document.getElementById("login-form");
 									loginMutation.mutate({

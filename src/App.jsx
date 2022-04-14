@@ -12,30 +12,12 @@ import PageNotFound from "./global-components/PageNotFound";
 
 //Theme
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { ThemeProvider } from "@mui/material/styles";
+import { makeTheme } from "./theme";
 import CssBaseline from "@mui/material/CssBaseline";
 
 const App = () => {
-	const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
-	const theme = React.useMemo(
-		() =>
-			createTheme({
-				palette: {
-					mode: prefersDarkMode ? "dark" : "light",
-					primary: {
-						main: "#6bc754", //424242
-					},
-					secondary: {
-						main: "#43a047",
-					},
-					background: {
-						default: prefersDarkMode ? "#323131" : "#fafafa",
-					},
-				},
-			}),
-		[prefersDarkMode]
-	);
-
+	const theme = makeTheme(useMediaQuery("(prefers-color-scheme: dark)"));
 	return (
 		<ThemeProvider theme={theme}>
 			<CssBaseline />

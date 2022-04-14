@@ -49,11 +49,6 @@ const AddTaskDialog = ({ open, handleClose, totalTasks, projectId, projectUsers 
 		}
 	);
 
-	const addTask = (data) => {
-		projectMutation.mutate({ projectId: projectId, task: data });
-		handleClose();
-	};
-
 	const formatDate = (date) => {
 		const day = String(date.getDate()).padStart(2, "0");
 		const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -64,14 +59,9 @@ const AddTaskDialog = ({ open, handleClose, totalTasks, projectId, projectUsers 
 	const handleSubmit = (e) => {
 		e.preventDefault();
 
-		let assigneeUsernames = [];
-
-		Array.from({ length: userInputFields }, (x, i) => {
-			assigneeUsernames.push({
-				username: document
-					.getElementById("assignee-select-" + String(i))
-					.innerText.split(" - ")[1],
-			});
+		// Add "username" label to each array element
+		const assigneeUsernames = selectedAsignees.map((username) => {
+			return { username: username };
 		});
 
 		const data = {
@@ -90,7 +80,9 @@ const AddTaskDialog = ({ open, handleClose, totalTasks, projectId, projectUsers 
 			},
 		};
 
-		addTask(data);
+		projectMutation.mutate({ projectId: projectId, task: data });
+		clearState();
+		handleClose();
 	};
 
 	const handleSelectAssignee = (event, index) => {
@@ -155,22 +147,24 @@ const AddTaskDialog = ({ open, handleClose, totalTasks, projectId, projectUsers 
 										defaultValue={""}
 										id={"assignee-select-" + String(i)}
 									>
-										{projectUsers.map((user, x) => (
-											<MenuItem
-												key={x}
-												onClick={(event) => {
-													handleSelectAssignee(event, i);
-												}}
-												value={user.username}
-												disabled={
-													selectedAsignees.includes(user.username)
-														? true
-														: false
-												}
-											>
-												{user.name} - {user.username}
-											</MenuItem>
-										))}
+										{projectUsers.map((user, x) =>
+											user.role !== "Client" ? (
+												<MenuItem
+													key={x}
+													onClick={(event) => {
+														handleSelectAssignee(event, i);
+													}}
+													value={user.username}
+													disabled={
+														selectedAsignees.includes(user.username)
+															? true
+															: false
+													}
+												>
+													{user.name} - {user.username}
+												</MenuItem>
+											) : null
+										)}
 									</Select>
 								</FormControl>
 							</Box>
@@ -263,13 +257,7 @@ const AddTaskDialog = ({ open, handleClose, totalTasks, projectId, projectUsers 
 						>
 							Cancel
 						</Button>
-						<Button
-							type='submit'
-							color='inherit'
-							onClick={() => {
-								clearState();
-							}}
-						>
+						<Button type='submit' color='inherit'>
 							Create
 						</Button>
 					</DialogActions>
