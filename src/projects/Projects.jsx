@@ -84,7 +84,6 @@ const Projects = () => {
 	const classes = NavStyles();
 
 	if (!projectData || !invitationData) return <Page isLoading={true} />;
-
 	return (
 		<Page drawerOpen={drawerOpen} handleDrawerOpen={handleDrawerOpen} showDrawer={true}>
 			<React.Fragment>
@@ -103,10 +102,7 @@ const Projects = () => {
 						<Grid
 							container
 							justifyContent='center'
-							style={{
-								margin: 0,
-								width: "100%",
-							}}
+							style={{ margin: 0, width: "100%" }}
 						>
 							<Grid item xs={12} md={8}>
 								<TaskTable
@@ -146,7 +142,7 @@ const Projects = () => {
 						</Grid>
 					</div>
 				</Box>
-				{/* Popup windows */}
+				{/* Dialog Menus */}
 				<AddTaskDialog
 					open={isAddTaskOpen}
 					handleClose={handleAddTaskClose}
