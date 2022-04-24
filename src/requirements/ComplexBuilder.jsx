@@ -42,9 +42,7 @@ const ComplexBuilder = ({ setComponents, components, requirement }) => {
 						<React.Fragment>
 							<p>While the</p>
 							<PreconditionInput
-								preconditions={
-									requirement ? requirement.preconditions : undefined
-								}
+								preconditions={requirement ? requirement.preconditions : undefined}
 							/>
 						</React.Fragment>
 					),
@@ -139,9 +137,7 @@ const ComplexBuilder = ({ setComponents, components, requirement }) => {
 						<React.Fragment>
 							<p>shall</p>
 							<ResponseInput
-								responses={
-									requirement ? requirement.systemResponses : undefined
-								}
+								responses={requirement ? requirement.systemResponses : undefined}
 							/>
 						</React.Fragment>
 					),
@@ -233,7 +229,6 @@ const ComplexBuilder = ({ setComponents, components, requirement }) => {
 				aria-label='add'
 				onClick={() => {
 					setComplexKeywords(complexKeywords + 1);
-					// setComponents(newComponents);
 				}}
 				sx={{ marginTop: "12px" }}
 			>

@@ -8,7 +8,7 @@ export const makeTheme = (prefersDarkMode) => {
 				palette: {
 					mode: prefersDarkMode ? "dark" : "light",
 					primary: {
-						main: "#6bc754", //424242
+						main: "#6bc754",
 					},
 					secondary: {
 						main: "#43a047",

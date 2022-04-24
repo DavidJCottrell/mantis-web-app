@@ -13,7 +13,6 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
 import TextField from "@mui/material/TextField";
 
 import toast, { Toaster } from "react-hot-toast";

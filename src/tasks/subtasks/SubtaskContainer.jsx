@@ -17,9 +17,7 @@ export default function SubtaskContainer({
 	handlers,
 	currentUserIsAssigned,
 }) {
-	const { setNodeRef } = useDroppable({
-		id,
-	});
+	const { setNodeRef } = useDroppable({ id });
 
 	return (
 		<SortableContext id={id} items={items} strategy={verticalListSortingStrategy}>

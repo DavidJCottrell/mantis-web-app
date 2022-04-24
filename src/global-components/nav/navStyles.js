@@ -45,9 +45,6 @@ const invitationListStyles = makeStyles(() => ({
 	card: {
 		width: 250,
 		maxHeight: 200,
-		// "&:hover": {
-		// 	backgroundColor: "rgba(0, 0, 0, 0.04)",
-		// },
 	},
 	title: {
 		fontSize: 14,
