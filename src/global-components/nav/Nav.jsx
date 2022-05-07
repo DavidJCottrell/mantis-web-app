@@ -61,7 +61,7 @@ const Nav = ({ drawerOpen, handleDrawerOpen, showDrawer }) => {
 	// Extract comments from each task
 	let comments = [];
 	if (taskData) {
-		for (const task of taskData) {
+		for (const task of taskData.tasks) {
 			for (const comment of task.task.comments) {
 				comments.push({
 					parentTask: task.task,
@@ -97,7 +97,9 @@ const Nav = ({ drawerOpen, handleDrawerOpen, showDrawer }) => {
 					<Tooltip title='Project invitations'>
 						<IconButton color='inherit' onClick={handleInvitationListOpen}>
 							<Badge
-								badgeContent={invitationData ? invitationData.length : null}
+								badgeContent={
+									invitationData ? invitationData.invitations.length : null
+								}
 								color='secondary'
 							>
 								<AddCircleIcon />
@@ -114,7 +116,7 @@ const Nav = ({ drawerOpen, handleDrawerOpen, showDrawer }) => {
 					<Tooltip title='Your tasks'>
 						<IconButton color='inherit' onClick={hanleTaskListOpen}>
 							<Badge
-								badgeContent={taskData ? taskData.length : null}
+								badgeContent={taskData ? taskData.tasks.length : null}
 								color='secondary'
 							>
 								<AssignmentIcon />
@@ -142,7 +144,7 @@ const Nav = ({ drawerOpen, handleDrawerOpen, showDrawer }) => {
 						open={isTaskMenuOpen}
 						anchorElement={tasksAnchor}
 						handleClose={handleTaskListClose}
-						tasks={taskData}
+						tasks={taskData.tasks}
 					/>
 				</React.Fragment>
 			) : null}
@@ -151,7 +153,7 @@ const Nav = ({ drawerOpen, handleDrawerOpen, showDrawer }) => {
 					open={isInvitationMenuOpen}
 					anchorElement={invitationAnchor}
 					handleClose={handleInvitationListClose}
-					invitationData={invitationData}
+					invitationData={invitationData.invitations}
 				/>
 			) : null}
 

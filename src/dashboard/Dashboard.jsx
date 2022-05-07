@@ -18,7 +18,7 @@ import Page from "../global-components/Page";
 
 const Dashboard = () => {
 	// Fetch the projects the user belongs to
-	const { data: projectData } = useQuery("getUserProjects", usersApis.getUserProjects);
+	let { data: projectData } = useQuery("getUserProjects", usersApis.getUserProjects);
 
 	// Add project dialog logic
 	const [addProjectOpen, setAddProjectOpen] = useState(false);
@@ -38,13 +38,15 @@ const Dashboard = () => {
 					<br />
 
 					<Grid container spacing={3} id='project-grid'>
-						{projectData.map(({ project, role }, i) => (
+						{projectData.projects.map(({ project, role }, i) => (
 							<ProjectCard project={project} role={role} key={i} />
 						))}
 						<AddProjectCard handleAddProjectOpen={handleAddProjectOpen} />
 					</Grid>
 
-					{projectData.length === 0 ? <h2>You currently have no projects</h2> : null}
+					{projectData.projects.length === 0 ? (
+						<h2>You currently have no projects</h2>
+					) : null}
 
 					<br />
 				</Container>
