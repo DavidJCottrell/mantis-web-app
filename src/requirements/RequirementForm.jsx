@@ -38,7 +38,7 @@ const RequirementForm = ({
 		case "State Driven":
 			form = (
 				<React.Fragment>
-					<p>While the</p>
+					<p>While</p>
 					<PreconditionInput
 						preconditions={requirement ? requirement.preconditions : undefined}
 					/>
