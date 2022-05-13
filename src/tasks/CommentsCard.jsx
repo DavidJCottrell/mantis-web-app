@@ -28,11 +28,28 @@ const CommentsCard = ({ comments, projectId, taskId }) => {
 
 	const handleSubmit = () => {
 		const commentContent = document.getElementById("comment-field").value;
+		const today = new Date();
+		const day = String(today.getDate()).padStart(2, "0");
+		const month = String(today.getMonth() + 1).padStart(2, "0");
+		const year = today.getFullYear();
+
 		const newComment = {
 			authorName: localStorage.getItem("fullName"),
 			authorId: localStorage.getItem("userId"),
 			content: commentContent,
 			taggedUsers: [],
+			dateAdded:
+				day +
+				"-" +
+				month +
+				"-" +
+				year +
+				"T" +
+				today.getHours() +
+				":" +
+				today.getMinutes() +
+				":" +
+				today.getSeconds(),
 		};
 		comments.push(newComment);
 		updateCommentsMutation.mutate({
