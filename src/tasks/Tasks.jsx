@@ -56,6 +56,13 @@ const Tasks = () => {
 	);
 
 	useEffect(() => {
+		const reloadCount = sessionStorage.getItem("reloadCount");
+		if (reloadCount < 1) {
+			sessionStorage.setItem("reloadCount", String(reloadCount + 1));
+			window.location.reload();
+		} else {
+			sessionStorage.removeItem("reloadCount");
+		}
 		// Lifecycle bar should change when on mobile
 		const handleResize = () => {
 			if (window.innerWidth <= mobileViewSize) setIsMobile(true);
@@ -76,10 +83,8 @@ const Tasks = () => {
 
 	let currentUserIsAssigned;
 	if (taskData) {
-		for (const asignee of taskData.assignees) {
-			if (localStorage.getItem("userId") === asignee.userId) currentUserIsAssigned = true;
-			else currentUserIsAssigned = false;
-		}
+		for (const assignee of taskData.assignees)
+			if (localStorage.getItem("userId") === assignee.userId) currentUserIsAssigned = true;
 	}
 
 	if (!taskData || !roleData) return <Page isLoading={true} />;

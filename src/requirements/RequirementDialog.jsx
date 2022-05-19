@@ -125,6 +125,7 @@ const RequirementDialog = ({ open, handleClose, requirement, projectId, totalReq
 		else saveNewRequirement(requirementData);
 
 		handleClose();
+		window.location.reload();
 	};
 
 	return (
