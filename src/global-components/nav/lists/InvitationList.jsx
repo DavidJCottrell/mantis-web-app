@@ -36,8 +36,10 @@ const InvitationList = ({ open, anchorElement, handleClose, invitationData }) =>
 		(invitationId) => invitationsApis.acceptInvitation(invitationId),
 		{
 			onSuccess: (data) => {
-				queryClient.setQueryData("getUserProjects", data.updatedProjects);
-				queryClient.setQueryData("fetchUsersInvitations", data.updatedInvitations);
+				queryClient.setQueryData("getUserProjects", { projects: data.updatedProjects });
+				queryClient.setQueryData("fetchUsersInvitations", {
+					invitations: data.updatedInvitations,
+				});
 			},
 		}
 	);

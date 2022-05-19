@@ -39,11 +39,11 @@ const CommentsCard = ({ comments, projectId, taskId }) => {
 			content: commentContent,
 			taggedUsers: [],
 			dateAdded:
-				day +
+				year +
 				"-" +
 				month +
 				"-" +
-				year +
+				day +
 				"T" +
 				today.getHours() +
 				":" +
